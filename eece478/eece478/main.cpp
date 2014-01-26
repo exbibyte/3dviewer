@@ -10,8 +10,19 @@
 #include <GL/glut.h>  // Compiles with "gcc OpenGL.c -o test -lglut" on linux
 
 #include <iostream>
+#include <math.h>
 
 using namespace std;
+
+namespace glut_global
+{
+	float vCamRotX = 0;
+	float vCamRotY = 0;
+	double modelMatrix[16];
+	bool scale = false;
+}
+
+using namespace glut_global;
 
 int vMouseOldX;
 int vMouseOldY;
@@ -20,15 +31,37 @@ int vMouseDy = 0;
 bool bMouseLeftDown = false;
 bool bKeyShiftDown = false;
 
-float vCamRotX = 0;
-float vCamRotY = 0;
 float vCamTraX = 0;
+
+int vWidth;
+int vHeight;
 
 void myIdle()
 {
 	if(bMouseLeftDown || bKeyShiftDown)
 	{
 		glutPostRedisplay();
+	}
+}
+
+void fKeyboardDown(unsigned char key, int x, int y)
+{
+	switch(key)
+	{
+	case 'z':
+
+		break;
+	case 'x':
+
+		break;
+	case 'c':
+
+		break;
+	case 'v':
+
+		break;
+	default:
+		break;
 	}
 }
 
@@ -63,52 +96,91 @@ void fMouseMotion(int x, int y)
 
 void reshape(int width, int height)
 {
+	vWidth = width;
+	vHeight = height;
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90, (float)width / height, 1, 1000);
+	gluPerspective(50, (float)width / height, 1, 1000);
 	glMatrixMode(GL_MODELVIEW);
 }
 
+//basic order of operation:
+//push current orientation
+//rotate view
+//translate object
+//draw object
+//pop restore previous orientation
 void display(void)
 {
 	glMatrixMode(GL_MODELVIEW);
-/*  clear all pixels  */
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
+	glColor3d(1, 0, 0);
+
+	//reset matrix
 	glLoadIdentity();
-
-	glTranslatef(0,0,-13);
 	
-	//camera translation
-	if(bMouseLeftDown && !bKeyShiftDown)
-	{
-		vCamTraX += vMouseDx/200.f;
-	}
-	glTranslatef(vCamTraX,0,0);
-
-	//camera aim
-	if(bMouseLeftDown && bKeyShiftDown)
-	{
-		vCamRotX += vMouseDx/30.f;
-		vCamRotY += vMouseDy/30.f;
-	}
-	glRotatef(vCamRotX,0,1,0);
-	glRotatef(vCamRotY,1,0,0);
-
-
-	/*gluLookAt(vMouseDx/10.f,vMouseDy/10.f, -3.0f,
-	0.f, 0.f, 0.f,
-	0.0f, 1.0f,  0.0f);
-*/
-    glColor3d(1, 0, 0);
-    
+	//save state model stack
 	glPushMatrix();
+		
+		//lastly translate object
+		glTranslatef(0,0,-5);
 
-    glutWireTeapot(1);
+		//get camera rotation delta
+		if(bMouseLeftDown && bKeyShiftDown)
+		{
+			vCamRotY += vMouseDx/40.f;
+			vCamRotX += vMouseDy/40.f;
+		}
 
+		//perform rotation on Y axis and then X axis 
+		glRotatef(abs(vCamRotX),vCamRotX,0,0);
+		glRotatef(abs(vCamRotY),0,vCamRotY,0);
+
+		//place model
+		glutWireTeapot(1);
+
+	//revert state model stack
 	glPopMatrix();
-    
+
+	//setup projection for text overlay
+	glMatrixMode(GL_PROJECTION);
+
+	//save state projection stack
+	glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0.0, vWidth, 0.0, vHeight);
+
+		glMatrixMode(GL_MODELVIEW);
+		//save state model stack
+		glPushMatrix();
+			glLoadIdentity();
+
+			// Draw text at bottom right
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glRasterPos2i(vWidth-40, 20);
+			string name = "Bill";
+			for(int i = 0; i < name.length(); i++)
+			{
+				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, name[i]);
+			}
+		//revert state model stack
+		glPopMatrix();
+
+	glMatrixMode(GL_PROJECTION);
+	//revert state projection stack
+	glPopMatrix();
+
+	////camera translation
+	//if(bMouseLeftDown && !bKeyShiftDown)
+	//{
+	//	vCamTraX += vMouseDx/200.f;
+	//}
+	//glTranslatef(vCamTraX,0,0);
+
+	glEnable(GL_TEXTURE_2D);
 	glutSwapBuffers();
 }
 
@@ -137,12 +209,14 @@ int main(int argc, char** argv)
     glutInitWindowSize (250, 250); 
     glutInitWindowPosition (100, 100);
     glutCreateWindow ("hello");
+	glEnable(GL_POLYGON_SMOOTH);
 	glutReshapeFunc(reshape);
     init ();
 	glutIdleFunc(myIdle);
     glutDisplayFunc(display);
 	glutMouseFunc(fMouseDown);
 	glutMotionFunc(fMouseMotion); //mouse motion when mouse/keyboard is pressed
+	glutKeyboardFunc(fKeyboardDown);
     glutMainLoop();
     return 0;   /* ISO C requires main to return int. */
 }
