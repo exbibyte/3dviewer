@@ -16,10 +16,11 @@ using namespace std;
 
 namespace glut_global
 {
-	float vCamRotX = 0;
-	float vCamRotY = 0;
-	double modelMatrix[16];
-	bool scale = false;
+  float vCamRotX = 0;
+  float vCamRotY = 0;
+  float vScale = 1;
+  double modelMatrix[16];
+  bool scale = false;
 }
 
 using namespace glut_global;
@@ -129,7 +130,7 @@ void display(void)
 		glTranslatef(0,0,-5);
 
 		//get camera rotation delta
-		if(bMouseLeftDown && bKeyShiftDown)
+		if(bMouseLeftDown && !bKeyShiftDown)
 		{
 			vCamRotY += vMouseDx/40.f;
 			vCamRotX += vMouseDy/40.f;
@@ -138,6 +139,14 @@ void display(void)
 		//perform rotation on Y axis and then X axis 
 		glRotatef(abs(vCamRotX),vCamRotX,0,0);
 		glRotatef(abs(vCamRotY),0,vCamRotY,0);
+
+		//scale object and avoid negative scaling
+		if(bMouseLeftDown && bKeyShiftDown)
+		{
+			vScale += vMouseDy/700.f;
+			vScale = vScale<0? 0: vScale;
+		}
+		glScalef(vScale,vScale,vScale);
 
 		//place model
 		glutWireTeapot(1);
@@ -161,7 +170,7 @@ void display(void)
 			// Draw text at bottom right
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			glRasterPos2i(vWidth-40, 20);
-			string name = "Bill";
+			string name = "Bill Liu";
 			for(int i = 0; i < name.length(); i++)
 			{
 				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, name[i]);
@@ -206,7 +215,7 @@ int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize (250, 250); 
+    glutInitWindowSize (500, 500); 
     glutInitWindowPosition (100, 100);
     glutCreateWindow ("hello");
 	glEnable(GL_POLYGON_SMOOTH);
