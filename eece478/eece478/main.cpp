@@ -6,8 +6,8 @@
 
 #include <string>
 
-#include <GL/gl.h>    // /usr/include/GL/gl.h
-#include <GL/glut.h>  // Compiles with "gcc OpenGL.c -o test -lglut" on linux
+#include <GL/gl.h>
+#include <GL/glut.h>  
 
 #include <iostream>
 #include <math.h>
@@ -169,7 +169,7 @@ void display(void)
 
 			// Draw text at bottom right
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			glRasterPos2i(vWidth-40, 20);
+			glRasterPos2i(vWidth-70, 20);
 			string name = "Bill Liu";
 			for(int i = 0; i < name.length(); i++)
 			{
