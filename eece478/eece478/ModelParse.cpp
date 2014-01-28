@@ -1,6 +1,11 @@
 #include "ModelParse.h"
-#include "ModelTexture.h"
+
 #include "ModelData.h"
+#include "ModelName.h"
+#include "ModelTexture.h"
+#include "ModelVertice.h"
+#include "ModelNormal.h"
+#include "ModelTriangle.h"
 
 #include <string>
 #include <iostream>
@@ -10,10 +15,18 @@ using namespace std;
 
 ModelParse::ModelParse(string path)
 {
+  ModelName * cModelName = new ModelName();
   ModelTexture * cModelTexture = new ModelTexture();
+  ModelVertice * cModelVertice = new ModelVertice();
+  ModelNormal * cModelNormal = new ModelNormal();
+  ModelTriangle * cModelTriangle = new ModelTriangle();
 
   vector<ModelData*> vModelData;
-  vModelData.push_back((ModelData*)cModelTexture);
+  // vModelData.push_back((ModelData*)cModelName);
+  // vModelData.push_back((ModelData*)cModelTexture);
+  // vModelData.push_back((ModelData*)cModelVertice);
+  // vModelData.push_back((ModelData*)cModelNormal);
+  vModelData.push_back((ModelData*)cModelTriangle);
 
   ifstream ifs;
   stringstream Ss;

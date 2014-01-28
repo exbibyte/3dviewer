@@ -9,14 +9,12 @@
 
 using namespace std;
 
-typedef tuple<double,double,double> tVertice;
 typedef tuple<string> tTexture;
 
 class ModelTexture: ModelData
 {
  public:
   ModelTexture();
-  vector<tVertice> vVertice;
   vector<tTexture> vTexture;
   void FormatData();
 };
