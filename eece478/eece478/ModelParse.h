@@ -9,18 +9,22 @@
 using namespace std;
 
 typedef struct{
-  string name;
+  string id;
+  string Name;
 }zTexture;
 
 typedef struct{
+  string id;
   double Vertice[3];
 }zVertice;
 
 typedef struct{
+  string id;
   double Normal[3];
 }zNormal;
 
 typedef struct{
+  string id;
   int Indices[3];
   int NormalIndex;
   int TextureIndex;

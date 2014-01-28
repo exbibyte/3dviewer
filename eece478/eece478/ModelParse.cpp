@@ -16,42 +16,38 @@ ModelParse::ModelParse(string path)
   vModelData.push_back((ModelData*)cModelTexture);
 
   ifstream ifs;
-  stringstream ss;
+  stringstream Ss;
 
   ifs.open(path.c_str(), ifstream::in);
 
   string line;
   int LineNum = 0;
 
-  //loop ModelData
-  while (getline(ifs, line)) {
-    // cout<<line<<endl;
-    vModelData.at(0)->setData(line);
-    // bool TagFound = false;
+  //remove lines with #comments
+  while (getline(ifs, line)) 
+  {    
+    size_t found = line.find("#");
+    if(found == std::string::npos){
+      Ss<<line<<" "; // save to buffer
+    }
+  }
 
-    // //find start tag <thing>
-    // if(!TagFound)
-    // {
-    //   size_t found = line.find(BeginTag);
-    //   if(found != std::string::npos)
-    //   {
-    // 	cout<<"found 'name' at position "<<found<<" line "<<LineNum<<endl;	
-    // 	TagFound = true;
-    //   }
-    // }
-    // //find end tag </thing>
-    // else
-    // {
-    //   size_t found = line.find(EndTag);
-    //   if(found != std::string::npos)
-    //   {
-    // 	cout<<"found 'name' at position "<<found<<" line "<<LineNum<<endl;	
-    // 	TagFound = true;
-    //   }
-    // }
-   
-    //process stuff in between the tags      
-    LineNum++;
+  //match <tags> and </tags> from ModelData and extract info to ModelData
+  line.clear();
+  while (getline(Ss, line)) 
+  { 
+    for(auto i : vModelData)
+    {
+      size_t FoundStartTag = line.find(i->mBeginTag);
+      if(FoundStartTag != std::string::npos){
+	size_t FoundEndTag = line.find(i->mEndTag);
+	if(FoundEndTag != std::string::npos){
+	  //when found begin and end tags, extract data
+	  string SubString = line.substr(FoundStartTag + i->mBeginTag.length(),FoundEndTag-(FoundStartTag + i->mBeginTag.length()));
+	  i->SetData(SubString); // format and set data to ModelData object
+	}
+      }
+    }
   }
 
   delete cModelTexture;
