@@ -10,32 +10,38 @@
 #include <GL/glut.h>  
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
 namespace glut_global
 {
+  
+  //model states
+  float vScale = 1;
+
+  //modelview states
   float vCamRotX = 0;
   float vCamRotY = 0;
-  float vScale = 1;
-  double modelMatrix[16];
-  bool scale = false;
+  float vCamRotOldX = 0;
+  float vCamRotOldY = 0;
+
+  float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+
+  //mouse and key states
+  int vMouseOldX;
+  int vMouseOldY;
+  int vMouseDx = 0;
+  int vMouseDy = 0;
+  bool bMouseLeftDown = false;
+  bool bKeyShiftDown = false;
+
+  //window dimenstions
+  int vWidth;
+  int vHeight;
 }
 
 using namespace glut_global;
-
-int vMouseOldX;
-int vMouseOldY;
-int vMouseDx = 0;
-int vMouseDy = 0;
-bool bMouseLeftDown = false;
-bool bKeyShiftDown = false;
-
-float vCamTraX = 0;
-
-int vWidth;
-int vHeight;
 
 void myIdle()
 {
@@ -81,6 +87,7 @@ void fMouseDown(int button, int state, int x, int y) {
 		vMouseDx = 0;
 		vMouseDy = 0;
 	}
+	glutPostRedisplay();
 }
 
 void fMouseMotion(int x, int y)
@@ -91,8 +98,8 @@ void fMouseMotion(int x, int y)
 		vMouseDy = y - vMouseOldY;
 		cout<<"left mouse: "<< vMouseDx <<", "<< vMouseDy <<endl;
 
-		glutPostRedisplay();
 	}
+	glutPostRedisplay();
 }
 
 void reshape(int width, int height)
@@ -106,13 +113,19 @@ void reshape(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-//basic order of operation:
-//push current orientation
-//rotate view
-//translate object
-//draw object
-//pop restore previous orientation
 void display(void)
+/**
+basic order of drawing operation:
+1.push current model/projection
+  a.model
+    i.translate transform
+    ii.rotate transform
+    iii.scale transform
+  b.projection
+    i.apply projection transform
+2.draw object
+3.pop restore previous model/projection
+*/
 {
 	glMatrixMode(GL_MODELVIEW);
 
@@ -129,16 +142,37 @@ void display(void)
 		//lastly translate object
 		glTranslatef(0,0,-5);
 
-		//get camera rotation delta
+		//apply rotation transform if only left mouse is down
 		if(bMouseLeftDown && !bKeyShiftDown)
 		{
-			vCamRotY += vMouseDx/40.f;
-			vCamRotX += vMouseDy/40.f;
+		  vCamRotY = vMouseDx/1.f;
+		  vCamRotX = vMouseDy/1.f;
+
+		  //save rotation transform to a matrix
+		  glPushMatrix();     
+		    glLoadIdentity(); // reset
+		    //then apply additional rotation transform
+		    glRotatef(abs(vCamRotX-vCamRotOldX),vCamRotX-vCamRotOldX,0,0);
+		    glRotatef(abs(vCamRotY-vCamRotOldY),0,vCamRotY-vCamRotOldY,0);
+		    //update rotation delta
+		    vCamRotOldX = vCamRotX;
+		    vCamRotOldY = vCamRotY;
+		    //first apply current rotation transform
+		    glMultMatrixf(vModelRotation);
+		    //lastly save the new rotation transform
+		    glGetFloatv(GL_MODELVIEW_MATRIX,vModelRotation);
+		  glPopMatrix();
+		}
+		else //reset rotation delta when left mouse is up
+		{
+		  vCamRotY = 0;
+		  vCamRotX = 0;
+		  vCamRotOldY = 0;
+		  vCamRotOldX = 0;
 		}
 
-		//perform rotation on Y axis and then X axis 
-		glRotatef(abs(vCamRotX),vCamRotX,0,0);
-		glRotatef(abs(vCamRotY),0,vCamRotY,0);
+		//apply rotation transform from saved matrix
+		glMultMatrixf(vModelRotation);
 
 		//scale object and avoid negative scaling
 		if(bMouseLeftDown && bKeyShiftDown)
@@ -160,7 +194,7 @@ void display(void)
 	//save state projection stack
 	glPushMatrix();
 		glLoadIdentity();
-		gluOrtho2D(0.0, vWidth, 0.0, vHeight);
+		gluOrtho2D(0.0, vWidth, 0.0, vHeight); // apply parallel projection transform for text display
 
 		glMatrixMode(GL_MODELVIEW);
 		//save state model stack
@@ -181,13 +215,6 @@ void display(void)
 	glMatrixMode(GL_PROJECTION);
 	//revert state projection stack
 	glPopMatrix();
-
-	////camera translation
-	//if(bMouseLeftDown && !bKeyShiftDown)
-	//{
-	//	vCamTraX += vMouseDx/200.f;
-	//}
-	//glTranslatef(vCamTraX,0,0);
 
 	glEnable(GL_TEXTURE_2D);
 	glutSwapBuffers();
