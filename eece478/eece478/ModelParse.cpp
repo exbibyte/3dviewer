@@ -22,10 +22,10 @@ ModelParse::ModelParse(string path)
   ModelTriangle * cModelTriangle = new ModelTriangle();
 
   vector<ModelData*> vModelData;
-  // vModelData.push_back((ModelData*)cModelName);
-  // vModelData.push_back((ModelData*)cModelTexture);
-  // vModelData.push_back((ModelData*)cModelVertice);
-  // vModelData.push_back((ModelData*)cModelNormal);
+  vModelData.push_back((ModelData*)cModelName);
+  vModelData.push_back((ModelData*)cModelTexture);
+  vModelData.push_back((ModelData*)cModelVertice);
+  vModelData.push_back((ModelData*)cModelNormal);
   vModelData.push_back((ModelData*)cModelTriangle);
 
   ifstream ifs;
@@ -41,11 +41,11 @@ ModelParse::ModelParse(string path)
   {    
     size_t found = line.find("#");
     if(found == std::string::npos){
-      Ss<<line<<" "; // save to buffer
+      Ss<<line<<" "; // save remaining to a single lined buffer
     }
   }
 
-  //match <tags> and </tags> from ModelData and extract info to ModelData
+  //find <tags> and </tags> defined in ModelData and extract info to ModelData
   line.clear();
   while (getline(Ss, line)) 
   { 
