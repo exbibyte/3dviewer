@@ -18,7 +18,6 @@ namespace glut_global
 {
   
   //model states
-  float vScale = 1;
 
   //modelview states
   float vCamRotX = 0;
@@ -26,7 +25,15 @@ namespace glut_global
   float vCamRotOldX = 0;
   float vCamRotOldY = 0;
 
+  float vScale = 1;
+  
   float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+
+  float vTransX = 0;
+  float vTransY = 0;
+  float vTransZ = 0;
+
+  float vModelTranslation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
   //mouse and key states
   int vMouseOldX;
@@ -35,6 +42,16 @@ namespace glut_global
   int vMouseDy = 0;
   bool bMouseLeftDown = false;
   bool bKeyShiftDown = false;
+
+  bool bKeyWDown = false;
+  bool bKeyADown = false;
+  bool bKeySDown = false;
+  bool bKeyDDown = false;
+
+  bool bKeyWUp = false;
+  bool bKeyAUp = false;
+  bool bKeySUp = false;
+  bool bKeyDUp = false;
 
   //window dimenstions
   int vWidth;
@@ -45,31 +62,45 @@ using namespace glut_global;
 
 void myIdle()
 {
-	if(bMouseLeftDown || bKeyShiftDown)
-	{
-		glutPostRedisplay();
-	}
+	// if(bMouseLeftDown || bKeyShiftDown)
+	// {
+		
+	// }
+	glutPostRedisplay();
 }
 
 void fKeyboardDown(unsigned char key, int x, int y)
 {
-	switch(key)
-	{
-	case 'z':
+  if(key == 'w')
+    bKeyWDown = true;
 
-		break;
-	case 'x':
+  if(key == 'a')
+    bKeyADown = true;
 
-		break;
-	case 'c':
+  if(key == 's')
+    bKeySDown = true;
+    
+  if(key == 'd')
+    bKeyDDown = true;
+  
+  glutPostRedisplay();
+}
 
-		break;
-	case 'v':
+void fKeyboardUp(unsigned char key, int x, int y)
+{
+  if(key == 'w')
+    bKeyWDown = false;
 
-		break;
-	default:
-		break;
-	}
+  if(key == 'a')
+    bKeyADown = false;
+
+  if(key == 's')
+    bKeySDown = false;
+    
+  if(key == 'd')
+    bKeyDDown = false;
+    
+  glutPostRedisplay();
 }
 
 void fMouseDown(int button, int state, int x, int y) {
@@ -82,16 +113,22 @@ void fMouseDown(int button, int state, int x, int y) {
 	int mod = glutGetModifiers();	
 	bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
 
-	if(bMouseLeftDown == false)
+	if(!bMouseLeftDown)	// reset mouse delta when left mouse is up
 	{
-		vMouseDx = 0;
-		vMouseDy = 0;
+	  vMouseDx = 0;
+	  vMouseDy = 0;
 	}
 	glutPostRedisplay();
 }
 
 void fMouseMotion(int x, int y)
+/** calculate left mouse delta and shift key state
+*/
 {
+	//detect shift key is pressed
+	int mod = glutGetModifiers();	
+	bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
+
 	if(bMouseLeftDown)
 	{
 		vMouseDx = x - vMouseOldX;
@@ -139,6 +176,26 @@ basic order of drawing operation:
 	//save state model stack
 	glPushMatrix();
 		
+	//additional translation from keys
+	vTransX = 0;
+	vTransY = 0;
+	vTransZ = 0;
+
+	vTransZ += (bKeyWDown)? 0.04: 0;
+        vTransX += (bKeyADown)? 0.04: 0;
+        vTransZ += (bKeySDown)? -0.04: 0;
+	vTransX += (bKeyDDown)? -0.04: 0;
+	
+	//save translation
+	glPushMatrix();     
+	  glLoadIdentity();
+	  glTranslatef(vTransX,vTransY,vTransZ);
+	  glMultMatrixf(vModelTranslation);
+	  glGetFloatv(GL_MODELVIEW_MATRIX,vModelTranslation);
+	glPopMatrix();
+
+	glMultMatrixf(vModelTranslation);
+
 		//lastly translate object
 		glTranslatef(0,0,-5);
 
@@ -177,7 +234,7 @@ basic order of drawing operation:
 		//scale object and avoid negative scaling
 		if(bMouseLeftDown && bKeyShiftDown)
 		{
-			vScale += vMouseDy/700.f;
+			vScale -= vMouseDy/1000.f;
 			vScale = vScale<0? 0: vScale;
 		}
 		glScalef(vScale,vScale,vScale);
@@ -245,14 +302,15 @@ int main(int argc, char** argv)
     glutInitWindowSize (500, 500); 
     glutInitWindowPosition (100, 100);
     glutCreateWindow ("hello");
-	glEnable(GL_POLYGON_SMOOTH);
-	glutReshapeFunc(reshape);
+    glEnable(GL_POLYGON_SMOOTH);
+    glutReshapeFunc(reshape);
     init ();
-	glutIdleFunc(myIdle);
+    glutIdleFunc(myIdle);
     glutDisplayFunc(display);
-	glutMouseFunc(fMouseDown);
-	glutMotionFunc(fMouseMotion); //mouse motion when mouse/keyboard is pressed
-	glutKeyboardFunc(fKeyboardDown);
+    glutMouseFunc(fMouseDown);
+    glutMotionFunc(fMouseMotion); //mouse motion when mouse/keyboard is pressed
+    glutKeyboardFunc(fKeyboardDown);
+    glutKeyboardUpFunc(fKeyboardUp);
     glutMainLoop();
     return 0;   /* ISO C requires main to return int. */
 }
