@@ -22,8 +22,8 @@ class ModelNormal: ModelData
 ModelNormal::ModelNormal()
 {
   this->mType = NORMAL;
-  this->mBeginTag = "<normal>";
-  this->mEndTag = "</normal>";
+  this->mBeginTag = "<normals>";
+  this->mEndTag = "</normals>";
 }
 
 void ModelNormal::FormatData()	

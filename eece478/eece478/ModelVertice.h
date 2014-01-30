@@ -22,8 +22,8 @@ class ModelVertice: ModelData
 ModelVertice::ModelVertice()
 {
   this->mType = VERTICE;
-  this->mBeginTag = "<vertice>";
-  this->mEndTag = "</vertice>";
+  this->mBeginTag = "<vertices>";
+  this->mEndTag = "</vertices>";
 }
 
 void ModelVertice::FormatData()	

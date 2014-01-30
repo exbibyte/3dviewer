@@ -22,8 +22,8 @@ class ModelTriangle: ModelData
 ModelTriangle::ModelTriangle()
 {
   this->mType = TRIANGLE;
-  this->mBeginTag = "<triangle>";
-  this->mEndTag = "</triangle>";
+  this->mBeginTag = "<triangles>";
+  this->mEndTag = "</triangles>";
 }
 
 void ModelTriangle::FormatData()	

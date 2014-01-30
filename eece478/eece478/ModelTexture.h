@@ -22,8 +22,8 @@ class ModelTexture: ModelData
 ModelTexture::ModelTexture()
 {
   this->mType = TEXTURE;
-  this->mBeginTag = "<texture>";
-  this->mEndTag = "</texture>";
+  this->mBeginTag = "<textures>";
+  this->mEndTag = "</textures>";
 }
 
 void ModelTexture::FormatData()	
