@@ -23,6 +23,7 @@ class ModelData{
   eDataType mType;
   void SetData(string input);
   virtual void FormatData()=0;
+  virtual ~ModelData(){};
 };
 
 void ModelData::SetData(string input)
