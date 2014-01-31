@@ -13,25 +13,42 @@
 
 using namespace std;
 
-ModelParse::ModelParse(string path)
+ModelParse::ModelParse()
 {
+}
+
+ModelParse::~ModelParse()
+{
+  for(auto i : vModelData)
+  {
+    delete i;
+  }
+}
+
+ModelEntity * ModelParse::GetEntity(string path)
+{
+  ifstream ifs;
+  stringstream Ss;
+
+  //open model file
+  ifs.open(path.c_str(), ifstream::in);
+  if(!ifs.is_open())
+  {
+    cout<<"error opening file: "<<path<<endl;
+    return NULL;
+  }
+
   ModelName * cModelName = new ModelName();
   ModelTexture * cModelTexture = new ModelTexture();
   ModelVertice * cModelVertice = new ModelVertice();
   ModelNormal * cModelNormal = new ModelNormal();
   ModelTriangle * cModelTriangle = new ModelTriangle();
 
-  vector<ModelData*> vModelData;
   vModelData.push_back((ModelData*)cModelName);
   vModelData.push_back((ModelData*)cModelTexture);
   vModelData.push_back((ModelData*)cModelVertice);
   vModelData.push_back((ModelData*)cModelNormal);
   vModelData.push_back((ModelData*)cModelTriangle);
-
-  ifstream ifs;
-  stringstream Ss;
-
-  ifs.open(path.c_str(), ifstream::in);
 
   string line;
   int LineNum = 0;
@@ -44,6 +61,8 @@ ModelParse::ModelParse(string path)
       Ss<<line<<" "; // save remaining to a single lined buffer
     }
   }
+
+  this->bEmpty = true;
 
   //find <tags> and </tags> defined in ModelData and extract info to ModelData
   line.clear();
@@ -58,10 +77,33 @@ ModelParse::ModelParse(string path)
 	  //when found begin and end tags, extract data
 	  string SubString = line.substr(FoundStartTag + i->mBeginTag.length(),FoundEndTag-(FoundStartTag + i->mBeginTag.length()));
 	  i->SetData(SubString); // format and set data to ModelData object
+
+	  this->bEmpty = false;
 	}
       }
     }
   }
 
-  delete cModelTexture;
+  if(this->bEmpty)
+  {
+    return NULL;
+  }
+
+  //save to model entity
+  ModelEntity * output = new ModelEntity();
+  output->cModelName = cModelName;
+  output->cModelTexture = cModelTexture;
+  output->cModelVertice = cModelVertice;
+  output->cModelNormal = cModelNormal;
+  output->cModelTriangle = cModelTriangle;
+  
+  cModelName = NULL;
+  cModelTexture = NULL;
+  cModelVertice = NULL;
+  cModelNormal = NULL;
+  cModelTriangle = NULL;
+
+  vModelData.clear();
+
+  return output;
 }

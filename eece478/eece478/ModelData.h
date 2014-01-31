@@ -5,6 +5,8 @@
 #include <sstream>
 #include <vector>
 
+using namespace std;
+
 enum eDataType
 {
   NAME = 0,
@@ -25,22 +27,5 @@ class ModelData{
   virtual void FormatData()=0;
   virtual ~ModelData(){};
 };
-
-void ModelData::SetData(string input)
-/** separate data items into a vector of strings and calls formating function in a derived class*/
-{
-  stringstream Ss;
-  Ss.str(input);
-  string temp;
-
-  //seperate each data item
-  while (Ss>>temp)
-  {
-    this->vDataItem.push_back(temp);
-    temp.clear();
-  }
-
-  this->FormatData(); //format data
-}
 
 #endif

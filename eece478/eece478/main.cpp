@@ -5,18 +5,31 @@
 #endif
 
 #include <string>
-
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glut.h>  
 
 #include <iostream>
 #include <cmath>
 
+#include "ModelParse.h"
+#include "ModelEntity.h"
+
 using namespace std;
 
 namespace glut_global
 {
+  //parser
+  ModelParse cParser;
+
+  vector<ModelEntity*> vpEntity;
+
+  //vertex buffer object ID
+  GLuint vVbo;
   
+  float * pVerticeData;		// holder of model vertices
+  int vNumData;
+
   //model states
 
   //modelview states
@@ -62,14 +75,13 @@ using namespace glut_global;
 
 void myIdle()
 {
-	// if(bMouseLeftDown || bKeyShiftDown)
-	// {
-		
-	// }
-	glutPostRedisplay();
+  glutPostRedisplay();
 }
 
 void fKeyboardDown(unsigned char key, int x, int y)
+/**
+   WASD key down detection
+*/
 {
   if(key == 'w')
     bKeyWDown = true;
@@ -87,6 +99,9 @@ void fKeyboardDown(unsigned char key, int x, int y)
 }
 
 void fKeyboardUp(unsigned char key, int x, int y)
+/**
+   WASD key up detection
+*/
 {
   if(key == 'w')
     bKeyWDown = false;
@@ -103,51 +118,54 @@ void fKeyboardUp(unsigned char key, int x, int y)
   glutPostRedisplay();
 }
 
-void fMouseDown(int button, int state, int x, int y) {
- 
-	vMouseOldX = x; 
-	vMouseOldY = y;
-	bMouseLeftDown = (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
+void fMouseDown(int button, int state, int x, int y) 
+/**
+   mouse down and up detection
+ */
+{ 
+  vMouseOldX = x; 
+  vMouseOldY = y;
+  bMouseLeftDown = (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
 
-	//detect shift key is pressed
-	int mod = glutGetModifiers();	
-	bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
+  //detect shift key is pressed
+  int mod = glutGetModifiers();	
+  bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
 
-	if(!bMouseLeftDown)	// reset mouse delta when left mouse is up
-	{
-	  vMouseDx = 0;
-	  vMouseDy = 0;
-	}
-	glutPostRedisplay();
+  if(!bMouseLeftDown)	// reset mouse delta when left mouse is up
+    {
+      vMouseDx = 0;
+      vMouseDy = 0;
+    }
+  glutPostRedisplay();
 }
 
 void fMouseMotion(int x, int y)
 /** calculate left mouse delta and shift key state
 */
 {
-	//detect shift key is pressed
-	int mod = glutGetModifiers();	
-	bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
+  //detect shift key is pressed
+  int mod = glutGetModifiers();	
+  bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
 
-	if(bMouseLeftDown)
-	{
-		vMouseDx = x - vMouseOldX;
-		vMouseDy = y - vMouseOldY;
-		cout<<"left mouse: "<< vMouseDx <<", "<< vMouseDy <<endl;
+  if(bMouseLeftDown)
+    {
+      vMouseDx = x - vMouseOldX;
+      vMouseDy = y - vMouseOldY;
+      cout<<"left mouse: "<< vMouseDx <<", "<< vMouseDy <<endl;
 
-	}
-	glutPostRedisplay();
+    }
+  glutPostRedisplay();
 }
 
 void reshape(int width, int height)
 {
-	vWidth = width;
-	vHeight = height;
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(50, (float)width / height, 1, 1000);
-	glMatrixMode(GL_MODELVIEW);
+  vWidth = width;
+  vHeight = height;
+  glViewport(0, 0, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  gluPerspective(50, (float)width / height, 1, 1000);
+  glMatrixMode(GL_MODELVIEW);
 }
 
 void display(void)
@@ -176,7 +194,7 @@ basic order of drawing operation:
 	//save state model stack
 	glPushMatrix();
 		
-	//additional translation from keys
+	//additional translation from WASD keys
 	vTransX = 0;
 	vTransY = 0;
 	vTransZ = 0;
@@ -194,10 +212,11 @@ basic order of drawing operation:
 	  glGetFloatv(GL_MODELVIEW_MATRIX,vModelTranslation);
 	glPopMatrix();
 
+	//apply additional translation from WASD key movement
 	glMultMatrixf(vModelTranslation);
 
 		//lastly translate object
-		glTranslatef(0,0,-5);
+		glTranslatef(0,0,-100);
 
 		//apply rotation transform if only left mouse is down
 		if(bMouseLeftDown && !bKeyShiftDown)
@@ -240,7 +259,13 @@ basic order of drawing operation:
 		glScalef(vScale,vScale,vScale);
 
 		//place model
-		glutWireTeapot(1);
+		// glutWireTeapot(20);
+
+		//activate VBO
+		glBindBuffer(GL_ARRAY_BUFFER, vVbo);
+		glVertexPointer(3, GL_FLOAT, 0, 0);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glDrawArrays(GL_TRIANGLES, 0, vNumData/3/sizeof(GLfloat));
 
 	//revert state model stack
 	glPopMatrix();
@@ -273,11 +298,16 @@ basic order of drawing operation:
 	//revert state projection stack
 	glPopMatrix();
 
-	glEnable(GL_TEXTURE_2D);
+	// glEnable(GL_TEXTURE_2D);
 	glutSwapBuffers();
 }
 
 void init (void) 
+/**
+  setup background colour
+  setup projection transformation
+  setup vertex buffer and load model vertex
+*/
 {
 /*  select clearing (background) color       */
     glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -286,6 +316,14 @@ void init (void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+
+    // setup vertex buffer object
+    glGenBuffers(1, &vVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vVbo);
+
+    //load vertices from parsed model data
+    vpEntity.at(0)->GetVertices(pVerticeData, vNumData);
+    glBufferData(GL_ARRAY_BUFFER, vNumData*sizeof(GLfloat), pVerticeData, GL_STATIC_DRAW);
 }
 
 /* 
@@ -297,20 +335,45 @@ void init (void)
  */
 int main(int argc, char** argv)
 {
-    glutInit(&argc, argv);
-    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize (500, 500); 
-    glutInitWindowPosition (100, 100);
-    glutCreateWindow ("hello");
-    glEnable(GL_POLYGON_SMOOTH);
-    glutReshapeFunc(reshape);
-    init ();
-    glutIdleFunc(myIdle);
-    glutDisplayFunc(display);
-    glutMouseFunc(fMouseDown);
-    glutMotionFunc(fMouseMotion); //mouse motion when mouse/keyboard is pressed
-    glutKeyboardFunc(fKeyboardDown);
-    glutKeyboardUpFunc(fKeyboardUp);
-    glutMainLoop();
-    return 0;   /* ISO C requires main to return int. */
+  
+  if(argc == 1)
+  { 
+    cout<<"not enough argument"<<endl;
+    return -1;
+  }
+
+  //parse model
+  ModelEntity * pcEntity = cParser.GetEntity(argv[1]);
+  vpEntity.push_back(pcEntity);
+
+  //boilerplate
+  glutInit(&argc, argv);
+  glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  glutInitWindowSize (500, 500); 
+  glutInitWindowPosition (100, 100);
+  glutCreateWindow ("Assignment 1");
+  
+  //initialize glew for vertex shader
+  GLenum err = glewInit();
+  if(GLEW_OK != err)
+  {
+    cout<<"glew init failed"<<endl;
+    return -1;
+  }
+
+  glEnable(GL_POLYGON_SMOOTH);
+  glutReshapeFunc(reshape);
+  init ();
+
+  //set callback functions
+  glutIdleFunc(myIdle);
+  glutDisplayFunc(display);
+  glutMouseFunc(fMouseDown);
+  glutMotionFunc(fMouseMotion);
+  glutKeyboardFunc(fKeyboardDown);
+  glutKeyboardUpFunc(fKeyboardUp);
+  
+  //run
+  glutMainLoop();
+  return 0;
 }

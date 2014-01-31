@@ -6,43 +6,27 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
-
-typedef struct{
-  string id;
-  string Name;
-}zTexture;
-
-typedef struct{
-  string id;
-  double Vertice[3];
-}zVertice;
-
-typedef struct{
-  string id;
-  double Normal[3];
-}zNormal;
-
-typedef struct{
-  string id;
-  int Indices[3];
-  int NormalIndex;
-  int TextureIndex;
-  double TextureCoord[6];
-}zTriangle;
+#include "ModelData.h"
+#include "ModelName.h"
+#include "ModelTexture.h"
+#include "ModelVertice.h"
+#include "ModelNormal.h"
+#include "ModelTriangle.h"
+#include "ModelEntity.h"
 
 using namespace std;
 
 class ModelParse
 {
-protected:
-  vector<zTexture> vecTexture;
-  vector<zVertice> vecVertice;
-  vector<zNormal> vecNormal;
-  vector<zTriangle> vecTriangle;
-public:
+ private:
+  bool bEmpty;
+  vector<ModelData*> vModelData;
+ public:
   //load model and store model info within the class
-  ModelParse(string path);
+  ModelParse();
+  ~ModelParse();
+  ModelEntity * GetEntity(string path);
+  
 };
 
 #endif
