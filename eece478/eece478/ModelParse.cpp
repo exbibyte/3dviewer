@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -107,3 +108,5 @@ ModelEntity * ModelParse::GetEntity(string path)
 
   return output;
 }
+
+

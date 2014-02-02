@@ -22,9 +22,6 @@ class ModelParse
   bool bEmpty;
   vector<ModelData*> vModelData;
 
-  bool (*fCompareB)(void*, void*);
-  int (*fCompareAB)(void*, void*);
-
  public:
   //load model and store model info within the class
   ModelParse();
