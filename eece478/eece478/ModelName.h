@@ -7,9 +7,12 @@
 #include <sstream>
 #include <tuple>
 
+#define TNAME_ID 0;
+#define TNAME_NAME 1;
+
 using namespace std;
 
-typedef tuple<string> tName;
+typedef tuple<int,string> tName;
 
 class ModelName: ModelData
 {

@@ -7,9 +7,14 @@
 #include <sstream>
 #include <tuple>
 
+#define TNORMAL_ID 0
+#define TNORMAL_X 1
+#define TNORMAL_Y 2
+#define TNORMAL_Z 3
+
 using namespace std;
 
-typedef tuple<float,float,float> tNormal;
+typedef tuple<int, float,float,float> tNormal;
 
 class ModelNormal: ModelData
 {

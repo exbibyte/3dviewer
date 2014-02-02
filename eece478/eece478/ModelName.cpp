@@ -22,15 +22,16 @@ void ModelName::FormatData()
   //convert data to expected format
   for(std::vector<string>::iterator it = this->vDataItem.begin(); it != vDataItem.end(); ++it)
   {
-    tName NewData = std::make_tuple(*it);
+    tName NewData = std::make_tuple(i,*it);
     this->vName.push_back(NewData);
+    i++;
   }
   
 #ifdef DEBUG 
   //check saved model data
   for(auto j : this->vName)
   {
-    cout<<"tuple data: "<<std::get<0>(j)<<endl;
+    cout<<"tuple data: "<<std::get<TNAME_NAME>(j)<<endl;
   }
 #endif
 }

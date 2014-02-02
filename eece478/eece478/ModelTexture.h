@@ -7,9 +7,12 @@
 #include <sstream>
 #include <tuple>
 
+#define TTEXTURE_ID 0
+#define TTEXTURE_NAME 1
+
 using namespace std;
 
-typedef tuple<string> tTexture;
+typedef tuple<int, string> tTexture;
 
 class ModelTexture: ModelData
 {

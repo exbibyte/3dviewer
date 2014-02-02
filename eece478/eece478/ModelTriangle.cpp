@@ -22,29 +22,31 @@ void ModelTriangle::FormatData()
   for(std::vector<string>::iterator it = this->vDataItem.begin(); it != vDataItem.end(); ++it)
   {
     tTriangle NewData;
-    std::get<0>(NewData) = atoi((*it).c_str());
-    std::get<1>(NewData) = atoi((*(it+1)).c_str());
-    std::get<2>(NewData) = atoi((*(it+2)).c_str());
+    std::get<TTRIANGLE_ID>(NewData) = i;
+    std::get<TTRIANGLE_VECX>(NewData) = atoi((*it).c_str());
+    std::get<TTRIANGLE_VECY>(NewData) = atoi((*(it+1)).c_str());
+    std::get<TTRIANGLE_VECZ>(NewData) = atoi((*(it+2)).c_str());
 
-    std::get<3>(NewData) = atoi((*(it+3)).c_str());
-    std::get<4>(NewData) = atoi((*(it+4)).c_str());
+    std::get<TTRIANGLE_NORM>(NewData) = atoi((*(it+3)).c_str());
+    std::get<TTRIANGLE_TEXT>(NewData) = atoi((*(it+4)).c_str());
 
-    std::get<5>(NewData) = atof((*(it+5)).c_str());
-    std::get<6>(NewData) = atof((*(it+6)).c_str());
-    std::get<7>(NewData) = atof((*(it+7)).c_str());
-    std::get<8>(NewData) = atof((*(it+8)).c_str());
-    std::get<9>(NewData) = atof((*(it+9)).c_str());
-    std::get<10>(NewData) = atof((*(it+10)).c_str());
+    std::get<TTRIANGLE_TEXT1>(NewData) = atof((*(it+5)).c_str());
+    std::get<TTRIANGLE_TEXT2>(NewData) = atof((*(it+6)).c_str());
+    std::get<TTRIANGLE_TEXT3>(NewData) = atof((*(it+7)).c_str());
+    std::get<TTRIANGLE_TEXT4>(NewData) = atof((*(it+8)).c_str());
+    std::get<TTRIANGLE_TEXT5>(NewData) = atof((*(it+9)).c_str());
+    std::get<TTRIANGLE_TEXT6>(NewData) = atof((*(it+10)).c_str());
 
     this->vTriangle.push_back(NewData);
     it += 10;
+    i++;
   }
   
 #ifdef DEBUG 
   //check saved model data
   for(auto j : this->vTriangle)
   {
-    cout<<"tuple data: "<<std::get<0>(j)<<", "<<std::get<1>(j)<<", "<<std::get<2>(j)<<", "<<std::get<3>(j)<<", "<<std::get<4>(j)<<", "<<std::get<5>(j)<<", "<<std::get<6>(j)<<", "<<std::get<7>(j)<<", "<<std::get<8>(j)<<", "<<std::get<9>(j)<<", "<<std::get<10>(j)<<endl;
+    cout<<"tuple data: "<<std::get<TTRIANGLE_VECX>(j)<<", "<<std::get<TTRIANGLE_VECY>(j)<<", "<<std::get<TTRIANGLE_VECZ>(j)<<", "<<std::get<TTRIANGLE_NORM>(j)<<", "<<std::get<TTRIANGLE_TEXT>(j)<<", "<<std::get<TTRIANGLE_TEXT1>(j)<<", "<<std::get<TTRIANGLE_TEXT2>(j)<<", "<<std::get<TTRIANGLE_TEXT3>(j)<<", "<<std::get<TTRIANGLE_TEXT4>(j)<<", "<<std::get<TTRIANGLE_TEXT5>(j)<<", "<<std::get<TTRIANGLE_TEXT6>(j)<<endl;
   }
 #endif
 }

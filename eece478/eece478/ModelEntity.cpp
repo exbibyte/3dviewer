@@ -26,11 +26,11 @@ num: array size
 
   for(auto i : this->cModelVertice->vVertice)
   {
-    *data = std::get<0>(i);
+    *data = std::get<TVERTICE_X>(i);
     data++;
-    *data = std::get<1>(i);
+    *data = std::get<TVERTICE_Y>(i);
     data++;
-    *data = std::get<2>(i);
+    *data = std::get<TVERTICE_Z>(i);
     data++;
   }
   data -= num;

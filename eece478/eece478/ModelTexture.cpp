@@ -21,15 +21,16 @@ void ModelTexture::FormatData()
   //convert data to expected format
   for(std::vector<string>::iterator it = this->vDataItem.begin(); it != vDataItem.end(); ++it)
   {
-    tTexture NewData = std::make_tuple((string)*it);
+    tTexture NewData = std::make_tuple(i, (string)*it);
     this->vTexture.push_back(NewData);
+    i++;
   }
 
 #ifdef DEBUG   
   //check saved model data
   for(auto j : this->vTexture)
   {
-    cout<<"tuple data: "<<std::get<0>(j)<<endl;
+    cout<<"tuple data: "<<std::get<TTEXTURE_NAME>(j)<<endl;
   }
 #endif
 }
