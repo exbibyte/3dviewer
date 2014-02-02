@@ -199,10 +199,10 @@ basic order of drawing operation:
 	vTransY = 0;
 	vTransZ = 0;
 
-	vTransZ += (bKeyWDown)? 0.04: 0;
-        vTransX += (bKeyADown)? 0.04: 0;
-        vTransZ += (bKeySDown)? -0.04: 0;
-	vTransX += (bKeyDDown)? -0.04: 0;
+	vTransZ += (bKeyWDown)? 0.15: 0;
+        vTransX += (bKeyADown)? 0.15: 0;
+        vTransZ += (bKeySDown)? -0.15: 0;
+	vTransX += (bKeyDDown)? -0.15: 0;
 	
 	//save translation
 	glPushMatrix();     
@@ -322,7 +322,8 @@ void init (void)
     glBindBuffer(GL_ARRAY_BUFFER, vVbo);
 
     //load vertices from parsed model data
-    vpEntity.at(0)->GetVertices(pVerticeData, vNumData);
+    vpEntity.at(0)->Update();
+    vpEntity.at(0)->GetUpdatedVertices(pVerticeData, vNumData);
     glBufferData(GL_ARRAY_BUFFER, vNumData*sizeof(GLfloat), pVerticeData, GL_STATIC_DRAW);
 }
 
