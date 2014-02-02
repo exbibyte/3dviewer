@@ -23,9 +23,9 @@ void ModelTriangle::FormatData()
   {
     tTriangle NewData;
     std::get<TTRIANGLE_ID>(NewData) = i;
-    std::get<TTRIANGLE_VECXID>(NewData) = atoi((*it).c_str());
-    std::get<TTRIANGLE_VECYID>(NewData) = atoi((*(it+1)).c_str());
-    std::get<TTRIANGLE_VECZID>(NewData) = atoi((*(it+2)).c_str());
+    std::get<TTRIANGLE_VEC1ID>(NewData) = atoi((*it).c_str());
+    std::get<TTRIANGLE_VEC2ID>(NewData) = atoi((*(it+1)).c_str());
+    std::get<TTRIANGLE_VEC3ID>(NewData) = atoi((*(it+2)).c_str());
 
     std::get<TTRIANGLE_NORMID>(NewData) = atoi((*(it+3)).c_str());
     std::get<TTRIANGLE_TEXTID>(NewData) = atoi((*(it+4)).c_str());
@@ -46,7 +46,7 @@ void ModelTriangle::FormatData()
   //check saved model data
   for(auto j : this->vTriangle)
   {
-    cout<<"tuple data: "<<std::get<TTRIANGLE_VECXID>(j)<<", "<<std::get<TTRIANGLE_VECYID>(j)<<", "<<std::get<TTRIANGLE_VECZID>(j)<<", "<<std::get<TTRIANGLE_NORMID>(j)<<", "<<std::get<TTRIANGLE_TEXTID>(j)<<", "<<std::get<TTRIANGLE_TEXT1>(j)<<", "<<std::get<TTRIANGLE_TEXT2>(j)<<", "<<std::get<TTRIANGLE_TEXT3>(j)<<", "<<std::get<TTRIANGLE_TEXT4>(j)<<", "<<std::get<TTRIANGLE_TEXT5>(j)<<", "<<std::get<TTRIANGLE_TEXT6>(j)<<endl;
+    cout<<"tuple data: "<<std::get<TTRIANGLE_VEC1ID>(j)<<", "<<std::get<TTRIANGLE_VEC2ID>(j)<<", "<<std::get<TTRIANGLE_VEC3ID>(j)<<", "<<std::get<TTRIANGLE_NORMID>(j)<<", "<<std::get<TTRIANGLE_TEXTID>(j)<<", "<<std::get<TTRIANGLE_TEXT1>(j)<<", "<<std::get<TTRIANGLE_TEXT2>(j)<<", "<<std::get<TTRIANGLE_TEXT3>(j)<<", "<<std::get<TTRIANGLE_TEXT4>(j)<<", "<<std::get<TTRIANGLE_TEXT5>(j)<<", "<<std::get<TTRIANGLE_TEXT6>(j)<<endl;
   }
 #endif
 }
