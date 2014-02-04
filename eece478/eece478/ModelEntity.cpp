@@ -63,7 +63,7 @@ num: array size
 void ModelEntity::GetUpdatedVertices(float*& data, int& num)
 /**
 return:
-data: 1D array of vertice data
+data: 1D array of updated vertice data matched for each triangle
 num: array size
 */
 {
@@ -101,6 +101,10 @@ num: array size
 }
 
 void ModelEntity::Update()
+/**
+Links triangles to vertices, normals, and textures to generate updated triangle data
+Currently vertices are updated
+*/
 { 
   this->vtTriangleDetail.clear();
   
@@ -168,7 +172,6 @@ void ModelEntity::Update()
       std::get<TTRIANGLEDETAIL_VEC3X>(*itDetail) = std::get<TVERTICE_X>(*itVertice);
       std::get<TTRIANGLEDETAIL_VEC3Y>(*itDetail) = std::get<TVERTICE_Y>(*itVertice);
       std::get<TTRIANGLEDETAIL_VEC3Z>(*itDetail) = std::get<TVERTICE_Z>(*itVertice);
-      cout<<"vec3 z: "<<std::get<TTRIANGLEDETAIL_VEC3X>(*itDetail)<<endl;
       itDetail++;
     }
     else
