@@ -365,7 +365,6 @@ void init (void)
 /*  initialize viewing values  */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
 
     // setup vertex buffer object
     glGenBuffers(1, &vVbo);
@@ -380,6 +379,7 @@ void init (void)
 void fExit()
 {
   delete pVerticeData;
+  pVerticeData = NULL;
   cout<<"exited program"<<endl;
 }
 
@@ -405,7 +405,7 @@ int main(int argc, char** argv)
 
   //boilerplate
   glutInit(&argc, argv);
-  glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize (500, 500); 
   glutInitWindowPosition (100, 100);
   glutCreateWindow ("Assignment 1");
