@@ -25,17 +25,10 @@ namespace glut_global
   //parser
   ModelParse cParser;
 
+  //holder of different input models
   vector<ModelEntity*> vpEntity;
 
-  //vertex buffer object ID
-  GLuint vVbo;
-  
-  float * pVerticeData;		// holder of model vertices
-  int vNumData;
-
-  //model states
-
-  //modelview states
+  //transformation variables
   float vCamRotX = 0;
   float vCamRotY = 0;
   float vCamRotOldX = 0;
@@ -44,15 +37,14 @@ namespace glut_global
   float vScale = 0;
   float vScaleOld = 0;
 
-  float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
-
-  float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-
   float vTransX = 0;
   float vTransY = 0;
   float vTransZ = 0;
 
+  //saves transformations of the model
   float vModelTranslation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
+  float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
   //mouse and key states
   int vMouseOldX;
@@ -61,7 +53,6 @@ namespace glut_global
   int vMouseDy = 0;
   bool bMouseLeftDown = false;
   bool bKeyShiftDown = false;
-
   bool bKeyWDown = false;
   bool bKeyADown = false;
   bool bKeySDown = false;
@@ -70,7 +61,7 @@ namespace glut_global
   bool bKeyCDown = false;
   bool bKeyVDown = false;
 
-  //window dimenstions
+  //window dimensions
   int vWidth;
   int vHeight;
 }
@@ -84,7 +75,7 @@ void myIdle()
 
 void fKeyboardDown(unsigned char key, int x, int y)
 /**
-   WASD key down detection
+   QWASDCV key down detection
 */
 {
   if(key == 'w')
@@ -100,7 +91,7 @@ void fKeyboardDown(unsigned char key, int x, int y)
     bKeyDDown = true;
 
   if(key == 'q')
-    bKeyQDown = !bKeyQDown;  
+    bKeyQDown = !bKeyQDown;  	// toggle only for switching models
   
   if(key == 'c')
     bKeyCDown = true;
@@ -113,7 +104,7 @@ void fKeyboardDown(unsigned char key, int x, int y)
 
 void fKeyboardUp(unsigned char key, int x, int y)
 /**
-   WASD key up detection
+WASDCV key up detection
 */
 {
   if(key == 'w')
@@ -139,8 +130,8 @@ void fKeyboardUp(unsigned char key, int x, int y)
 
 void fMouseDown(int button, int state, int x, int y) 
 /**
-   mouse down and up detection
- */
+mouse down and up detection
+*/
 { 
   vMouseOldX = x; 
   vMouseOldY = y;
@@ -159,7 +150,8 @@ void fMouseDown(int button, int state, int x, int y)
 }
 
 void fMouseMotion(int x, int y)
-/** calculate left mouse delta and shift key state
+/** 
+calculate left mouse delta and shift key state
 */
 {
   //detect shift key is pressed
@@ -178,6 +170,9 @@ void fMouseMotion(int x, int y)
 }
 
 void reshape(int width, int height)
+/**
+resize window and set perspective parameters
+*/
 {
   vWidth = width;
   vHeight = height;
@@ -203,22 +198,18 @@ basic order of drawing operation:
 */
 {
 	glMatrixMode(GL_MODELVIEW);
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- 
 	glColor3d(1, 1, 1);
 
 	//reset matrix
 	glLoadIdentity();
-	
-	//save state model stack
-	glPushMatrix();
 		
-	//additional translation from WASD keys
+	//additional translation from WASDCV (forward,left,back,right,up,down) keys
 	vTransX = 0;
 	vTransY = 0;
 	vTransZ = 0;
 
+	//delta when key is down
 	vTransZ += (bKeyWDown)? 0.3: 0;
         vTransX += (bKeyADown)? 0.3: 0;
         vTransZ += (bKeySDown)? -0.3: 0;
@@ -226,7 +217,7 @@ basic order of drawing operation:
         vTransY += (bKeyCDown)? -0.3: 0;
 	vTransY += (bKeyVDown)? 0.3: 0;
 	
-	//save translation
+	//save translation from WASDCV
 	glPushMatrix();     
 	  glLoadIdentity();
 	  glTranslatef(vTransX,vTransY,vTransZ);
@@ -234,31 +225,35 @@ basic order of drawing operation:
 	  glGetFloatv(GL_MODELVIEW_MATRIX,vModelTranslation);
 	glPopMatrix();
 
-	//apply additional translation from WASD key movement
+	//apply translation from WASDCV key movement
 	glMultMatrixf(vModelTranslation);
 
-		//lastly translate object
+		//translate object
 		glTranslatef(0,0,-130);
 
 		//apply rotation transform if only left mouse is down
 		if(bMouseLeftDown && !bKeyShiftDown)
 		{
+		  //get rotation delta
 		  vCamRotY = vMouseDx/1.f;
 		  vCamRotX = vMouseDy/1.f;
 
-		  //save rotation transform to a matrix
-		  glPushMatrix();     
-		    glLoadIdentity(); // reset
-		    //3rd, apply additional rotation transform
+		  //start of object rotation transform
+		  glPushMatrix();    
+		    glLoadIdentity();
+		    //2nd, apply additional delta transform
 		    glRotatef(abs(vCamRotX-vCamRotOldX),vCamRotX-vCamRotOldX,0,0);
 		    glRotatef(abs(vCamRotY-vCamRotOldY),0,vCamRotY-vCamRotOldY,0);
-		    //2nd,update rotation delta
+		    
+		    //1st, apply old rotation transform
+		    glMultMatrixf(vModelRotation);
+		    
+		    //save the new rotation transform
+		    glGetFloatv(GL_MODELVIEW_MATRIX,vModelRotation);
+
+		    //update rotation delta
 		    vCamRotOldX = vCamRotX;
 		    vCamRotOldY = vCamRotY;
-		    //first apply current rotation transform
-		    glMultMatrixf(vModelRotation);
-		    //lastly, save the new rotation transform
-		    glGetFloatv(GL_MODELVIEW_MATRIX,vModelRotation);
 		  glPopMatrix();
 		}
 		else //reset rotation delta when left mouse is up
@@ -275,24 +270,24 @@ basic order of drawing operation:
 		//scale object and avoid negative scaling
 		if(bMouseLeftDown && bKeyShiftDown)
 		{
+		        //get delta
 			vScale = -vMouseDy/3000.f;
-
-			//save scaling transform to a matrix
+			float DeltaScale = 1+vScale-vScaleOld;
+			DeltaScale = DeltaScale<0? 0: DeltaScale;
+			
+			//start of object scaling transform
 			glPushMatrix();     
-			  glLoadIdentity(); // reset
+			  glLoadIdentity();
 
-			  //apply scaling transform
-			  float DeltaScale = 1+vScale-vScaleOld;
-			  DeltaScale = DeltaScale<0? 0: DeltaScale;
-
+			  //2nd, apply delta scaling
 			  glScalef(DeltaScale,DeltaScale,DeltaScale);
 
-			  vScaleOld = vScale;
-
-			  //first apply current scaling transform
+			  //1st, apply old scaling transform
 			  glMultMatrixf(vModelScaling);
+			  
 			  //lastly, save the new scaling transform
 			  glGetFloatv(GL_MODELVIEW_MATRIX,vModelScaling);
+			  vScaleOld = vScale;
 			glPopMatrix();
 		}
 		{
@@ -303,18 +298,14 @@ basic order of drawing operation:
 		//apply saved scaling transform
 		glMultMatrixf(vModelScaling);
 
+		//drawing different objects using q key toggle
 		if(!bKeyQDown)
 		{
-		  //place teapot
 		  glutWireTeapot(20);
 		}
 		else
 		{
-		  //activate VBO and place input model
-		  glBindBuffer(GL_ARRAY_BUFFER, vVbo);
-		  glVertexPointer(3, GL_FLOAT, 0, 0);
-		  glEnableClientState(GL_VERTEX_ARRAY);
-		  glDrawArrays(GL_TRIANGLES, 0, vNumData/3/sizeof(GLfloat));
+		  vpEntity.at(0)->Draw();
 		}
 
 	//revert state model stack
@@ -326,7 +317,8 @@ basic order of drawing operation:
 	//save state projection stack
 	glPushMatrix();
 		glLoadIdentity();
-		gluOrtho2D(0.0, vWidth, 0.0, vHeight); // apply parallel projection transform for text display
+		// apply parallel projection transform for text display
+		gluOrtho2D(0.0, vWidth, 0.0, vHeight); 
 
 		glMatrixMode(GL_MODELVIEW);
 		//save state model stack
@@ -348,7 +340,6 @@ basic order of drawing operation:
 	//revert state projection stack
 	glPopMatrix();
 
-	// glEnable(GL_TEXTURE_2D);
 	glutSwapBuffers();
 }
 
@@ -359,27 +350,13 @@ void init (void)
   setup vertex buffer and load model vertex
 */
 {
-/*  select clearing (background) color       */
     glClearColor (0.0, 0.0, 0.0, 0.0);
-
-/*  initialize viewing values  */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    // setup vertex buffer object
-    glGenBuffers(1, &vVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vVbo);
-
-    //load vertices from parsed model data
-    vpEntity.at(0)->Update();
-    vpEntity.at(0)->GetUpdatedVertices(pVerticeData, vNumData);
-    glBufferData(GL_ARRAY_BUFFER, vNumData*sizeof(GLfloat), pVerticeData, GL_STATIC_DRAW);
 }
 
 void fExit()
 {
-  delete pVerticeData;
-  pVerticeData = NULL;
   cout<<"exited program"<<endl;
 }
 
@@ -399,10 +376,6 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  //parse model
-  ModelEntity * pcEntity = cParser.GetEntity(argv[1]);
-  vpEntity.push_back(pcEntity);
-
   //boilerplate
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -420,7 +393,7 @@ int main(int argc, char** argv)
 
   glEnable(GL_POLYGON_SMOOTH);
   glutReshapeFunc(reshape);
-  init ();
+  init();
 
   //set callback functions
   glutIdleFunc(myIdle);
@@ -432,6 +405,13 @@ int main(int argc, char** argv)
 
   //exit callback
   atexit(fExit);
+
+  //parse model after glut initialization
+  ModelEntity * pcEntity = cParser.GetEntity(argv[1]);
+  vpEntity.push_back(pcEntity);
+  //do an initial update of triangle vertices and store into VBO
+  vpEntity.at(0)->Update();
+  vpEntity.at(0)->LoadVBO();
 
   //run
   glutMainLoop();

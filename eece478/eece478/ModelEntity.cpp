@@ -11,7 +11,7 @@
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
 
-
+//comparator functions for item IDs (vertices,normals,texture,etc) in our tuple
 bool ModelEntity::fSortTriangleDetailByVec1(const tTriangleDetail& A, const tTriangleDetail& B)
 {
   return std::get<TTRIANGLEDETAIL_VEC1ID>(A) < std::get<TTRIANGLEDETAIL_VEC1ID>(B);
@@ -32,48 +32,26 @@ bool ModelEntity::fSortTriangleDetailByNorm(const tTriangleDetail& A, const tTri
   return std::get<TTRIANGLEDETAIL_NORMID>(A) < std::get<TTRIANGLEDETAIL_NORMID>(B);
 }
 
-void ModelEntity::GetVertices(float*& data, int& num)
-/**
-return:
-data: 1D array of vertice data
-num: array size
-*/
-{
-  this->vNumVertice = (this->cModelVertice->vVertice.size());
-  num = this->vNumVertice*3;
-
-#ifdef DEBUG
-  cout<<"vertex data count"<<num<<endl; 
-#endif
-
-  data = new float[num];
-
-  for(auto i : this->cModelVertice->vVertice)
-  {
-    *data = std::get<TVERTICE_X>(i);
-    data++;
-    *data = std::get<TVERTICE_Y>(i);
-    data++;
-    *data = std::get<TVERTICE_Z>(i);
-    data++;
-  }
-  data -= num;
-}
-
 void ModelEntity::GetUpdatedVertices(float*& data, int& num)
 /**
 return:
-data: 1D array of updated vertice data matched for each triangle
+data: 1D array of updated vertices for all triangles
 num: array size
 */
-{
-  this->vNumVertice = (this->vtTriangleDetail.size()*3);
-  num = this->vNumVertice*3;
+{ 
+  num = this->vtTriangleDetail.size()*9;
 
 #ifdef DEBUG
   cout<<"vertex data count"<<num<<endl; 
 #endif
 
+  //removes old data
+  if(data != NULL)
+  {
+    delete data;
+  }
+  
+  //assign data to the array
   data = new float[num];
 
   for(auto i : this->vtTriangleDetail)
@@ -103,12 +81,11 @@ num: array size
 void ModelEntity::Update()
 /**
 Links triangles to vertices, normals, and textures to generate updated triangle data
-Currently vertices are updated
 */
 { 
   this->vtTriangleDetail.clear();
   
-  //copy IDs
+  //copy IDs of basic data
   for(auto i : cModelTriangle->vTriangle)
   {
     tTriangleDetail detail;
@@ -179,4 +156,50 @@ Currently vertices are updated
       itVertice++;
     }
   }
+  
+  //saves the updated array of vertices
+  int numData;
+  this->GetUpdatedVertices(this->pVerticeData, numData);
+  this->vNumVertice = numData/3;
+}
+
+void ModelEntity::LoadVBO()
+/**
+link updated vertice data to the VBO
+*/
+{
+  glBindBuffer(GL_ARRAY_BUFFER, this->vVbo);
+  glBufferData(GL_ARRAY_BUFFER, this->vNumVertice*3*sizeof(GLfloat), this->pVerticeData, GL_STATIC_DRAW);
+}
+
+void ModelEntity::Draw()
+/**
+Draw what's linked to the VBO
+*/
+{
+    glBindBuffer(GL_ARRAY_BUFFER, this->vVbo);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDrawArrays(GL_TRIANGLES, 0, this->vNumVertice/sizeof(GLfloat));
+}
+
+ModelEntity::ModelEntity()
+/**
+This works after glut is initialized.
+Create a vertex buffer object.
+Initialize vertex data pointer
+*/
+{
+    this->pVerticeData = NULL;
+    this->pVbo = &this->vVbo;
+    glGenBuffers(1, this->pVbo);
+}
+
+ModelEntity::~ModelEntity()
+/**
+Deallocate memory
+*/
+{
+  delete this->pVerticeData;
+  this->pVerticeData = NULL;
 }

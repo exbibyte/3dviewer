@@ -10,6 +10,12 @@
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
 
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glut.h> 
+
+
+//index for accessing triangle data tuple
 #define TTRIANGLEDETAIL_ID 0
 #define TTRIANGLEDETAIL_VEC1ID 1
 #define TTRIANGLEDETAIL_VEC2ID 2
@@ -28,28 +34,44 @@
 #define TTRIANGLEDETAIL_NORMY 15
 #define TTRIANGLEDETAIL_NORMZ 16
 
+//definition of data tuple
 typedef tuple<int, int,int,int, int, float,float,float,float,float,float,float,float,float, float,float,float> tTriangleDetail;
 
 class ModelEntity{
 private:
+
+  //sorting comparators used in linking triangles to vertices, normals, etc
   static bool fSortTriangleDetailByVec1(const tTriangleDetail&, const tTriangleDetail&);
   static bool fSortTriangleDetailByVec2(const tTriangleDetail&, const tTriangleDetail&);
   static bool fSortTriangleDetailByVec3(const tTriangleDetail&, const tTriangleDetail&);
   static bool fSortTriangleDetailByNorm(const tTriangleDetail&, const tTriangleDetail&);
   
-public:
+  //vertice data
+  float * pVerticeData;
   int vNumVertice;
+
+  //VBO object
+  GLuint vVbo;
+  GLuint * pVbo;
+
+public:
+  ModelEntity();
+  ~ModelEntity();
+  
+  //basic data from parsing
   ModelName * cModelName;
   ModelTexture * cModelTexture;
   ModelVertice * cModelVertice;
   ModelNormal * cModelNormal;
   ModelTriangle * cModelTriangle;
   
+  //processed data for each triangle
   vector<tTriangleDetail> vtTriangleDetail;
   
-  void GetVertices(float*& data, int& num);
-  void GetUpdatedVertices(float*& data, int& num);
-  void Update();
+  void GetUpdatedVertices(float*& data, int& num);   //helper function for creating 1D array of vertice data
+  void Update();    //sort and match to create processed data
+  void Draw();
+  void LoadVBO();    //bind data to VBO		
 };
 
 #endif
