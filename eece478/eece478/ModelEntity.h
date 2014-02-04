@@ -14,7 +14,6 @@
 #include <GL/gl.h>
 #include <GL/glut.h> 
 
-
 //index for accessing triangle data tuple
 #define TTRIANGLEDETAIL_ID 0
 #define TTRIANGLEDETAIL_VEC1ID 1
@@ -37,10 +36,13 @@
 //definition of data tuple
 typedef tuple<int, int,int,int, int, float,float,float,float,float,float,float,float,float, float,float,float> tTriangleDetail;
 
+//This class is a container of basic model data. It also provides functions to link basic data to generate triangle vertices and draw vertices.
+//It can be used after OpenGL initilization functions are called. 
+
 class ModelEntity{
 private:
 
-  //sorting comparators used in linking triangles to vertices, normals, etc
+  //sorting comparators used in linking triangles to vertices, normals, texture (implemented vertices for vertice drawing for now)
   static bool fSortTriangleDetailByVec1(const tTriangleDetail&, const tTriangleDetail&);
   static bool fSortTriangleDetailByVec2(const tTriangleDetail&, const tTriangleDetail&);
   static bool fSortTriangleDetailByVec3(const tTriangleDetail&, const tTriangleDetail&);
@@ -65,13 +67,13 @@ public:
   ModelNormal * cModelNormal;
   ModelTriangle * cModelTriangle;
   
-  //processed data for each triangle
+  //contains processed data for triangles after calling Update()
   vector<tTriangleDetail> vtTriangleDetail;
   
   void GetUpdatedVertices(float*& data, int& num);   //helper function for creating 1D array of vertice data
   void Update();    //sort and match to create processed data
-  void Draw();
-  void LoadVBO();    //bind data to VBO		
+  void Draw();  //drawing using VBO
+  void LoadVBO();    //bind data array to VBO		
 };
 
 #endif

@@ -157,7 +157,7 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
     }
   }
   
-  //saves the updated array of vertices
+  //saves to an updated array of vertices
   int numData;
   this->GetUpdatedVertices(this->pVerticeData, numData);
   this->vNumVertice = numData/3;
@@ -165,7 +165,7 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
 
 void ModelEntity::LoadVBO()
 /**
-link updated vertice data to the VBO
+link updated vertice array to the VBO
 */
 {
   glBindBuffer(GL_ARRAY_BUFFER, this->vVbo);

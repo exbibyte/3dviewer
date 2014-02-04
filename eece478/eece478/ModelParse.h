@@ -16,17 +16,18 @@
 
 using namespace std;
 
+// this class generates an entity for an input model file path
+
 class ModelParse
 {
  private:
   bool bEmpty;
-  vector<ModelData*> vModelData;
+  vector<ModelData*> vModelData; // container to hold parsed data types such as vertices, textures, triangles, normals, and model name
 
  public:
-  //load model and store model info within the class
   ModelParse();
   ~ModelParse();
-  ModelEntity * GetEntity(string path);
+  ModelEntity * GetEntity(string path); //generator of an entity from input model file path
   
 };
 

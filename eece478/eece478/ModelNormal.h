@@ -7,6 +7,7 @@
 #include <sstream>
 #include <tuple>
 
+//access index to tuple
 #define TNORMAL_ID 0
 #define TNORMAL_X 1
 #define TNORMAL_Y 2
@@ -14,6 +15,7 @@
 
 using namespace std;
 
+//tuple definition
 typedef tuple<int, float,float,float> tNormal;
 
 class ModelNormal: ModelData
