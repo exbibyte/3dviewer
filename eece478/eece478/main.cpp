@@ -1,3 +1,5 @@
+//Author: Bill Liu #63461081 EECE478 2014 Spring
+
 //flag set to bypass initialization problem with GLUT
 #define GLUT_DISABLE_ATEXIT_HACK
 

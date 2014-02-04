@@ -19,6 +19,9 @@ ModelParse::ModelParse()
 }
 
 ModelParse::~ModelParse()
+/** 
+delete any allocated data
+*/
 {
   for(auto i : vModelData)
   {
@@ -27,6 +30,9 @@ ModelParse::~ModelParse()
 }
 
 ModelEntity * ModelParse::GetEntity(string path)
+/**
+Parses and returns a model entity for the input model file
+*/
 {
   ifstream ifs;
   stringstream Ss;
@@ -39,6 +45,7 @@ ModelEntity * ModelParse::GetEntity(string path)
     return NULL;
   }
 
+  //creates containers for basic model data
   ModelName * cModelName = new ModelName();
   ModelTexture * cModelTexture = new ModelTexture();
   ModelVertice * cModelVertice = new ModelVertice();
@@ -54,18 +61,18 @@ ModelEntity * ModelParse::GetEntity(string path)
   string line;
   int LineNum = 0;
 
-  //remove lines with #comments
+  //remove parsed lines with #comments
   while (getline(ifs, line)) 
   {    
     size_t found = line.find("#");
     if(found == std::string::npos){
-      Ss<<line<<" "; // save remaining to a single lined buffer
+      Ss<<line<<" "; // save remaining lines to a single lined buffer
     }
   }
 
   this->bEmpty = true;
 
-  //find <tags> and </tags> defined in ModelData and extract info to ModelData
+  //find <tags> and </tags> defined in ModelData and extract string to ModelData
   line.clear();
   while (getline(Ss, line)) 
   { 
@@ -75,9 +82,9 @@ ModelEntity * ModelParse::GetEntity(string path)
       if(FoundStartTag != std::string::npos){
 	size_t FoundEndTag = line.find(i->mEndTag);
 	if(FoundEndTag != std::string::npos){
-	  //when found begin and end tags, extract data
+	  //when found begin and end tags, extract string
 	  string SubString = line.substr(FoundStartTag + i->mBeginTag.length(),FoundEndTag-(FoundStartTag + i->mBeginTag.length()));
-	  i->SetData(SubString); // format and set data to ModelData object
+	  i->SetData(SubString); // call derived ModelData classes to format and save data
 
 	  this->bEmpty = false;
 	}
@@ -90,7 +97,7 @@ ModelEntity * ModelParse::GetEntity(string path)
     return NULL;
   }
 
-  //save to model entity
+  //creates a model entity and save parsed data
   ModelEntity * output = new ModelEntity();
   output->cModelName = cModelName;
   output->cModelTexture = cModelTexture;
