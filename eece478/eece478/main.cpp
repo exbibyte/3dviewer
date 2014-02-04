@@ -1,8 +1,11 @@
+//flag set to bypass initialization problem with GLUT
 #define GLUT_DISABLE_ATEXIT_HACK
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
+
+#include <stdlib.h>
 
 #include <string>
 #include <GL/glew.h>
@@ -38,8 +41,11 @@ namespace glut_global
   float vCamRotOldX = 0;
   float vCamRotOldY = 0;
 
-  float vScale = 1;
-  
+  float vScale = 0;
+  float vScaleOld = 0;
+
+  float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
+
   float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
   float vTransX = 0;
@@ -60,11 +66,9 @@ namespace glut_global
   bool bKeyADown = false;
   bool bKeySDown = false;
   bool bKeyDDown = false;
-
-  bool bKeyWUp = false;
-  bool bKeyAUp = false;
-  bool bKeySUp = false;
-  bool bKeyDUp = false;
+  bool bKeyQDown = false;
+  bool bKeyCDown = false;
+  bool bKeyVDown = false;
 
   //window dimenstions
   int vWidth;
@@ -94,7 +98,16 @@ void fKeyboardDown(unsigned char key, int x, int y)
     
   if(key == 'd')
     bKeyDDown = true;
+
+  if(key == 'q')
+    bKeyQDown = !bKeyQDown;  
   
+  if(key == 'c')
+    bKeyCDown = true;
+
+  if(key == 'v')
+    bKeyVDown = true;
+
   glutPostRedisplay();
 }
 
@@ -115,6 +128,12 @@ void fKeyboardUp(unsigned char key, int x, int y)
   if(key == 'd')
     bKeyDDown = false;
     
+  if(key == 'c')
+    bKeyCDown = false;
+
+  if(key == 'v')
+    bKeyVDown = false;
+
   glutPostRedisplay();
 }
 
@@ -151,8 +170,9 @@ void fMouseMotion(int x, int y)
     {
       vMouseDx = x - vMouseOldX;
       vMouseDy = y - vMouseOldY;
+#ifdef DEBUG
       cout<<"left mouse: "<< vMouseDx <<", "<< vMouseDy <<endl;
-
+#endif
     }
   glutPostRedisplay();
 }
@@ -199,10 +219,12 @@ basic order of drawing operation:
 	vTransY = 0;
 	vTransZ = 0;
 
-	vTransZ += (bKeyWDown)? 0.15: 0;
-        vTransX += (bKeyADown)? 0.15: 0;
-        vTransZ += (bKeySDown)? -0.15: 0;
-	vTransX += (bKeyDDown)? -0.15: 0;
+	vTransZ += (bKeyWDown)? 0.3: 0;
+        vTransX += (bKeyADown)? 0.3: 0;
+        vTransZ += (bKeySDown)? -0.3: 0;
+	vTransX += (bKeyDDown)? -0.3: 0;
+        vTransY += (bKeyCDown)? -0.3: 0;
+	vTransY += (bKeyVDown)? 0.3: 0;
 	
 	//save translation
 	glPushMatrix();     
@@ -216,7 +238,7 @@ basic order of drawing operation:
 	glMultMatrixf(vModelTranslation);
 
 		//lastly translate object
-		glTranslatef(0,0,-100);
+		glTranslatef(0,0,-130);
 
 		//apply rotation transform if only left mouse is down
 		if(bMouseLeftDown && !bKeyShiftDown)
@@ -227,15 +249,15 @@ basic order of drawing operation:
 		  //save rotation transform to a matrix
 		  glPushMatrix();     
 		    glLoadIdentity(); // reset
-		    //then apply additional rotation transform
+		    //3rd, apply additional rotation transform
 		    glRotatef(abs(vCamRotX-vCamRotOldX),vCamRotX-vCamRotOldX,0,0);
 		    glRotatef(abs(vCamRotY-vCamRotOldY),0,vCamRotY-vCamRotOldY,0);
-		    //update rotation delta
+		    //2nd,update rotation delta
 		    vCamRotOldX = vCamRotX;
 		    vCamRotOldY = vCamRotY;
 		    //first apply current rotation transform
 		    glMultMatrixf(vModelRotation);
-		    //lastly save the new rotation transform
+		    //lastly, save the new rotation transform
 		    glGetFloatv(GL_MODELVIEW_MATRIX,vModelRotation);
 		  glPopMatrix();
 		}
@@ -253,19 +275,47 @@ basic order of drawing operation:
 		//scale object and avoid negative scaling
 		if(bMouseLeftDown && bKeyShiftDown)
 		{
-			vScale -= vMouseDy/1000.f;
-			vScale = vScale<0? 0: vScale;
+			vScale = -vMouseDy/3000.f;
+
+			//save scaling transform to a matrix
+			glPushMatrix();     
+			  glLoadIdentity(); // reset
+
+			  //apply scaling transform
+			  float DeltaScale = 1+vScale-vScaleOld;
+			  DeltaScale = DeltaScale<0? 0: DeltaScale;
+
+			  glScalef(DeltaScale,DeltaScale,DeltaScale);
+
+			  vScaleOld = vScale;
+
+			  //first apply current scaling transform
+			  glMultMatrixf(vModelScaling);
+			  //lastly, save the new scaling transform
+			  glGetFloatv(GL_MODELVIEW_MATRIX,vModelScaling);
+			glPopMatrix();
 		}
-		glScalef(vScale,vScale,vScale);
+		{
+		  vScale = 0;
+		  vScaleOld = 0;
+		}
 
-		//place model
-		// glutWireTeapot(20);
+		//apply saved scaling transform
+		glMultMatrixf(vModelScaling);
 
-		//activate VBO
-		glBindBuffer(GL_ARRAY_BUFFER, vVbo);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glDrawArrays(GL_TRIANGLES, 0, vNumData/3/sizeof(GLfloat));
+		if(!bKeyQDown)
+		{
+		  //place teapot
+		  glutWireTeapot(20);
+		}
+		else
+		{
+		  //activate VBO and place input model
+		  glBindBuffer(GL_ARRAY_BUFFER, vVbo);
+		  glVertexPointer(3, GL_FLOAT, 0, 0);
+		  glEnableClientState(GL_VERTEX_ARRAY);
+		  glDrawArrays(GL_TRIANGLES, 0, vNumData/3/sizeof(GLfloat));
+		}
 
 	//revert state model stack
 	glPopMatrix();
@@ -327,6 +377,12 @@ void init (void)
     glBufferData(GL_ARRAY_BUFFER, vNumData*sizeof(GLfloat), pVerticeData, GL_STATIC_DRAW);
 }
 
+void fExit()
+{
+  delete pVerticeData;
+  cout<<"exited program"<<endl;
+}
+
 /* 
  *  Declare initial window size, position, and display mode
  *  (single buffer and RGBA).  Open window with "hello"
@@ -373,7 +429,10 @@ int main(int argc, char** argv)
   glutMotionFunc(fMouseMotion);
   glutKeyboardFunc(fKeyboardDown);
   glutKeyboardUpFunc(fKeyboardUp);
-  
+
+  //exit callback
+  atexit(fExit);
+
   //run
   glutMainLoop();
   return 0;
