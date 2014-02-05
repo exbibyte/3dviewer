@@ -7,7 +7,7 @@
 #include <sstream>
 #include <tuple>
 
-//access index of data
+///access index of data
 #define TTRIANGLE_ID 0
 #define TTRIANGLE_VEC1ID 1
 #define TTRIANGLE_VEC2ID 2
@@ -23,14 +23,17 @@
 
 using namespace std;
 
-//tuple data definition
+///tuple data definition
 typedef tuple<int, int,int,int, int, int, float,float,float,float,float,float> tTriangle;
 
+///container for triangle data
 class ModelTriangle: ModelData
 {
  public:
   ModelTriangle();
+  ///container for formatted triangle data
   vector<tTriangle> vTriangle;
+  ///formats triangle data
   void FormatData();
 };
 

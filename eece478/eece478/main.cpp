@@ -1,4 +1,4 @@
-//Author: Bill Liu #63461081 EECE478 2014 Spring
+/// @author Bill Liu #63461081 EECE478 2014 Spring
 
 //flag set to bypass initialization problem with GLUT
 #define GLUT_DISABLE_ATEXIT_HACK
@@ -22,15 +22,16 @@
 
 using namespace std;
 
+///global variables for mouse and key states, transformations, model entity
 namespace glut_global
 {
-  //parser
+  ///parser
   ModelParse cParser;
 
-  //holder of different input models
+  ///holder of different input models
   vector<ModelEntity*> vpEntity;
 
-  //transformation variables
+  ///transformation variables
   float vCamRotX = 0;
   float vCamRotY = 0;
   float vCamRotOldX = 0;
@@ -43,12 +44,12 @@ namespace glut_global
   float vTransY = 0;
   float vTransZ = 0;
 
-  //saves transformations of the model
+  ///saves transformations of the model
   float vModelTranslation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
   float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
   float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
-  //mouse and key states
+  ///mouse and key states
   int vMouseOldX;
   int vMouseOldY;
   int vMouseDx = 0;
@@ -63,7 +64,7 @@ namespace glut_global
   bool bKeyCDown = false;
   bool bKeyVDown = false;
 
-  //window dimensions
+  ///window dimensions
   int vWidth;
   int vHeight;
 }
@@ -415,7 +416,7 @@ int main(int argc, char** argv)
   vpEntity.at(0)->Update();
   vpEntity.at(0)->LoadVBO();
 
-  //run
+  //run gl loop
   glutMainLoop();
   return 0;
 }

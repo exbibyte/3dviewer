@@ -7,7 +7,7 @@
 #include <sstream>
 #include <tuple>
 
-//access index to tuple
+///access index to tuple
 #define TNORMAL_ID 0
 #define TNORMAL_X 1
 #define TNORMAL_Y 2
@@ -15,14 +15,17 @@
 
 using namespace std;
 
-//tuple definition
+///tuple definition
 typedef tuple<int, float,float,float> tNormal;
 
+///container for triangle normals
 class ModelNormal: ModelData
 {
  public:
   ModelNormal();
+  ///container for formatted data
   vector<tNormal> vNormal;
+  ///formats data
   void FormatData();
 };
 

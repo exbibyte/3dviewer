@@ -8,7 +8,7 @@
 #include <tuple>
 #include <string>
 
-//access index of data
+///access index of data
 #define TVERTICE_ID 0
 #define TVERTICE_X 1
 #define TVERTICE_Y 2
@@ -16,14 +16,17 @@
 
 using namespace std;
 
-//data tuple definition
+///data tuple definition
 typedef tuple<int, float,float,float> tVertice;
 
+///container for vertices data
 class ModelVertice: ModelData
 {
  public:
   ModelVertice();
+  ///container of formatted data
   vector<tVertice> vVertice;
+  ///formats vertices
   void FormatData();
 };
 

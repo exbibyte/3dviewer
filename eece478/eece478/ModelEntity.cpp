@@ -34,15 +34,15 @@ bool ModelEntity::fSortTriangleDetailByNorm(const tTriangleDetail& A, const tTri
 
 void ModelEntity::GetUpdatedVertices(float*& data, int& num)
 /**
-return:
-data: 1D array of updated vertices for all triangles
-num: array size
+@param data 1D array of updated vertices for all triangles
+@param num array size
 */
 { 
+  //number of coordinates from all vertices
   num = this->vtTriangleDetail.size()*9;
 
 #ifdef DEBUG
-  cout<<"vertex data count"<<num<<endl; 
+  cout<<"vertex coord count: "<<num<<endl; 
 #endif
 
   //removes old data
@@ -51,7 +51,7 @@ num: array size
     delete data;
   }
   
-  //assign data to the array
+  //assign processed triangle data to the array
   data = new float[num];
 
   for(auto i : this->vtTriangleDetail)
@@ -185,9 +185,7 @@ Draw what's linked to the VBO
 
 ModelEntity::ModelEntity()
 /**
-This works after glut is initialized.
-Create a vertex buffer object.
-Initialize vertex data pointer
+Creates a vertex buffer object. Initializes vertex data pointer
 */
 {
     this->pVerticeData = NULL;
@@ -197,7 +195,7 @@ Initialize vertex data pointer
 
 ModelEntity::~ModelEntity()
 /**
-Deallocate memory
+Deallocates memory
 */
 {
   delete this->pVerticeData;

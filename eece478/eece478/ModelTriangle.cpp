@@ -14,7 +14,9 @@ ModelTriangle::ModelTriangle()
 }
 
 void ModelTriangle::FormatData()	
-/** implemented formating for Triangle */
+/** 
+implemented formating for Triangles 
+*/
 {
   int i = 0;
  

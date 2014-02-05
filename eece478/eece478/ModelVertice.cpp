@@ -14,7 +14,9 @@ ModelVertice::ModelVertice()
 }
 
 void ModelVertice::FormatData()	
-/** implemented formating for vertice */
+/** 
+implemented formating for vertice 
+*/
 {
   int i = 0;
  

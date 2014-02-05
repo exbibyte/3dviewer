@@ -14,7 +14,9 @@ ModelTexture::ModelTexture()
 }
 
 void ModelTexture::FormatData()	
-/** implemented formating for texture */
+/** 
+implemented formating for texture 
+*/
 {
   int i = 0;
  

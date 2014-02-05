@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//might be useful later on
+///type of data, might be useful later on
 enum eDataType
 {
   NAME = 0,
@@ -17,17 +17,22 @@ enum eDataType
   TRIANGLE
 };
 
-//this class is used as a helper to the parser. It provides matching tags and separates data to be used by derived classes 
-
+///acts as a helper class to the parser. It provides matching DOM tags and separates data to be used by derived classes
 class ModelData{
  protected:
-  vector<string> vDataItem; //contains separated data to be accessed by derived class
+  ///contains separated data to be accessed by derived class
+  vector<string> vDataItem; 
  public:
-  string mBeginTag; //tags for parsing
-  string mEndTag;  //tags for parsing
+  ///start tag for parsing
+  string mBeginTag; 
+  ///end tag for parsing
+  string mEndTag;  
+  //type of stored data
   eDataType mType;
-  void SetData(string input);  //seperates space delimited input string into a vector of strings in vDataItem
-  virtual void FormatData()=0; //function to save data to specific format
+  ///seperates space delimited input string into a vector of strings in vDataItem
+  void SetData(string input);  
+  ///function to save data to specific format
+  virtual void FormatData()=0; 
   virtual ~ModelData(){};
 };
 

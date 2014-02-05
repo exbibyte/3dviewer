@@ -7,21 +7,24 @@
 #include <sstream>
 #include <tuple>
 
-//access index of tuple
+///access index of tuple
 #define TNAME_ID 0;
 #define TNAME_NAME 1;
 
 using namespace std;
 
-//tuple definition
+///tuple definition
 typedef tuple<int,string> tName;
 
+///container for model name
 class ModelName: ModelData
 {
  public:
   ModelName();
+  ///formatted data
   vector<tName> vName;
-  void FormatData();  //saves parsed data to tuple
+  ///saves parsed data to tuple
+  void FormatData();  
 };
 
 #endif

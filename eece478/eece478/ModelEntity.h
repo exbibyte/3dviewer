@@ -14,7 +14,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h> 
 
-//index for accessing triangle data tuple
+///index for accessing triangle data tuple
 #define TTRIANGLEDETAIL_ID 0
 #define TTRIANGLEDETAIL_VEC1ID 1
 #define TTRIANGLEDETAIL_VEC2ID 2
@@ -33,47 +33,58 @@
 #define TTRIANGLEDETAIL_NORMY 15
 #define TTRIANGLEDETAIL_NORMZ 16
 
-//definition of data tuple
+///definition of data tuple
 typedef tuple<int, int,int,int, int, float,float,float,float,float,float,float,float,float, float,float,float> tTriangleDetail;
 
-//This class is a container of basic model data. It also provides functions to link basic data to generate triangle vertices and draw vertices.
-//It can be used after OpenGL initilization functions are called. 
+///This class is a container of basic model data. It also provides functions to link basic data to generate triangle vertices and draw vertices. It can be used after OpenGL initilization functions are called. 
 
 class ModelEntity{
 private:
-
-  //sorting comparators used in linking triangles to vertices, normals, texture (implemented vertices for vertice drawing for now)
+  ///sorting comparators used in linking triangles to vertices  
   static bool fSortTriangleDetailByVec1(const tTriangleDetail&, const tTriangleDetail&);
+  ///sorting comparators used in linking triangles to vertices  
   static bool fSortTriangleDetailByVec2(const tTriangleDetail&, const tTriangleDetail&);
+  ///sorting comparators used in linking triangles to vertices  
   static bool fSortTriangleDetailByVec3(const tTriangleDetail&, const tTriangleDetail&);
+  ///sorting comparators used in linking triangles to normals 
   static bool fSortTriangleDetailByNorm(const tTriangleDetail&, const tTriangleDetail&);
   
-  //vertice data
+  ///stores updated vertice data in an array
   float * pVerticeData;
+  ///number of vertices stored in the  array
   int vNumVertice;
 
-  //VBO object
+  ///VBO object
   GLuint vVbo;
+  ///VBO object pointer
   GLuint * pVbo;
 
 public:
   ModelEntity();
   ~ModelEntity();
   
-  //basic data from parsing
+  ///stored formatted data from parsing
   ModelName * cModelName;
+  ///stored formatted data from parsing
   ModelTexture * cModelTexture;
+  ///stored formatted data from parsing
   ModelVertice * cModelVertice;
+  ///stored formatted data from parsing
   ModelNormal * cModelNormal;
+  ///stored formatted data from parsing
   ModelTriangle * cModelTriangle;
   
-  //contains processed data for triangles after calling Update()
+  //stores processed triangle data after calling Update()
   vector<tTriangleDetail> vtTriangleDetail;
   
-  void GetUpdatedVertices(float*& data, int& num);   //helper function for creating 1D array of vertice data
-  void Update();    //sort and match to create processed data
-  void Draw();  //drawing using VBO
-  void LoadVBO();    //bind data array to VBO		
+  ///helper function to create 1D array of vertice data from processed triangles
+  void GetUpdatedVertices(float*& data, int& num);
+  //sortes and matches formatted data to create processed triangles
+  void Update();
+  ///draws model using data linked to VBO    
+  void Draw();  
+  ///bind vertice array to VBO		
+  void LoadVBO();    
 };
 
 #endif

@@ -15,7 +15,9 @@ ModelName::ModelName()
 }
 
 void ModelName::FormatData()	
-/** implemented formating for vertice */
+/**
+implemented formating for name
+*/
 {
   int i = 0;
  

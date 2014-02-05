@@ -32,6 +32,8 @@ delete any allocated data
 ModelEntity * ModelParse::GetEntity(string path)
 /**
 Parses and returns a model entity for the input model file
+@param path model file path
+@return ModelEntity an entity holding formatted data and also provides methods to draw triangles
 */
 {
   ifstream ifs;
@@ -52,6 +54,7 @@ Parses and returns a model entity for the input model file
   ModelNormal * cModelNormal = new ModelNormal();
   ModelTriangle * cModelTriangle = new ModelTriangle();
 
+  //prepares to extract data using loop
   vModelData.push_back((ModelData*)cModelName);
   vModelData.push_back((ModelData*)cModelTexture);
   vModelData.push_back((ModelData*)cModelVertice);
@@ -66,7 +69,7 @@ Parses and returns a model entity for the input model file
   {    
     size_t found = line.find("#");
     if(found == std::string::npos){
-      Ss<<line<<" "; // save remaining lines to a single lined buffer
+      Ss<<line<<" "; // save remaining lines to a single lined buffer and add space to ensure data separation
     }
   }
 
@@ -79,9 +82,11 @@ Parses and returns a model entity for the input model file
     for(auto i : vModelData)
     {
       size_t FoundStartTag = line.find(i->mBeginTag);
-      if(FoundStartTag != std::string::npos){
+      if(FoundStartTag != std::string::npos)
+      {
 	size_t FoundEndTag = line.find(i->mEndTag);
-	if(FoundEndTag != std::string::npos){
+	if(FoundEndTag != std::string::npos)
+	{
 	  //when found begin and end tags, extract string
 	  string SubString = line.substr(FoundStartTag + i->mBeginTag.length(),FoundEndTag-(FoundStartTag + i->mBeginTag.length()));
 	  i->SetData(SubString); // call derived ModelData classes to format and save data
@@ -92,6 +97,7 @@ Parses and returns a model entity for the input model file
     }
   }
 
+  //if can't find tags, return
   if(this->bEmpty)
   {
     return NULL;
@@ -105,12 +111,12 @@ Parses and returns a model entity for the input model file
   output->cModelNormal = cModelNormal;
   output->cModelTriangle = cModelTriangle;
   
+  //null pointers
   cModelName = NULL;
   cModelTexture = NULL;
   cModelVertice = NULL;
   cModelNormal = NULL;
   cModelTriangle = NULL;
-
   vModelData.clear();
 
   return output;

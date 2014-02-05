@@ -4,7 +4,9 @@
 #include "ModelData.h"
 
 void ModelData::SetData(string input)
-/** separate data items into a vector of strings and calls formating function in a derived class*/
+/** separate data items into a vector of strings and calls formating function in a derived class
+@param input single lined string data to be separated
+*/
 {
   stringstream Ss;
   Ss.str(input);

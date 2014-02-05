@@ -14,7 +14,9 @@ ModelNormal::ModelNormal()
 }
 
 void ModelNormal::FormatData()	
-/** implemented formating for vertice */
+/** 
+implemented formating for normals
+*/
 {
   int i = 0;
  

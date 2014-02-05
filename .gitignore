@@ -5,6 +5,8 @@
 Release
 Debug
 
+html/
+
 *.pydevproject
 .project
 .metadata
