@@ -180,7 +180,7 @@ Draw what's linked to the VBO
     glBindBuffer(GL_ARRAY_BUFFER, this->vVbo);
     glVertexPointer(3, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glDrawArrays(GL_TRIANGLES, 0, this->vNumVertice/sizeof(GLfloat));
+    glDrawArrays(GL_TRIANGLES, 0, this->vNumVertice);
 }
 
 ModelEntity::ModelEntity()
