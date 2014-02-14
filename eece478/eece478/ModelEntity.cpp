@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
+#include <string>
 
 #include "ModelEntity.h"
 #include "ModelName.h"
@@ -10,6 +11,8 @@
 #include "ModelVertice.h"
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
+
+using namespace std;
 
 //comparator functions for item IDs (vertices,normals,texture,etc) in our tuple
 bool ModelEntity::fSortTriangleDetailByVec1(const tTriangleDetail& A, const tTriangleDetail& B)
@@ -31,6 +34,12 @@ bool ModelEntity::fSortTriangleDetailByNorm(const tTriangleDetail& A, const tTri
 {
   return std::get<TTRIANGLEDETAIL_NORMID>(A) < std::get<TTRIANGLEDETAIL_NORMID>(B);
 }
+
+bool ModelEntity::fSortTriangleDetailByText(const tTriangleDetail& A, const tTriangleDetail& B)
+{
+  return std::get<TTRIANGLEDETAIL_TEXTID>(A) < std::get<TTRIANGLEDETAIL_TEXTID>(B);
+}
+
 
 void ModelEntity::GetUpdatedVertices(float*& data, int& num)
 /**
@@ -85,7 +94,7 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
 { 
   this->vtTriangleDetail.clear();
   
-  //copy IDs of basic data
+  //copy IDs of basic data and texture coordinates
   for(auto i : cModelTriangle->vTriangle)
   {
     tTriangleDetail detail;
@@ -94,6 +103,14 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
     std::get<TTRIANGLEDETAIL_VEC2ID>(detail) = std::get<TTRIANGLE_VEC2ID>(i);
     std::get<TTRIANGLEDETAIL_VEC3ID>(detail) = std::get<TTRIANGLE_VEC3ID>(i);
     std::get<TTRIANGLEDETAIL_NORMID>(detail) = std::get<TTRIANGLE_NORMID>(i);
+    std::get<TTRIANGLEDETAIL_TEXTID>(detail) = std::get<TTRIANGLE_TEXTID>(i);
+    
+    std::get<TTRIANGLEDETAIL_TEXT1>(detail) = std::get<TTRIANGLE_TEXT1>(i);
+    std::get<TTRIANGLEDETAIL_TEXT2>(detail) = std::get<TTRIANGLE_TEXT2>(i);
+    std::get<TTRIANGLEDETAIL_TEXT3>(detail) = std::get<TTRIANGLE_TEXT3>(i);
+    std::get<TTRIANGLEDETAIL_TEXT4>(detail) = std::get<TTRIANGLE_TEXT4>(i);
+    std::get<TTRIANGLEDETAIL_TEXT5>(detail) = std::get<TTRIANGLE_TEXT5>(i);
+    std::get<TTRIANGLEDETAIL_TEXT6>(detail) = std::get<TTRIANGLE_TEXT6>(i);
     this->vtTriangleDetail.push_back(detail);
   }
 
@@ -161,6 +178,46 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
   int numData;
   this->GetUpdatedVertices(this->pVerticeData, numData);
   this->vNumVertice = numData/3;
+
+  //sort triangles by normal
+  std::sort(this->vtTriangleDetail.begin(), this->vtTriangleDetail.end(), fSortTriangleDetailByNorm); 
+  //assign values when IDs match
+  vector<tNormal>::iterator itNormal = this->cModelNormal->vNormal.begin(); 
+  itDetail = this->vtTriangleDetail.begin(); 
+  while(itNormal != this->cModelNormal->vNormal.end() && itDetail != this->vtTriangleDetail.end())   
+  {
+    if(std::get<TNORMAL_ID>(*itNormal) == std::get<TTRIANGLEDETAIL_NORMID>(*itDetail))
+    {
+      std::get<TTRIANGLEDETAIL_NORMX>(*itDetail) = std::get<TNORMAL_X>(*itNormal);
+      std::get<TTRIANGLEDETAIL_NORMY>(*itDetail) = std::get<TNORMAL_Y>(*itNormal);
+      std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail) = std::get<TNORMAL_Z>(*itNormal);
+      itDetail++;
+    }
+    else
+    {
+      itNormal++;
+    }
+  }
+
+  //sort triangles by texture
+  std::sort(this->vtTriangleDetail.begin(), this->vtTriangleDetail.end(), fSortTriangleDetailByText); 
+  //assign values when IDs match
+  vector<tTexture>::iterator itTexture = this->cModelTexture->vTexture.begin(); 
+  itDetail = this->vtTriangleDetail.begin(); 
+  while(itTexture != this->cModelTexture->vTexture.end() && itDetail != this->vtTriangleDetail.end())   
+  {
+    if(std::get<TTEXTURE_ID>(*itTexture) == std::get<TTRIANGLEDETAIL_TEXTID>(*itDetail))
+    {
+      std::get<TTRIANGLEDETAIL_TEXTNAME>(*itDetail) = std::get<TTEXTURE_NAME>(*itTexture);
+      cout<<std::get<TTRIANGLEDETAIL_TEXTNAME>(*itDetail)<<endl;
+      itDetail++;
+    }
+    else
+    {
+      itTexture++;
+    }
+  }
+
 }
 
 void ModelEntity::LoadVBO()
