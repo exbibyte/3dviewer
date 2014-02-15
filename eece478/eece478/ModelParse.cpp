@@ -110,7 +110,16 @@ Parses and returns a model entity for the input model file
   output->cModelVertice = cModelVertice;
   output->cModelNormal = cModelNormal;
   output->cModelTriangle = cModelTriangle;
-  
+
+  //truncate path to the model folder path
+  string Folder = "/";
+  unsigned found = path.rfind(Folder);
+  if(found!=std::string::npos)
+  {
+    path = path.substr(0,found+1); 
+  }
+  output->ModelFilePath = path;
+
   //null pointers
   cModelName = NULL;
   cModelTexture = NULL;
