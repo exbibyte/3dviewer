@@ -353,7 +353,7 @@ void init (void)
   setup vertex buffer and load model vertex
 */
 {
-    glClearColor (0.0, 0.0, 0.0, 0.0);
+    glClearColor (0.3, 0.3, 0.3, 0.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 }
@@ -395,6 +395,13 @@ int main(int argc, char** argv)
   }
 
   glEnable(GL_POLYGON_SMOOTH);
+  glEnable(GL_TEXTURE_2D);
+  glFrontFace(GL_CCW);
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);    
+  glEnable(GL_DEPTH_TEST);
+  // glEnable(GL_LIGHTING);
   glutReshapeFunc(reshape);
   init();
 
@@ -412,9 +419,15 @@ int main(int argc, char** argv)
   //parse model after glut initialization
   ModelEntity * pcEntity = cParser.GetEntity(argv[1]);
   vpEntity.push_back(pcEntity);
-  //do an initial update of triangle vertices and store into VBO
+
+  //load texture data
+  vpEntity.at(0)->LoadTextureFiles();
+
+  //do an initial update of triangle data
   vpEntity.at(0)->Update();
-  vpEntity.at(0)->LoadVBO();
+
+  //update data in buffers to be rendered
+  vpEntity.at(0)->LoadRenderBuffer();
 
   //run gl loop
   glutMainLoop();
