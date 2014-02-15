@@ -12,6 +12,8 @@
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
 
+#include "PPM.hpp"
+
 using namespace std;
 
 //comparator functions for item IDs (vertices,normals,texture,etc) in our tuple
@@ -85,6 +87,270 @@ void ModelEntity::GetUpdatedVertices(float*& data, int& num)
     data++;
   }
   data -= num;
+}
+
+void ModelEntity::GetUpdatedNormals(float*& data, int& num)
+/**
+@param data 1D array of updated normals for all triangles
+@param num array size
+*/
+{ 
+  //number of coordinates from all vertices
+  num = this->vtTriangleDetail.size()*3;
+
+#ifdef DEBUG
+  cout<<"normal coord count: "<<num<<endl; 
+#endif
+
+  //removes old data
+  if(data != NULL)
+  {
+    delete data;
+  }
+  
+  //assign processed triangle data to the array
+  data = new float[num];
+
+  for(auto i : this->vtTriangleDetail)
+  {
+    *data = std::get<TTRIANGLEDETAIL_NORMX>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_NORMY>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_NORMZ>(i);
+    data++;
+  }
+  data -= num;
+}
+
+void ModelEntity::GetUpdatedTextureCoords(float*& data, int& num)
+/**
+@param data 1D array of updated texture coordinates for all triangles
+@param num array size
+*/
+{ 
+  //number of coordinates from all vertices
+  num = this->vtTriangleDetail.size()*6;
+
+#ifdef DEBUG
+  cout<<"texture coord count: "<<num<<endl; 
+#endif
+
+  //removes old data
+  if(data != NULL)
+  {
+    delete data;
+  }
+  
+  //assign processed triangle data to the array
+  data = new float[num];
+
+  for(auto i : this->vtTriangleDetail)
+  {
+    *data = std::get<TTRIANGLEDETAIL_TEXT1>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_TEXT2>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_TEXT3>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_TEXT4>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_TEXT5>(i);
+    data++;
+    *data = std::get<TTRIANGLEDETAIL_TEXT6>(i);
+    data++;
+  }
+  data -= num;
+}
+
+void ModelEntity::UpdateInterleavedArray()
+/**
+updates interleaved render data buffers according to texture
+*/
+{ 
+  //sort triangle by texture id
+  std::sort(this->vtTriangleDetail.begin(), this->vtTriangleDetail.end(), fSortTriangleDetailByText); 
+  vector<tTriangleDetail>::iterator itDetail1 = this->vtTriangleDetail.begin(); 
+  vector<tTriangleDetail>::iterator itDetail2 = this->vtTriangleDetail.begin(); 
+
+  int bufnum;
+  
+  //copy data into rendering buffers for each specfic texture
+  while(itDetail2 != this->vtTriangleDetail.end())      
+  {
+    //find where texture changes and start copying
+    if(std::get<TTRIANGLEDETAIL_TEXTID>(*itDetail1) != std::get<TTRIANGLEDETAIL_TEXTID>(*itDetail2))
+    {
+      int datanum = (itDetail2 - itDetail1)*24;
+      float * data = new float[datanum];
+
+      //copy data into buffer
+      while(itDetail1 != itDetail2)
+      {      
+	*data = std::get<TTRIANGLEDETAIL_VEC1X>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_VEC1Y>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_VEC1Z>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMX>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMY>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_TEXT1>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_TEXT2>(*itDetail1);
+	data++;
+
+	*data = std::get<TTRIANGLEDETAIL_VEC2X>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_VEC2Y>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_VEC2Z>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMX>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMY>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_TEXT3>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_TEXT4>(*itDetail1);
+	data++;
+
+	*data = std::get<TTRIANGLEDETAIL_VEC3X>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_VEC3Y>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_VEC3Z>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMX>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMY>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_TEXT5>(*itDetail1);
+	data++;
+	*data = std::get<TTRIANGLEDETAIL_TEXT6>(*itDetail1);
+	data++;
+
+	itDetail1++;
+      }
+      
+      //get texture id of the current data
+      bufnum = std::get<TTRIANGLEDETAIL_TEXTID>(*(itDetail1-1));
+      
+      //save number of data
+      this->pNumRenderData[bufnum] = datanum;
+      data -= datanum;
+      
+      //deallocate previous data
+      if(this->pRenderData[bufnum]!=NULL)
+      {
+	delete [] this->pRenderData[bufnum];
+      }
+
+      //save the texture id 
+      this->vTexturePassId.push_back(bufnum);
+
+      //save render data
+      this->pRenderData[bufnum] = data;
+
+      data = NULL;
+    }
+    else
+    {
+      itDetail2++;
+    }
+  }
+
+  //copy the last portion
+  int datanum = (this->vtTriangleDetail.end() - itDetail1)*24;
+  float * data;
+  
+  if(datanum > 0)
+  {
+    data = new float[datanum];
+    while(itDetail1 != this->vtTriangleDetail.end())
+    {      
+      *data = std::get<TTRIANGLEDETAIL_VEC1X>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_VEC1Y>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_VEC1Z>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMX>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMY>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_TEXT1>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_TEXT2>(*itDetail1);
+      data++;
+
+      *data = std::get<TTRIANGLEDETAIL_VEC2X>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_VEC2Y>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_VEC2Z>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMX>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMY>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_TEXT3>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_TEXT4>(*itDetail1);
+      data++;
+
+      *data = std::get<TTRIANGLEDETAIL_VEC3X>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_VEC3Y>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_VEC3Z>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMX>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMY>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_NORMZ>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_TEXT5>(*itDetail1);
+      data++;
+      *data = std::get<TTRIANGLEDETAIL_TEXT6>(*itDetail1);
+      data++;
+
+      itDetail1++;
+    }
+
+    //get texture id of the current data
+    bufnum = std::get<TTRIANGLEDETAIL_TEXTID>(*(itDetail1-1));
+      
+    //save number of data
+    this->pNumRenderData[bufnum] = datanum;
+    data -= datanum;
+  
+    //dellocate previous data
+    if(this->pRenderData[bufnum]!= NULL)
+    {
+      delete [] this->pRenderData[bufnum];
+    }
+
+    //save the texture id
+    this->vTexturePassId.push_back(bufnum);
+
+    //save render data
+    this->pRenderData[bufnum] = data;
+    data = NULL;
+  }
 }
 
 void ModelEntity::Update()
@@ -173,11 +439,6 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
       itVertice++;
     }
   }
-  
-  //saves to an updated array of vertices
-  int numData;
-  this->GetUpdatedVertices(this->pVerticeData, numData);
-  this->vNumVertice = numData/3;
 
   //sort triangles by normal
   std::sort(this->vtTriangleDetail.begin(), this->vtTriangleDetail.end(), fSortTriangleDetailByNorm); 
@@ -208,8 +469,9 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
   {
     if(std::get<TTEXTURE_ID>(*itTexture) == std::get<TTRIANGLEDETAIL_TEXTID>(*itDetail))
     {
+      
       std::get<TTRIANGLEDETAIL_TEXTNAME>(*itDetail) = std::get<TTEXTURE_NAME>(*itTexture);
-      cout<<std::get<TTRIANGLEDETAIL_TEXTNAME>(*itDetail)<<endl;
+
       itDetail++;
     }
     else
@@ -218,26 +480,45 @@ Links triangles to vertices, normals, and textures to generate updated triangle 
     }
   }
 
+  //update rendering buffer
+  this->UpdateInterleavedArray();
 }
 
-void ModelEntity::LoadVBO()
+void ModelEntity::LoadRenderBuffer()
 /**
-link updated vertice array to the VBO
+link updated render data to buffers
 */
 {
-  glBindBuffer(GL_ARRAY_BUFFER, this->vVbo);
-  glBufferData(GL_ARRAY_BUFFER, this->vNumVertice*3*sizeof(GLfloat), this->pVerticeData, GL_STATIC_DRAW);
+  for(auto i : this->vTexturePassId)
+  {
+    glBindBuffer(GL_ARRAY_BUFFER, this->pRbo[i]);
+    glBufferData(GL_ARRAY_BUFFER, this->pNumRenderData[i]*sizeof(GLfloat), this->pRenderData[i], GL_STATIC_DRAW);
+  }
 }
 
 void ModelEntity::Draw()
 /**
-Draw what's linked to the VBO
+Draw what's linked to the VBO, NBO, TBO
 */
 {
-    glBindBuffer(GL_ARRAY_BUFFER, this->vVbo);
-    glVertexPointer(3, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glDrawArrays(GL_TRIANGLES, 0, this->vNumVertice);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    //texture switching
+    for(auto i : vTexturePassId)
+    {
+      glBindTexture(GL_TEXTURE_2D, pTextureID[i]);       
+      glBindBuffer(GL_ARRAY_BUFFER, this->pRbo[i]);
+      glVertexPointer(3, GL_FLOAT, 8*sizeof(GLfloat), 0);
+      glNormalPointer(GL_FLOAT, 8*sizeof(GLfloat), (void*)(3*sizeof(GLfloat)));        
+      glTexCoordPointer(2, GL_FLOAT, 8*sizeof(GLfloat), (void*)(6*sizeof(GLfloat)));  
+      glDrawArrays(GL_TRIANGLES, 0, this->pNumRenderData[i]*3);
+    } 
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 ModelEntity::ModelEntity()
@@ -245,9 +526,57 @@ ModelEntity::ModelEntity()
 Creates a vertex buffer object. Initializes vertex data pointer
 */
 {
-    this->pVerticeData = NULL;
-    this->pVbo = &this->vVbo;
-    glGenBuffers(1, this->pVbo);
+    this->pRbo = NULL;
+    this->pTextureID = NULL;
+    this->pRenderData = NULL;
+    this->pNumRenderData = NULL;
+    this->vNumTextureImg = 0;
+}
+
+void ModelEntity::CleanUp()
+/**
+Delete pointer data
+*/
+{
+  glDeleteBuffers(this->vNumTextureImg, this->pRbo);
+
+  for(int i = 0; i < this->vNumTextureImg; i++)
+  {
+    if(this->pRenderData[i] != NULL)
+    {
+      delete [] this->pRenderData[i];
+      this->pRenderData[i] = NULL;
+    }
+  }
+
+  this->vNumTextureImg = 0;
+
+  if(this->pRenderData != NULL)
+  {
+    delete [] pRenderData;
+    pRenderData = NULL;
+  }
+
+  if(this->pTextureID != NULL)
+  {
+    glDeleteTextures(this->vNumTextureImg,this->pTextureID);
+    delete [] this->pTextureID;
+    this->pTextureID = NULL;
+  }
+
+  if(this->pRbo != NULL)
+  {  
+    delete [] this->pRbo;
+    this->pRbo = NULL;
+  }
+
+  if(this->pNumRenderData != NULL)
+  {
+    delete [] this->pNumRenderData;
+    this->pNumRenderData = NULL;
+  }
+
+  this->vTexturePassId.clear();
 }
 
 ModelEntity::~ModelEntity()
@@ -255,6 +584,64 @@ ModelEntity::~ModelEntity()
 Deallocates memory
 */
 {
-  delete this->pVerticeData;
-  this->pVerticeData = NULL;
+  this->CleanUp();
+}
+
+void ModelEntity::LoadTextureFiles()
+/**
+Load texture image files and bind to OpenGL
+*/
+{ 
+  //delete previous data
+  this->CleanUp();
+
+  //get number of files to load
+  this->vNumTextureImg = this->cModelTexture->vTexture.size();
+  this->pTextureID = new GLuint[this->vNumTextureImg];
+
+  //initialize render buffers
+  this->pRbo = new GLuint[this->vNumTextureImg];
+  glGenBuffers(this->vNumTextureImg, this->pRbo);
+
+  //initilize arrays for rendering interleaved vertices, normals, texture coordinates for specific textures
+  this->pNumRenderData = new int[this->vNumTextureImg];
+  this->pRenderData = new float*[this->vNumTextureImg];
+
+  for(int i = 0; i < this->vNumTextureImg; i++)
+  {
+    this->pRenderData[i] = NULL;
+  }
+
+  //generate texture holders
+  glGenTextures(this->vNumTextureImg,this->pTextureID);
+
+  //texture counter
+  int j = 0;
+
+  //load each texture into opengl
+  for(auto i : this->cModelTexture->vTexture)
+  {
+    //get texture from file
+    string FileName = this->ModelFilePath + std::get<TTEXTURE_NAME>(i);
+    int width;
+    int height;
+    GLubyte * ImgData = PPM::Read(FileName, width, height);
+
+    //bind texture to current texture holder
+    glBindTexture(GL_TEXTURE_2D, this->pTextureID[j]);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    //pass texture to openGL
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, ImgData);
+    
+    //delte image data
+    delete [] ImgData;
+    ImgData = NULL;
+
+    j++;
+  }
 }

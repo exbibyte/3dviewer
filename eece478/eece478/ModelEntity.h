@@ -37,12 +37,12 @@
 #define TTRIANGLEDETAIL_NORMY 16
 #define TTRIANGLEDETAIL_NORMZ 17
 #define TTRIANGLEDETAIL_TEXTNAME 18
-#define TTRIANGLEDETAIL_TEXT1 18
-#define TTRIANGLEDETAIL_TEXT2 19
-#define TTRIANGLEDETAIL_TEXT3 20
-#define TTRIANGLEDETAIL_TEXT4 21
-#define TTRIANGLEDETAIL_TEXT5 22
-#define TTRIANGLEDETAIL_TEXT6 23
+#define TTRIANGLEDETAIL_TEXT1 19
+#define TTRIANGLEDETAIL_TEXT2 20
+#define TTRIANGLEDETAIL_TEXT3 21
+#define TTRIANGLEDETAIL_TEXT4 22
+#define TTRIANGLEDETAIL_TEXT5 23
+#define TTRIANGLEDETAIL_TEXT6 24
 
 using namespace std;
 
@@ -64,20 +64,27 @@ private:
   ///sorting comparators used in linking triangles to textures
   static bool fSortTriangleDetailByText(const tTriangleDetail&, const tTriangleDetail&);
   
-  ///stores updated vertice data in an array
-  float * pVerticeData;
-  ///number of vertices stored in the  array
-  int vNumVertice;
+  ///texture object names
+  GLuint *pTextureID;
+  ///texture file count
+  int vNumTextureImg;
 
-  ///VBO object
-  GLuint vVbo;
-  ///VBO object pointer
-  GLuint * pVbo;
+  ///render buffer object names
+  GLuint * pRbo;
+  ///render buffers
+  float ** pRenderData;
+  ///number of data in specific buffer
+  int* pNumRenderData;
+  ///holder of texture id, used for opengl texture name, buffer name lookup
+  vector<int> vTexturePassId;
 
 public:
   ModelEntity();
   ~ModelEntity();
   
+  ///model file path
+  string ModelFilePath;
+
   ///stored formatted data from parsing
   ModelName * cModelName;
   ///stored formatted data from parsing
@@ -94,12 +101,30 @@ public:
   
   ///helper function to create 1D array of vertice data from processed triangles
   void GetUpdatedVertices(float*& data, int& num);
+
+  ///helper function to create 1D array of normals from processed triangles
+  void GetUpdatedNormals(float*& data, int& num);
+
+  ///helper function to create 1D array of texture coordinates from processed triangles
+  void GetUpdatedTextureCoords(float*& data, int& num);
+
+  ///helper function to create 1D array of interleaved vertices, normals, texture coordinates
+  void UpdateInterleavedArray();
+
   //sortes and matches formatted data to create processed triangles
   void Update();
+
   ///draws model using data linked to VBO    
   void Draw();  
-  ///bind vertice array to VBO		
-  void LoadVBO();    
+
+  ///bind render data to buffer objects		
+  void LoadRenderBuffer();    
+
+  ///load texture files
+  void LoadTextureFiles();    
+
+  ///deallocate pointers
+  void CleanUp();
 };
 
 #endif
