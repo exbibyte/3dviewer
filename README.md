@@ -7,3 +7,7 @@ Assignments 2/3 under way: 3D building modelling and texturing
 
 Completed:
 Simple modelview and projection manipulation implemented with event callback, simple rendering of teapot and user supplied model with texture.
+
+converter utility from .obj file from modelling software to custom format for the course
+
+rendered completed model with texture
