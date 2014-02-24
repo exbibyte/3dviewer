@@ -5,6 +5,8 @@ Project for the 3D computer graphics course, implemented with OpenGL glut librar
 Progress:
 Assignments 2/3 under way: 3D building modelling and texturing
 
+Progress screenshots link: https://www.behance.net/wip/482211
+
 Completed:
 Simple modelview and projection manipulation implemented with event callback, simple rendering of teapot and user supplied model with texture.
 
