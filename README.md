@@ -3,7 +3,7 @@
 Project for the 3D computer graphics course, implemented with OpenGL glut library. Expected product is creation of a building model from Vancouver region and creative rendering of building, environment with camera movement.
 
 Progress:
-Assignments 2/3 under way: 3D building modelling and texturing
+Assignments 3/3 under way: camera movement and world creation with multiple building placements.
 
 Progress screenshots link: https://www.behance.net/wip/482211
 
