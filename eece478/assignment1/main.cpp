@@ -182,7 +182,7 @@ resize window and set perspective parameters
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(120, (float)width / height, 1, 10000);
+  gluPerspective(100, (float)width / height, 1, 10000);
   glMatrixMode(GL_MODELVIEW);
 }
 
