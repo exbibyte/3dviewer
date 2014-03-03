@@ -4,8 +4,8 @@ Bill Liu
 
 Info:
 Convert .obj file to custom file format
-.obj file need to be in vertex and texture coordinate format only (no vertex normals)
-This generates custom file format having vertices, face normals, triangles, texture coordinates, and a reference to 1 texture image (texture.ppm)
+.obj file need have vertex and texture coordinates
+This generates custom file format having vertices, face normals, triangles, texture coordinates, and 1 reference to 1 texture image per object having the name as object_name.ppm
 
  */
 
@@ -23,8 +23,6 @@ typedef tuple<int,int,int, int, int, float,float,float,float,float,float> tTrian
 
 int main(int argc, char** argv)
 {
-  fstream input;
-  fstream output;
 
   if(argc<4)
   {
