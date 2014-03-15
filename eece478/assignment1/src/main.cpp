@@ -159,7 +159,7 @@ calculate left mouse delta and shift key state
 {
   //detect shift key is pressed
   int mod = glutGetModifiers();	
-  bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
+  //bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
 
   if(bMouseLeftDown)
     {

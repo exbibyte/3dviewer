@@ -1,2 +1,0 @@
-all:
-	g++ -std=gnu++0x ModelParse.cpp testParse.cpp -o ./build/testParse
