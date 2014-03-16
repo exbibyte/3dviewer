@@ -5,7 +5,7 @@ Project for the 3D computer graphics course, implemented with OpenGL glut librar
 Progress:
 Assignments 3/3 under way: camera movement and world creation with multiple building placements.
 
-Progress screenshots link: https://www.behance.net/wip/482211
+Progress screenshots link: https://www.behance.net/gallery/20140226-Sea-Island-Station/14890125
 
 Completed:
 Simple modelview and projection manipulation implemented with event callback, simple rendering of teapot and user supplied model with texture.
