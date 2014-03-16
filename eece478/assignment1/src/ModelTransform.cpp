@@ -134,7 +134,13 @@ void ModelTransform::ApplyTransform()
     glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelAllTransform);
   glPopMatrix();
   
-  glMultMatrixf(vModelAllTransform);  
+  glLoadIdentity();
+  //apply parent transform
+  glMultMatrixf(vModelParentTransform); 
+  //apply local transform
+  glMultMatrixf(vModelAllTransform);   
+  //save this combined transform
+  glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelCombinedTransform);
 }
 
 void ModelTransform::ApplyDeltaScale(float scale[])
@@ -186,4 +192,21 @@ void ModelTransform::InitializeOrientation(float scale[], float rotate[], float 
   this->ApplyScale(scale);
   this->ApplyRotate(rotate);
   this->ApplyTranslate(translate);
+}
+
+void ModelTransform::SetParentTransform(float matrix[])
+{
+  for(int i = 0; i < 16; i++)
+  {
+    this->vModelParentTransform[i] = matrix[i];
+  }
+}
+
+float * ModelTransform::GetCombinedTransform()
+{
+  float * out = new float[16];
+  for(int i = 0; i < 16; i++)
+    out[i] = this->vModelCombinedTransform[i];
+
+  return out;
 }

@@ -32,6 +32,9 @@ namespace glut_global
   ///holder of different input models
   vector<ModelAbstraction*> vpEntity;
 
+  //camera entity
+  ModelAbstraction* pCameraEntity;
+
   ///transformation variables
   float vCamRotX = 0;
   float vCamRotY = 0;
@@ -222,37 +225,26 @@ basic order of drawing operation:
     vTransX += (bKeyDDown)? -0.3: 0;
     vTransY += (bKeyCDown)? -0.3: 0;
     vTransY += (bKeyVDown)? 0.3: 0;
-	
-    // glTranslatef(0,0,-130);
 
     //apply translation
     
-    float DeltaTranslate[3];
+    float DeltaTranslate[3]={0,0,0};
     DeltaTranslate[0] = vTransX;
     DeltaTranslate[1] = vTransY;
-    DeltaTranslate[2] = vTransZ;
-    
-    for(auto i : vpEntity)
-    {
-      i->ApplyDeltaTranslate(DeltaTranslate);
-    }         
+    DeltaTranslate[2] = vTransZ;       
 
     //apply rotation transform if only left mouse is down
+    float DeltaRotate[3]={0,0,0};
+
     if(bMouseLeftDown && !bKeyShiftDown)
     {
       //get rotation delta
       vCamRotY = vMouseDx/1.f;
       vCamRotX = vMouseDy/1.f;
 
-      float DeltaRotate[3];
       DeltaRotate[0] = vCamRotX - vCamRotOldX;
       DeltaRotate[1] = vCamRotY - vCamRotOldY;
       DeltaRotate[2] = 0;
-
-      for(auto i : vpEntity)
-      {
-	i->ApplyDeltaRotate(DeltaRotate);
-      }
 
       //update rotation delta
       vCamRotOldX = vCamRotX;
@@ -267,19 +259,15 @@ basic order of drawing operation:
     }
 
     //scale object and avoid negative scaling
+    float DeltaScale[3] = {0,0,0};
     if(bMouseLeftDown && bKeyShiftDown)
     {
       //get delta
       vScale = -vMouseDy/3000.f;
-      float DeltaScale[3];
+
       for(int j = 0; j < 3; j++)
       {
 	DeltaScale[j] = vScale-vScaleOld;
-      }
-      
-      for(auto i : vpEntity)
-      {
-	i->ApplyDeltaScale(DeltaScale);
       }
 
       vScaleOld = vScale;
@@ -290,7 +278,14 @@ basic order of drawing operation:
       vScaleOld = 0;
     }
 
-    //apply transforms
+    //apply transforms to camera
+    pCameraEntity->ApplyDeltaTranslate(DeltaTranslate);
+    pCameraEntity->ApplyDeltaRotate(DeltaRotate);
+    pCameraEntity->ApplyDeltaScale(DeltaScale);
+
+    pCameraEntity->DrawModel();
+
+    //updated chain reaction transforms to other entities
     for(auto i : vpEntity)
     {
       i->DrawModel();
@@ -411,6 +406,9 @@ int main(int argc, char** argv)
   //parse model after glut initialization
   CityParse cCityParse;
   vpEntity = cCityParse.ParseCity(argv[1]); 
+  
+  //initialize camera
+  pCameraEntity = new ModelAbstraction();
 
   for(auto i : vpEntity)
   {
@@ -422,6 +420,9 @@ int main(int argc, char** argv)
     
     //update data in buffers to be rendered
     i->LoadRenderBuffer();
+
+    //add objects to camera's child
+    pCameraEntity->AddChild(i);
   }
 
   //run gl loop

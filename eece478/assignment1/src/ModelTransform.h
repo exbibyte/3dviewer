@@ -27,13 +27,17 @@ class ModelTransform
   float ModelTranslate[3] = {0,0,0};
   float ModelRotate[3] = {0,0,0};
 
-  ///transform matrices
+  ///local transform matrices
   float vModelTranslation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
   float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
   float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-
   float vModelAllTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
   
+  ///parent transform matrix
+  float vModelParentTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+
+  float vModelCombinedTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+
   vector<TransformQueue> vTransformQueue;
 
   void PutInTransformQueue(int, float[]);
@@ -57,6 +61,12 @@ class ModelTransform
   ///sets intial model orientation
   void InitializeOrientation(float scale[], float rotate[], float translate[]);
   
+  ///sets transform from the parent 
+  void SetParentTransform(float matrix[]);
+
+  ///returns combined transform of current entity
+  float* GetCombinedTransform();
+
 };
 
 #endif
