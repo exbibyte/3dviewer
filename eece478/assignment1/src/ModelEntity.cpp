@@ -501,24 +501,24 @@ void ModelEntity::Draw()
 Draw what's linked to the VBO, NBO, TBO
 */
 {
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_NORMAL_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    //texture switching
-    for(auto i : vTexturePassId)
-    {
-      glBindTexture(GL_TEXTURE_2D, pTextureID[i]);       
-      glBindBuffer(GL_ARRAY_BUFFER, this->pRbo[i]);
-      glVertexPointer(3, GL_FLOAT, 8*sizeof(GLfloat), 0);
-      glNormalPointer(GL_FLOAT, 8*sizeof(GLfloat), (void*)(3*sizeof(GLfloat)));        
-      glTexCoordPointer(2, GL_FLOAT, 8*sizeof(GLfloat), (void*)(6*sizeof(GLfloat)));  
-      glDrawArrays(GL_TRIANGLES, 0, this->pNumRenderData[i]*3);
-    } 
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  //texture switching
+  for(auto i : vTexturePassId)
+  {
+    glBindTexture(GL_TEXTURE_2D, pTextureID[i]);       
+    glBindBuffer(GL_ARRAY_BUFFER, this->pRbo[i]);
+    glVertexPointer(3, GL_FLOAT, 8*sizeof(GLfloat), 0);
+    glNormalPointer(GL_FLOAT, 8*sizeof(GLfloat), (void*)(3*sizeof(GLfloat)));        
+    glTexCoordPointer(2, GL_FLOAT, 8*sizeof(GLfloat), (void*)(6*sizeof(GLfloat)));  
+    glDrawArrays(GL_TRIANGLES, 0, this->pNumRenderData[i]*3);
+  } 
+  
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_NORMAL_ARRAY);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 ModelEntity::ModelEntity()

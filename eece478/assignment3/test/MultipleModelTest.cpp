@@ -18,8 +18,8 @@
 #include <cmath>
 
 #include "ModelParse.h"
-#include "ModelEntity.h"
 #include "CityParse.h"
+#include "ModelAbstraction.h"
 
 using namespace std;
 
@@ -30,7 +30,7 @@ namespace glut_global
   ModelParse cParser;
 
   ///holder of different input models
-  vector<ModelEntity*> vpEntity;
+  vector<ModelAbstraction*> vpEntity;
 
   ///transformation variables
   float vCamRotX = 0;
@@ -201,153 +201,141 @@ basic order of drawing operation:
 3.pop restore previous model/projection
 */
 {
-	glMatrixMode(GL_MODELVIEW);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3d(1, 1, 1);
+  glMatrixMode(GL_MODELVIEW);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glColor3d(1, 1, 1);
 
-	//reset matrix
-	glLoadIdentity();
+  glPushMatrix();
+
+    //reset matrix
+    glLoadIdentity();
 		
-	//additional translation from WASDCV (forward,left,back,right,up,down) keys
-	vTransX = 0;
-	vTransY = 0;
-	vTransZ = 0;
+    //additional translation from WASDCV (forward,left,back,right,up,down) keys
+    vTransX = 0;
+    vTransY = 0;
+    vTransZ = 0;
 
-	//delta when key is down
-	vTransZ += (bKeyWDown)? 0.3: 0;
-        vTransX += (bKeyADown)? 0.3: 0;
-        vTransZ += (bKeySDown)? -0.3: 0;
-	vTransX += (bKeyDDown)? -0.3: 0;
-        vTransY += (bKeyCDown)? -0.3: 0;
-	vTransY += (bKeyVDown)? 0.3: 0;
+    //delta when key is down
+    vTransZ += (bKeyWDown)? 0.3: 0;
+    vTransX += (bKeyADown)? 0.3: 0;
+    vTransZ += (bKeySDown)? -0.3: 0;
+    vTransX += (bKeyDDown)? -0.3: 0;
+    vTransY += (bKeyCDown)? -0.3: 0;
+    vTransY += (bKeyVDown)? 0.3: 0;
 	
-	//save translation from WASDCV
-	glPushMatrix();     
-	  glLoadIdentity();
-	  glTranslatef(vTransX,vTransY,vTransZ);
-	  glMultMatrixf(vModelTranslation);
-	  glGetFloatv(GL_MODELVIEW_MATRIX,vModelTranslation);
-	glPopMatrix();
+    // glTranslatef(0,0,-130);
 
-	//apply translation from WASDCV key movement
-	glMultMatrixf(vModelTranslation);
+    //apply translation
+    
+    float DeltaTranslate[3];
+    DeltaTranslate[0] = vTransX;
+    DeltaTranslate[1] = vTransY;
+    DeltaTranslate[2] = vTransZ;
+    
+    for(auto i : vpEntity)
+    {
+      i->ApplyDeltaTranslate(DeltaTranslate);
+    }         
 
-		//translate object
-		glTranslatef(0,0,-130);
+    //apply rotation transform if only left mouse is down
+    if(bMouseLeftDown && !bKeyShiftDown)
+    {
+      //get rotation delta
+      vCamRotY = vMouseDx/1.f;
+      vCamRotX = vMouseDy/1.f;
 
-		//apply rotation transform if only left mouse is down
-		if(bMouseLeftDown && !bKeyShiftDown)
-		{
-		  //get rotation delta
-		  vCamRotY = vMouseDx/1.f;
-		  vCamRotX = vMouseDy/1.f;
+      float DeltaRotate[3];
+      DeltaRotate[0] = vCamRotX - vCamRotOldX;
+      DeltaRotate[1] = vCamRotY - vCamRotOldY;
+      DeltaRotate[2] = 0;
 
-		  //start of object rotation transform
-		  glPushMatrix();    
-		    glLoadIdentity();
-		    //2nd, apply additional delta transform
-		    glRotatef(abs(vCamRotX-vCamRotOldX),vCamRotX-vCamRotOldX,0,0);
-		    glRotatef(abs(vCamRotY-vCamRotOldY),0,vCamRotY-vCamRotOldY,0);
-		    
-		    //1st, apply old rotation transform
-		    glMultMatrixf(vModelRotation);
-		    
-		    //save the new rotation transform
-		    glGetFloatv(GL_MODELVIEW_MATRIX,vModelRotation);
+      for(auto i : vpEntity)
+      {
+	i->ApplyDeltaRotate(DeltaRotate);
+      }
 
-		    //update rotation delta
-		    vCamRotOldX = vCamRotX;
-		    vCamRotOldY = vCamRotY;
-		  glPopMatrix();
-		}
-		else //reset rotation delta when left mouse is up
-		{
-		  vCamRotY = 0;
-		  vCamRotX = 0;
-		  vCamRotOldY = 0;
-		  vCamRotOldX = 0;
-		}
+      //update rotation delta
+      vCamRotOldX = vCamRotX;
+      vCamRotOldY = vCamRotY;  
+    }
+    else //reset rotation delta when left mouse is up
+    {
+      vCamRotY = 0;
+      vCamRotX = 0;
+      vCamRotOldY = 0;
+      vCamRotOldX = 0;
+    }
 
-		//apply rotation transform from saved matrix
-		glMultMatrixf(vModelRotation);
+    //scale object and avoid negative scaling
+    if(bMouseLeftDown && bKeyShiftDown)
+    {
+      //get delta
+      vScale = -vMouseDy/3000.f;
+      float DeltaScale[3];
+      for(int j = 0; j < 3; j++)
+      {
+	DeltaScale[j] = vScale-vScaleOld;
+      }
+      
+      for(auto i : vpEntity)
+      {
+	i->ApplyDeltaScale(DeltaScale);
+      }
 
-		//scale object and avoid negative scaling
-		if(bMouseLeftDown && bKeyShiftDown)
-		{
-		        //get delta
-			vScale = -vMouseDy/3000.f;
-			float DeltaScale = 1+vScale-vScaleOld;
-			DeltaScale = DeltaScale<0? 0: DeltaScale;
-			
-			//start of object scaling transform
-			glPushMatrix();     
-			  glLoadIdentity();
+      vScaleOld = vScale;
+    }
+    else
+    {
+      vScale = 0;
+      vScaleOld = 0;
+    }
 
-			  //2nd, apply delta scaling
-			  glScalef(DeltaScale,DeltaScale,DeltaScale);
+    //apply transforms
+    for(auto i : vpEntity)
+    {
+      i->DrawModel();
+    }
 
-			  //1st, apply old scaling transform
-			  glMultMatrixf(vModelScaling);
-			  
-			  //lastly, save the new scaling transform
-			  glGetFloatv(GL_MODELVIEW_MATRIX,vModelScaling);
-			  vScaleOld = vScale;
-			glPopMatrix();
-		}
-		{
-		  vScale = 0;
-		  vScaleOld = 0;
-		}
-
-		//apply saved scaling transform
-		glMultMatrixf(vModelScaling);
-
-		//drawing different objects using q key toggle
-		if(!bKeyQDown)
-		{
-		  glutWireTeapot(20);
-		}
-		else
-		{
-		  for(auto i : vpEntity)
-		  {
-		      i->Draw();
-		  }
-		}
-
-	//revert state model stack
-	glPopMatrix();
-
-	//setup projection for text overlay
-	glMatrixMode(GL_PROJECTION);
-
-	//save state projection stack
-	glPushMatrix();
-		glLoadIdentity();
-		// apply parallel projection transform for text display
-		gluOrtho2D(0.0, vWidth, 0.0, vHeight); 
-
-		glMatrixMode(GL_MODELVIEW);
-		//save state model stack
-		glPushMatrix();
-			glLoadIdentity();
-
-			// Draw text at bottom right
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			glRasterPos2i(vWidth-70, 20);
-			string name = "Bill Liu";
-			for(int i = 0; i < name.length(); i++)
-			{
-				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, name[i]);
-			}
-		//revert state model stack
-		glPopMatrix();
-
-	glMatrixMode(GL_PROJECTION);
-	//revert state projection stack
-	glPopMatrix();
-
-	glutSwapBuffers();
+    //drawing different objects using q key toggle
+    if(!bKeyQDown)
+    {
+      glutWireTeapot(20);
+    }
+    
+  //revert state model stack
+  glPopMatrix();
+      
+  //setup projection for text overlay
+  glMatrixMode(GL_PROJECTION);
+      
+  //save state projection stack
+  glPushMatrix();
+    glLoadIdentity();
+    // apply parallel projection transform for text display
+    gluOrtho2D(0.0, vWidth, 0.0, vHeight); 
+    
+    glMatrixMode(GL_MODELVIEW);
+    //save state model stack
+    glPushMatrix();
+      glLoadIdentity();
+    
+      // Draw text at bottom right
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glRasterPos2i(vWidth-70, 20);
+      string name = "Bill Liu";
+      for(int i = 0; i < name.length(); i++)
+      {
+	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, name[i]);
+      }
+      //revert state model stack
+    glPopMatrix();
+      
+    glMatrixMode(GL_PROJECTION);
+    
+  //revert state projection stack
+  glPopMatrix();
+    
+  glutSwapBuffers();
 }
 
 void init (void) 

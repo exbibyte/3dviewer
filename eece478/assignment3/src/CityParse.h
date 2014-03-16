@@ -7,17 +7,17 @@
 #include <vector>
 
 #include "ModelParse.h"
-#include "ModelEntity.h"
+#include "ModelAbstraction.h"
 
 class CityParse
 {
  private:
   ModelParse cModelParse; ///factory to generate model
-  vector<ModelEntity*> vEntity;///temporary storage for produced models
+  vector<ModelAbstraction*> vEntity;///temporary storage for produced models
 
  public:
   CityParse();
-  vector<ModelEntity*> ParseCity(string path); /// parses city file and returns a vector of entities   
+  vector<ModelAbstraction*> ParseCity(string path); /// parses city file and returns a vector of entities   
 };
 
 #endif

@@ -12,7 +12,7 @@
 #include "ModelVertice.h"
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
-#include "ModelEntity.h"
+#include "ModelAbstraction.h"
 
 using namespace std;
 
@@ -28,7 +28,7 @@ class ModelParse
   ModelParse();
   ~ModelParse();
   ///factory function to generate model entity from input model file
-  ModelEntity * GetEntity(string path);
+  ModelAbstraction * GetEntity(string path);
 };
 
 #endif

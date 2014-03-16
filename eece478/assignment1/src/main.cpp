@@ -159,7 +159,7 @@ calculate left mouse delta and shift key state
 {
   //detect shift key is pressed
   int mod = glutGetModifiers();	
-  //bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
+  // bKeyShiftDown = (mod == GLUT_ACTIVE_SHIFT);
 
   if(bMouseLeftDown)
     {
@@ -274,7 +274,7 @@ basic order of drawing operation:
 		if(bMouseLeftDown && bKeyShiftDown)
 		{
 		        //get delta
-			vScale = -vMouseDy/3000.f;
+			vScale = -vMouseDy/1000.f;
 			float DeltaScale = 1+vScale-vScaleOld;
 			DeltaScale = DeltaScale<0? 0: DeltaScale;
 			
@@ -293,6 +293,7 @@ basic order of drawing operation:
 			  vScaleOld = vScale;
 			glPopMatrix();
 		}
+		else
 		{
 		  vScale = 0;
 		  vScaleOld = 0;

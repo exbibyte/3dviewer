@@ -5,7 +5,7 @@
 #include <GL/glut.h>  
 
 #include "CityParse.h"
-#include "ModelEntity.h"
+#include "ModelAbstraction.h"
 
 #define GLUT_DISABLE_ATEXIT_HACK
 
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
   CityParse cCityParse;
   
-  vector<ModelEntity*> vpEntity;
+  vector<ModelAbstraction*> vpEntity;
 
   vpEntity = cCityParse.ParseCity(argv[1]); 
 

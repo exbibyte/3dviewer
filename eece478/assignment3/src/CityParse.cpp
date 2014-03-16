@@ -5,15 +5,15 @@
 
 #include "CityParse.h"
 #include "ModelParse.h"
-#include "ModelEntity.h"
+#include "ModelAbstraction.h"
 
 CityParse::CityParse()
 {
 }
 
-vector<ModelEntity*> CityParse::ParseCity(string path)
+vector<ModelAbstraction*> CityParse::ParseCity(string path)
 {
-  vector<ModelEntity*> vpEntity;
+  vector<ModelAbstraction*> vpEntity;
 
   ifstream ifs;
   stringstream Ss;
@@ -79,8 +79,9 @@ vector<ModelEntity*> CityParse::ParseCity(string path)
     cout<<"translate: "<<translate[0]<<","<<translate[1]<<","<<translate[2]<<endl;
 #endif
     //generate new entity
-    ModelEntity * newentity = cModelParse.GetEntity(entitypath);
-    newentity->SetOrientation(scale,rotate,translate);
+    ModelAbstraction * newentity;
+    newentity = cModelParse.GetEntity(entitypath);
+    newentity->InitializeOrientation(scale,rotate,translate);
   
     vpEntity.push_back(newentity);
     newentity = NULL;
