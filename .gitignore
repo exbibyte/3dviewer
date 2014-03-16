@@ -11,6 +11,8 @@ documentation/
 
 *.h~
 *.cpp~
+*.ppm
+*.model
 
 *.pydevproject
 .project
