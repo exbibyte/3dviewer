@@ -70,7 +70,6 @@ vector<ModelEntity*> CityParse::ParseCity(string path)
     unsigned foundfolder = path.rfind(folder);
     if(foundfolder!=std::string::npos)
     {
-      cout<<path.substr(0,foundfolder+1)<<endl;
       entitypath = path.substr(0,foundfolder+1) + entitypath; 
     }
 #ifdef DEBUG
