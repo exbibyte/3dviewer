@@ -1,3 +1,5 @@
+///OpenGL needs to be initialized before using this class
+
 #ifndef CITYPARSE_H
 #define CITYPARSE_H
 

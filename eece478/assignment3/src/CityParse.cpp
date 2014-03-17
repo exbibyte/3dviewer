@@ -5,6 +5,7 @@
 
 #include "CityParse.h"
 #include "ModelParse.h"
+#include "ModelEntity.h"
 #include "ModelAbstraction.h"
 
 CityParse::CityParse()
@@ -79,10 +80,19 @@ vector<ModelAbstraction*> CityParse::ParseCity(string path)
     cout<<"translate: "<<translate[0]<<","<<translate[1]<<","<<translate[2]<<endl;
 #endif
     //generate new entity
-    ModelAbstraction * newentity;
+    ModelEntity * newentity;
     newentity = cModelParse.GetEntity(entitypath);
     newentity->InitializeOrientation(scale,rotate,translate);
   
+    //load model information and textures and do initial update
+    newentity->LoadTextureFiles();
+    
+    //do an initial update of triangle data
+    newentity->Update();
+    
+    //update data in buffers to be rendered
+    newentity->LoadRenderBuffer();
+
     vpEntity.push_back(newentity);
     newentity = NULL;
   }
