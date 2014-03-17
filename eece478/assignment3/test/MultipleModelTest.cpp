@@ -20,6 +20,7 @@
 #include "ModelParse.h"
 #include "CityParse.h"
 #include "ModelAbstraction.h"
+#include "Lighting.h"
 
 using namespace std;
 
@@ -291,11 +292,11 @@ basic order of drawing operation:
       i->DrawModel();
     }
 
-    //drawing different objects using q key toggle
-    if(!bKeyQDown)
-    {
-      glutWireTeapot(20);
-    }
+    // //drawing different objects using q key toggle
+    // if(!bKeyQDown)
+    // {
+    //   glutWireTeapot(20);
+    // }
     
   //revert state model stack
   glPopMatrix();
@@ -388,7 +389,7 @@ int main(int argc, char** argv)
   glCullFace(GL_BACK);
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);    
   glEnable(GL_DEPTH_TEST);
-  // glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHTING);
   glutReshapeFunc(reshape);
   init();
 
@@ -406,22 +407,25 @@ int main(int argc, char** argv)
   //parse model after glut initialization
   CityParse cCityParse;
   vpEntity = cCityParse.ParseCity(argv[1]); 
+
+  //create a light source
+  GLfloat amb[] = { 0, 0, 0, 1.0 };
+  GLfloat spec[] = { 0.5, 0.5, 0.5, 0.0 };
+  GLfloat dif[] = { 0.5, 0.5, 0.5, 0 };
+  GLfloat pos[] = { 50.0, 50.0, 50.0, 1.0 };
+  Lighting * pLightAmbient = new Lighting();
+  pLightAmbient->SetLightParam(amb, spec, dif, pos);
+  pLightAmbient->TurnOn();
+
+  //add light entity to entity list
+  vpEntity.push_back(pLightAmbient);
   
   //initialize camera
   pCameraEntity = new ModelAbstraction();
 
+  //make objects' transformation hierachy lower than the camera
   for(auto i : vpEntity)
   {
-    //load texture data
-    i->LoadTextureFiles();
-    
-    //do an initial update of triangle data
-    i->Update();
-    
-    //update data in buffers to be rendered
-    i->LoadRenderBuffer();
-
-    //add objects to camera's child
     pCameraEntity->AddChild(i);
   }
 
