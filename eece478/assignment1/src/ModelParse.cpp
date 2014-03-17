@@ -29,11 +29,11 @@ delete any allocated data
   }
 }
 
-ModelAbstraction * ModelParse::GetEntity(string path)
+ModelEntity * ModelParse::GetEntity(string path)
 /**
 Parses and returns a model entity for the input model file
 @param path model file path
-@return ModelAbstraction an entity holding formatted data and also provides methods to draw triangles
+@return ModelEntity an entity holding formatted data and also provides methods to draw triangles
 */
 {
   ifstream ifs;
@@ -104,7 +104,7 @@ Parses and returns a model entity for the input model file
   }
 
   //creates a model entity and save parsed data
-  ModelAbstraction * output = new ModelAbstraction();
+  ModelEntity * output = new ModelEntity();
   output->cModelName = cModelName;
   output->cModelTexture = cModelTexture;
   output->cModelVertice = cModelVertice;
