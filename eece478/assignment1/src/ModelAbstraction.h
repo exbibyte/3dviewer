@@ -3,12 +3,11 @@
 
 #include <vector>
 
-#include "ModelEntity.h"
 #include "ModelTransform.h"
 
 using namespace std;
 
-class ModelAbstraction : public ModelTransform, public ModelEntity
+class ModelAbstraction : public ModelTransform
 {
  private:
   ///storage for child and parent entities used for transforms
@@ -18,8 +17,11 @@ class ModelAbstraction : public ModelTransform, public ModelEntity
  public:	
   ModelAbstraction();
 
-  ///updates model view and draws model
+  ///updates model view transforms and calls implementable draw method
   void DrawModel();
+  
+  ///implementable draw function
+  virtual void Draw();
 
   void AddChild(ModelAbstraction* child);
   void RemoveChild(ModelAbstraction* child);
@@ -28,6 +30,7 @@ class ModelAbstraction : public ModelTransform, public ModelEntity
 
   ///gets the parent transform if it exists
   void GetParentTransform();
+
 };
 
 #endif

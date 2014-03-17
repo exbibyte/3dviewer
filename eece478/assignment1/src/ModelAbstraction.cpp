@@ -1,5 +1,4 @@
 #include "ModelAbstraction.h"
-#include "ModelEntity.h"
 #include "ModelTransform.h"
 
 ModelAbstraction::ModelAbstraction()
@@ -17,6 +16,10 @@ void ModelAbstraction::DrawModel()
 
   //draw model
   this->Draw();
+}
+
+void ModelAbstraction::Draw()
+{
 }
 
 void ModelAbstraction::AddChild(ModelAbstraction* child)
