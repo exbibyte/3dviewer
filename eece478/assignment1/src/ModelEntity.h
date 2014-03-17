@@ -11,6 +11,8 @@
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
 
+#include "ModelAbstraction.h"
+
 #include "PPM.hpp"
 
 #include <GL/glew.h>
@@ -51,7 +53,7 @@ typedef tuple<int, int,int,int, int, int, float,float,float,float,float,float,fl
 
 ///This class is a container of basic model data. It also provides functions to link basic data to generate triangle vertices and draw vertices. It can be used after OpenGL initilization functions are called. 
 
-class ModelEntity{
+class ModelEntity : public ModelAbstraction{
 private:
   ///sorting comparators used in linking triangles to vertices  
   static bool fSortTriangleDetailByVec1(const tTriangleDetail&, const tTriangleDetail&);
