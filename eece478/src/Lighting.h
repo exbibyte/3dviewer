@@ -7,6 +7,7 @@
 
 using namespace std;
 
+///inherits transformation functionality from ModelAbstraction
 class Lighting: public ModelAbstraction 
 {
  private:
