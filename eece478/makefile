@@ -1,9 +1,18 @@
-src_assign1 := $(wildcard src/*.cpp)
-src_dir:=./src
+src_files := $(wildcard ./src/*.cpp)
+inc_dir:=./src
 out := ./build
-lib:= -lGL -lGLU -lGLEW -lglut
+lib:= -lGL -lGLU -lGLEW -lglut 
 
 $(shell   mkdir -p $(out))
 
+#modelviewer project for assignment 1
 modelviewer:
-	g++ -std=c++0x test/assign1.cpp $(src_assign1) -I$(src_dir) $(lib) -o $(out)/modelviewer
+	g++ -std=c++0x test/assign1.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/ModelViewer
+
+#test for city file parsing
+cityparse: 
+	g++ -std=c++0x test/CityParseTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CityParseTest
+
+#test for multiple model loading
+multiplemodel:
+	g++ -std=c++0x test/MultipleModelTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/MultipleModelTest
