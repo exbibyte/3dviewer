@@ -30,6 +30,9 @@ int main(int argc, char** argv)
     return 0;
   }
 
+  fstream input;
+  fstream output;
+
   input.open (argv[1], std::fstream::in);
   output.open (argv[2], std::fstream::out | std::fstream::trunc);
   
