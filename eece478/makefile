@@ -10,6 +10,7 @@ $(shell   mkdir -p $(out))
 modelviewer:
 	g++ -std=c++0x test/assign1.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/ModelViewer
 
+#assignment 2 utility
 obj2cutom:
 	g++ -std=c++0x $(src_files_obj2custom) -o $(out)/obj2custom	
 

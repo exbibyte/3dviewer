@@ -19,6 +19,7 @@ typedef tuple<int,float*> TransformQueue;
 #define TRANSFORMTYPE_ROTATE_ABS 4
 #define TRANSFORMTYPE_SCALE_ABS 5
 
+///provides transformation abilities and cascades transform from parent hierarchy
 class ModelTransform
 {
  private:

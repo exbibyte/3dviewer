@@ -7,6 +7,7 @@
 
 using namespace std;
 
+///provides ability to attach entities in a hierarchy and inherits entity transforms from ModelTransform
 class ModelAbstraction : public ModelTransform
 {
  private:
