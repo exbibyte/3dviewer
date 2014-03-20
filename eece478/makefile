@@ -6,4 +6,4 @@ lib:= -lGL -lGLU -lGLEW -lglut
 $(shell   mkdir -p $(out))
 
 all:
-	g++ -std=c++0x test/main.cpp $(src_assign1) -I$(src_dir) $(lib) -o $(out)/main
+	g++ -std=c++0x test/assign1.cpp $(src_assign1) -I$(src_dir) $(lib) -o $(out)/modelviewer
