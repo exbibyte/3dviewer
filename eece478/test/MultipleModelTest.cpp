@@ -72,6 +72,8 @@ namespace glut_global
   ///window dimensions
   int vWidth;
   int vHeight;
+
+  Lighting * pLightSpot1;
 }
 
 using namespace glut_global;
@@ -279,6 +281,14 @@ basic order of drawing operation:
       vScaleOld = 0;
     }
 
+    float rotatevec[] = {0,4,0};
+    pLightSpot1->ApplyDeltaRotate(rotatevec);
+
+    // float dir[] = {-1,-1,-1,1};
+    // float exponent = 3;
+    // float cutoff = 5;
+    // pLightSpot1->SetLightParamSpot(dir, exponent, cutoff);
+
     //apply transforms to camera
     pCameraEntity->ApplyDeltaTranslate(DeltaTranslate);
     pCameraEntity->ApplyDeltaRotate(DeltaRotate);
@@ -409,25 +419,40 @@ int main(int argc, char** argv)
   vpEntity = cCityParse.ParseCity(argv[1]); 
 
   //create a light source
-  GLfloat amb[] = { 0, 0, 0, 1.0 };
-  GLfloat spec[] = { 0.5, 0.5, 0.5, 0.0 };
-  GLfloat dif[] = { 0.5, 0.5, 0.5, 0 };
-  GLfloat pos[] = { 50.0, 50.0, 50.0, 1.0 };
+  float amb[] = { 0, 0, 0, 1.0 };
+  float spec[] = { 0.5, 0.5, 0.5, 0.0 };
+  float dif[] = { 0.5, 0.5, 0.5, 0 };
+  float pos[] = { 70.0, 70.0, 70.0, 1.0 };
+  float pos2[] = { 0.0, 0.0, 0.0, 1.0 };
   Lighting * pLightAmbient = new Lighting();
   pLightAmbient->SetLightParam(amb, spec, dif, pos);
-  pLightAmbient->TurnOn();
+  //pLightAmbient->TurnOn();
 
   //add light entity to entity list
-  vpEntity.push_back(pLightAmbient);
+  //vpEntity.push_back(pLightAmbient);
   
   //initialize camera
   pCameraEntity = new ModelAbstraction();
+
+  // Lighting * 
+  pLightSpot1 = new Lighting();
+  pLightSpot1->SetLightParam(amb, spec, dif, pos2);
+  
+  float dir[] = {0.2,-1,0,1};
+  float exponent = 1;
+  float cutoff = 8;
+  pLightSpot1->SetLightParamSpot(dir, exponent, cutoff);
+  pLightSpot1->TurnOn();
+  vpEntity.push_back(pLightSpot1);
 
   //make objects' transformation hierachy lower than the camera
   for(auto i : vpEntity)
   {
     pCameraEntity->AddChild(i);
   }
+
+  float pos3[] = { 0.0, 150, 0};
+  pLightSpot1->ApplyDeltaTranslate(pos3);
 
   //run gl loop
   glutMainLoop();
