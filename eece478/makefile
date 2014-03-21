@@ -21,3 +21,7 @@ cityparse:
 #test for multiple model loading
 multiplemodel:
 	g++ -std=c++0x test/MultipleModelTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/MultipleModelTest
+
+#test for multiple model loading
+parametriccurve:
+	g++ -std=c++0x test/CurveTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/ParametricCurveTest
