@@ -18,7 +18,7 @@
 #include <cmath>
 #include <time.h>
 
-#include "ParametricCurve.h"
+#include "CurvePath.h"
 #include "ModelAbstraction.h"
 #include "ModelParse.h"
 
@@ -73,12 +73,12 @@ namespace glut_global
   int vWidth;
   int vHeight;
 
-  ParametricCurve * pCurve;
+  CurvePath * pCurve;
 
   clock_t t;
   int time_prev;
 
-  float fps = 0.75; 
+  float fps = 1/30; 
 }
 
 using namespace glut_global;
@@ -95,11 +95,8 @@ void myIdle()
     duration = (float)(time - time_prev)/CLOCKS_PER_SEC;
   }while(duration < fps);
 
-  if(pCurve->Done() != true)
-  {
-    pCurve->Increment();
-  }
-
+  pCurve->Increment();
+  
   time_prev = time;
 
   glutPostRedisplay();
@@ -310,7 +307,7 @@ basic order of drawing operation:
 
     pCameraEntity->DrawModel();
     
-    pCurve->DrawDebug();
+    pCurve->Draw();
 
   //revert state model stack
   glPopMatrix();
@@ -424,13 +421,18 @@ int main(int argc, char** argv)
   float trans[] = {0,0,-40};
   pCameraEntity->ApplyDeltaTranslate(trans);
 
-  pCurve = new ParametricCurve();
+  pCurve = new CurvePath();
   float control1[3] = {0,0,0};
   float control2[3] = {0,10,0};
   float control3[3] = {10,10,0};
   float control4[3] = {10,0,0};
-  pCurve->SetParameter(40, control1, control2, control3, control4);
-  pCurve->Start();
+
+  float control5[3] = {10,0,0};
+  float control6[3] = {10,-10,0};
+  float control7[3] = {0,-10,0};
+  float control8[3] = {0,0,0};
+  pCurve->AddCurve(30*10, control1, control2, control3, control4);
+  pCurve->AddCurve(30*10, control5, control6, control7, control8);
 
   time_prev = clock();
 
