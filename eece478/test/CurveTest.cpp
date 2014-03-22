@@ -77,7 +77,6 @@ namespace glut_global
 
   clock_t t;
   int time_prev;
-
   float fps = 1/30; 
 }
 
@@ -307,7 +306,12 @@ basic order of drawing operation:
 
     pCameraEntity->DrawModel();
     
-    pCurve->Draw();
+    //updated chain reaction transforms to other entities
+    for(auto i : vpEntity)
+    {
+      i->DrawModel();
+    }
+    // pCurve->Draw();
 
   //revert state model stack
   glPopMatrix();
@@ -433,6 +437,14 @@ int main(int argc, char** argv)
   float control8[3] = {0,0,0};
   pCurve->AddCurve(30*10, control1, control2, control3, control4);
   pCurve->AddCurve(30*10, control5, control6, control7, control8);
+
+  vpEntity.push_back(pCurve);
+
+  //make objects' transformation hierachy lower than the camera
+  for(auto i : vpEntity)
+  {
+    pCameraEntity->AddChild(i);
+  }
 
   time_prev = clock();
 
