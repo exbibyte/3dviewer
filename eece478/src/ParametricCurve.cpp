@@ -2,14 +2,11 @@
 
 #include <iostream>
 
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glut.h>  
-
 using namespace std;
 
 ParametricCurve::ParametricCurve()
 {
+  this->bStarted = false;
 }
 
 void ParametricCurve::SetParameter(int steps, float control1[], float control2[], float control3[], float control4[])
@@ -32,8 +29,8 @@ void ParametricCurve::Increment()
     this->mPoint[i] += this->mDPoint[i];
     this->mDPoint[i] += this->mDDPoint[i];
     this->mDDPoint[i] += this->mDDDPoint[i];
-    this->mCurrentStep++;
   }
+  this->mCurrentStep++;
 }
 
 void ParametricCurve::GetCurrent(float*& out)
@@ -63,8 +60,6 @@ void ParametricCurve::Start()
     pz[i] = this->mControlPoints[i][2];
   }
 
-  cout<<"control4:"<<px[3]<<","<<py[3]<<","<<pz[3]<<endl;
-  
   float cVec[3][4];
   
   float * pVec = &cVec[0][0];
@@ -93,11 +88,18 @@ void ParametricCurve::Start()
     mDDPoint[i] = 6 * a * d3 + 2 * b * d2;
     mDDDPoint[i] = 6 * a * d3;
   } 
+
+  this->bStarted = true;
 }
 
 bool ParametricCurve::Done()
 {
   return (this->mCurrentStep == this->mTotalStep -1);
+}
+
+bool ParametricCurve::Started()
+{
+  return this->bStarted;
 }
 
 void ParametricCurve::MatMult(float * FourByOne, float * FourbyFour, float *& out)
@@ -110,19 +112,7 @@ void ParametricCurve::MatMult(float * FourByOne, float * FourbyFour, float *& ou
     for(int j = 0; j < 4; j++)
      {
       sum += (FourByOne[j] * FourbyFour[i + j*4]);
-      // sum += (FourByOne[j] * FourbyFour[i*4 + j]);
     }    
     out[i] = sum;
   }
-}
-
-void ParametricCurve::DrawDebug()
-{
-  glBegin(GL_POINTS);
-
-    glColor3f(1,1,1);
-    glVertex3f(this->mPoint[0], this->mPoint[1], this->mPoint[2]);
-  glEnd();
-
-  cout<<this->mPoint[0]<<","<<this->mPoint[1]<<","<<this->mPoint[2]<<endl;
 }

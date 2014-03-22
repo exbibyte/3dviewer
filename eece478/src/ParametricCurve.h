@@ -23,25 +23,31 @@ class ParametricCurve
   /// bezier basis matrix
   float mBezierBasis[4][4] = {{-1,3,-3,1}, {3,-6,3,0}, {-3,3,0,0}, {1,0,0,0}};
 
+  bool bStarted;
+
  public:
   
   ParametricCurve();
 
+  ///sets control points for the curve
   void SetParameter(int steps, float control1[], float control2[], float control3[], float control4[]);
 
-  /// go to next step
+  /// go to next step of the curve
   void Increment();
 
-  /// returns current point
+  /// returns current position
   void GetCurrent(float*& out); 
 
+  ///initialize the curve
   void Start();
 
+  ///see if the curve had reached the end
   bool Done();
+
+  bool Started();
 
   /// provides 4x1 * 4x4 matrix operation 
   void MatMult(float * FourByOne, float * FourbyFour, float *& out); 
-  void DrawDebug();
 };
 
 #endif
