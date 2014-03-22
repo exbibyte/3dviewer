@@ -24,4 +24,8 @@ multiplemodel:
 
 #test for multiple model loading
 parametriccurve:
-	g++ -std=c++0x test/CurveTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/ParametricCurveTest
+	g++ -g -std=c++0x test/CurveTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/ParametricCurveTest
+
+#test for multiple model loading
+camerapath:
+	g++ -g -std=c++0x test/CameraPathTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CameraPathTest
