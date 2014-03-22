@@ -318,9 +318,9 @@ basic order of drawing operation:
     pCameraEntity->ApplyDeltaScale(DeltaScale);
 
     //update parents first
+    pCameraEntity->DrawModel();    
     pcurveoffset->DrawModel();
     pCurve->DrawModel();
-    pCameraEntity->DrawModel();
 
     //updated chain reaction transforms to other entities
     for(auto i : vpEntity)
@@ -490,18 +490,18 @@ int main(int argc, char** argv)
 
   //offsets curve path
   pcurveoffset = new ModelAbstraction();
-  // pcurveoffset->ApplyDeltaTranslate(campos);
+  pcurveoffset->ApplyDeltaTranslate(campos);
 
-  //attach curve to curveoffset
+  //attach curveoffset to camera
+  pCameraEntity->AddChild(pcurveoffset);
+
+  //attach curve path to curveoffset
   pcurveoffset->AddChild(pCurve);
 
-  //attach camera to curve path
-  pCameraEntity->AddParent(pCurve);
-
-  //make objects' transformation hierachy lower than the camera
+  //attach other world objects
   for(auto i : vpEntity)
   {
-    pCameraEntity->AddChild(i);
+    pCurve->AddChild(i);
   }
 
   float pos3[] = { 0.0, 150, 0};
