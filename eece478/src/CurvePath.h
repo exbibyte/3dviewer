@@ -2,12 +2,13 @@
 #define CURVEPATH_H
 
 #include "ParametricCurve.h"
+#include "ModelAbstraction.h"
 
 #include <vector>
 
 using namespace std;
 
-class CurvePath
+class CurvePath : public ModelAbstraction
 {
  private:
 

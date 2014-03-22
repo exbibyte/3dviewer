@@ -58,13 +58,15 @@ void CurvePath::Increment()
       this->CurveIndex++;
     }
   }
+  this->ApplyTranslate(this->Position);
 }
 
 void CurvePath::Draw()
 {
   glBegin(GL_POINTS);
     glColor3f(1,1,1);
-    glVertex3f(this->Position[0], this->Position[1], this->Position[2]);
+    // position is actually transformed using ModelTransform's ApplyTranslate in Increment function
+    glVertex3f(0,0,0);
   glEnd();
 }
 
