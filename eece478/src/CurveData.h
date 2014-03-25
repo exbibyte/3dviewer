@@ -28,6 +28,7 @@ class CurveData : public ModelData
   vector<tCurveControl> vCurveControl;
   CurveData();
   void FormatData(); 
+  void ClearData(); 
 };
 
 #endif

@@ -10,8 +10,8 @@ using namespace std;
 CurveData::CurveData()
 {
   this->mType = CURVE;
-  this->mBeginTag = "<Curve>";
-  this->mEndTag = "</Curve>";
+  this->mBeginTag = "<curve>";
+  this->mEndTag = "</curve>";
 }
 
 void CurveData::FormatData()
@@ -52,4 +52,10 @@ void CurveData::FormatData()
     cout<<"tuple data: "<<std::get<TCURVECONTROL_STEP>(j)<<", "<<std::get<TCURVECONTROL_PT1_Z>(j)<<", "<<std::get<TCURVECONTROL_PT4_Z>(j)<<endl;
   }
 #endif
+}
+
+void CurveData::ClearData()
+{
+  this->vDataItem.clear();
+  this->vCurveControl.clear();
 }
