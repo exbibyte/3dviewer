@@ -14,7 +14,8 @@ enum eDataType
   TEXTURE,
   VERTICE,
   NORMAL,
-  TRIANGLE
+  TRIANGLE,
+  CURVE
 };
 
 ///acts as a helper class to the parser. It provides matching DOM tags and separates data to be used by derived classes
@@ -34,6 +35,7 @@ class ModelData{
   ///function to save data to specific format
   virtual void FormatData()=0; 
   virtual ~ModelData(){};
+  virtual void ClearData(){}; 
 };
 
 #endif
