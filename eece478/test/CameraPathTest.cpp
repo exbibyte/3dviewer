@@ -16,13 +16,14 @@
 
 #include <iostream>
 #include <cmath>
-#include <time.h>
 
 #include "ModelParse.h"
 #include "CityParse.h"
 #include "ModelAbstraction.h"
 #include "Lighting.h"
 #include "CurvePath.h"
+
+#include "Clock.h"
 
 using namespace std;
 
@@ -78,30 +79,27 @@ namespace glut_global
   Lighting * pLightSpot1;
   CurvePath * pCurve;
   ModelAbstraction * pcurveoffset;
-
-  clock_t t;
-  int time_prev;
-
-  float fps = 1/30; 
+  
+  Clock * pClock;
 }
 
 using namespace glut_global;
 
 void myIdle()
 {
-  int time;
-  
-  float duration;
+  bool TimeRunning = pClock->Tick();
 
-  do
+  cout<<"Time: "<<pClock->GetTime()<<endl;
+
+  if(TimeRunning)
   {
-    time = clock();
-    duration = (float)(time - time_prev)/CLOCKS_PER_SEC;
-  }while(duration < fps);
+    pCurve->Increment();
+  }
 
-  pCurve->Increment();
-  
-  time_prev = time;
+  // if(pClock->GetTime() > 8)
+  // {
+  //   pClock->Pause();
+  // }
 
   glutPostRedisplay();
 }
@@ -507,7 +505,10 @@ int main(int argc, char** argv)
   float pos3[] = { 0.0, 150, 0};
   pLightSpot1->ApplyDeltaTranslate(pos3);
 
-  time_prev = clock();
+  //create clock and run
+  pClock = new Clock;
+  pClock->SetFps(30);
+  pClock->Run();
 
   //run gl loop
   glutMainLoop();
