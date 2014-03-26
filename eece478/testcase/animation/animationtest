@@ -1,0 +1,17 @@
+<animation>
+  <curveindex>0</curveindex>
+  <timeindex>
+    5
+    <modelindex>88
+      <action>asdf</action>
+      <timeindex>ghi</timeindex>	
+    </modelindex>	
+  </timeindex>		
+  <action>run 2</action>
+</animation>
+
+<animation>
+  <modelindex>3</modelindex>
+  <timeindex>0</timeindex>	
+  <action>attach 1</action>
+</animation>
