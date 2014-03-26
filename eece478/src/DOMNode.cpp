@@ -6,6 +6,7 @@ using namespace std;
 
 DOMNode::DOMNode()
 {
+  this->Parent = NULL;
   this->Type.clear();
   this->Data.clear();
 }
