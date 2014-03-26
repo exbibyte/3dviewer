@@ -34,6 +34,10 @@ camerapath:
 curveparse:
 	g++ -g -std=c++0x test/CurveParse.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CurveParseTest
 
+#test for curve drawing
+curvedraw:
+	g++ -g -std=c++0x test/CurveTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CurveDraw
+
 #test for DOM parse
 domparse:
 	g++ -g -std=c++0x test/DOMParseTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/DOMParseTest
