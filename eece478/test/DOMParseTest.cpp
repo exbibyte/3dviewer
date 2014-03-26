@@ -16,6 +16,7 @@ int main(int argc, char** argv)
 
   DOMNode* root = parser.GetDOM(argv[1]);
 
-  root->PrintBreadth();
+  if(root != NULL)
+    root->PrintBreadth();
   
 }

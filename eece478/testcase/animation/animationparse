@@ -1,9 +1,5 @@
-<timeindex>
-	<timeindex>
-	<timeindex>bh</timeindex>		
-	<timeindex>ffg</timeindex>	
-	</timeindex>
-	<timeindex>b</timeindex>	
-	<timeindex>c</timeindex>	
-	<timeindex>d</timeindex>
-</timeindex>
+<animation>
+	<timeindex>7</timeindex>		
+	<curveindex>0</curveindex>	
+	<action>run</action>
+</animation>
