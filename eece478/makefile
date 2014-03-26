@@ -22,14 +22,18 @@ cityparse:
 multiplemodel:
 	g++ -std=c++0x test/MultipleModelTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/MultipleModelTest
 
-#test for multiple model loading
+#test for parametric curve
 parametriccurve:
 	g++ -g -std=c++0x test/CurveTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/ParametricCurveTest
 
-#test for multiple model loading
+#test for camera motion with parametric curve
 camerapath:
 	g++ -g -std=c++0x test/CameraPathTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CameraPathTest
 
-#test for multiple model loading
+#test for curve parsing
 curveparse:
 	g++ -g -std=c++0x test/CurveParse.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CurveParseTest
+
+#test for DOM parse
+domparse:
+	g++ -g -std=c++0x test/DOMParseTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/DOMParseTest
