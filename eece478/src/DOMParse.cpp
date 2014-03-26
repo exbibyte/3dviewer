@@ -141,6 +141,9 @@ void DOMParse::NestedDOM(DOMNode * parent, string line)
   size_t start = 0;
   size_t end = 0;
 
+  int occurrencesStartOld = occurrencesStart;
+  int occurrencesEndOld = occurrencesEnd;
+
   //match number of start tags to number of end tags
   while (occurrencesStart != occurrencesEnd || occurrencesEnd == 0) 
   {
@@ -164,12 +167,18 @@ void DOMParse::NestedDOM(DOMNode * parent, string line)
       {
 	occurrencesStart++;
 	start = FoundStartTag + starttag.length();
-
-	// cout<<start<<","<<end<<endl;
-	// cout<<"occurences: "<<occurrencesStart<<", "<<occurrencesEnd<<endl;
-
       }
     }while(FoundStartTag != std::string::npos);
+
+
+    //see if DOM is invalid and return
+    if(occurrencesEndOld == occurrencesEnd && occurrencesStartOld == occurrencesStart)
+    {
+      return;
+    }
+
+    occurrencesStartOld = occurrencesStart;
+    occurrencesEndOld = occurrencesEnd;
   }
 
   //get 1st start tag
