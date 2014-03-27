@@ -22,9 +22,11 @@ typedef tuple<int, float,float,float, float,float,float, float,float,float, floa
 #define TCURVECONTROL_PT4_Y 11
 #define TCURVECONTROL_PT4_Z 12
 
+///stores control points for bezier curve
 class CurveData : public ModelData
 {
  public:
+  ///storage for bezier curve control points
   vector<tCurveControl> vCurveControl;
   CurveData();
   void FormatData(); 

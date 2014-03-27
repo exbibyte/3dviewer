@@ -10,6 +10,7 @@ using namespace std;
 CurveData::CurveData()
 {
   this->mType = CURVE;
+  //ignore these tags for current version of implementation
   this->mBeginTag = "<curve>";
   this->mEndTag = "</curve>";
 }
