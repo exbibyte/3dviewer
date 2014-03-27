@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <tuple>
+#include <string>
 
 ///access index of tuple
 #define TNAME_ID 0;
