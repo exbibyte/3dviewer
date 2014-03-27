@@ -16,11 +16,6 @@ DOMParse::DOMParse()
   std::get<TDOMMATCHER_STARTTAG>(MatchAnimation) = "<animation>";
   std::get<TDOMMATCHER_ENDTAG>(MatchAnimation) = "</animation>";
 
-  tDOMMatcher MatchCurve;
-  std::get<TDOMMATCHER_TYPE>(MatchCurve) = "CURVEINDEX";
-  std::get<TDOMMATCHER_STARTTAG>(MatchCurve) = "<curveindex>";
-  std::get<TDOMMATCHER_ENDTAG>(MatchCurve) = "</curveindex>";
-
   tDOMMatcher MatchModel;
   std::get<TDOMMATCHER_TYPE>(MatchModel) = "MODELINDEX";
   std::get<TDOMMATCHER_STARTTAG>(MatchModel) = "<modelindex>";
@@ -36,11 +31,46 @@ DOMParse::DOMParse()
   std::get<TDOMMATCHER_STARTTAG>(MatchAction) = "<action>";
   std::get<TDOMMATCHER_ENDTAG>(MatchAction) = "</action>";
 
+  tDOMMatcher MatchName;
+  std::get<TDOMMATCHER_TYPE>(MatchName) = "NAME";
+  std::get<TDOMMATCHER_STARTTAG>(MatchName) = "<name>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchName) = "</name>";
+
+  tDOMMatcher MatchCurve;
+  std::get<TDOMMATCHER_TYPE>(MatchCurve) = "CURVE";
+  std::get<TDOMMATCHER_STARTTAG>(MatchCurve) = "<curve>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchCurve) = "</curve>";
+
+  tDOMMatcher MatchData;
+  std::get<TDOMMATCHER_TYPE>(MatchData) = "DATA";
+  std::get<TDOMMATCHER_STARTTAG>(MatchData) = "<data>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchData) = "</data>";
+
+  tDOMMatcher MatchTranslation;
+  std::get<TDOMMATCHER_TYPE>(MatchTranslation) = "TRANSLATION";
+  std::get<TDOMMATCHER_STARTTAG>(MatchTranslation) = "<translation>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchTranslation) = "</translation>";
+
+  tDOMMatcher MatchScale;
+  std::get<TDOMMATCHER_TYPE>(MatchScale) = "SCALE";
+  std::get<TDOMMATCHER_STARTTAG>(MatchScale) = "<scale>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchScale) = "</scale>";
+
+  tDOMMatcher MatchRotation;
+  std::get<TDOMMATCHER_TYPE>(MatchRotation) = "ROTATION";
+  std::get<TDOMMATCHER_STARTTAG>(MatchRotation) = "<rotation>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchRotation) = "</rotation>";
+
   vDOMMatcher.push_back(MatchAnimation);
-  vDOMMatcher.push_back(MatchCurve);
   vDOMMatcher.push_back(MatchModel);
   vDOMMatcher.push_back(MatchTime);
   vDOMMatcher.push_back(MatchAction);
+  vDOMMatcher.push_back(MatchName);
+  vDOMMatcher.push_back(MatchCurve);
+  vDOMMatcher.push_back(MatchData);
+  vDOMMatcher.push_back(MatchTranslation);
+  vDOMMatcher.push_back(MatchScale);
+  vDOMMatcher.push_back(MatchRotation);
 }
 
 DOMNode * DOMParse::GetDOM(string path)
