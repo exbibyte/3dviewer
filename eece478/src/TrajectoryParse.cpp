@@ -47,7 +47,7 @@ Parses and returns a camera path
       {
 	NewCurvePath->Name = j->Data;
       }
-      else if(j->Type == "DATA")
+      else if(j->Type == "CONTROLPOINT")
       {
 	string curvecontrol = j->Data;
 
@@ -57,8 +57,6 @@ Parses and returns a camera path
 	// call derived ModelData classes to format and save data
 	pCurveData->SetData(curvecontrol); 
 
-	cout<<"curve control: "<<curvecontrol<<endl;
-	
 	//creates a curve path with given control points
 	this->InitializeCurve(NewCurvePath, pCurveData);
 	vpCurvePath.push_back(NewCurvePath);  
