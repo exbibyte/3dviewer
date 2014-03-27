@@ -16,6 +16,9 @@ class ModelAbstraction : public ModelTransform
   vector<ModelAbstraction*> vParent;
 
  public:	
+
+  string Name;
+
   ModelAbstraction();
 
   ///updates model view transforms and calls implementable draw method
