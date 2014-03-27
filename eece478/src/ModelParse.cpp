@@ -105,11 +105,7 @@ Parses and returns a model entity for the input model file
 
   //creates a model entity and save parsed data
   ModelEntity * output = new ModelEntity();
-  output->cModelName = cModelName;
-  output->cModelTexture = cModelTexture;
-  output->cModelVertice = cModelVertice;
-  output->cModelNormal = cModelNormal;
-  output->cModelTriangle = cModelTriangle;
+  output->Initialize(cModelName, cModelTexture, cModelVertice, cModelNormal, cModelTriangle);
 
   //truncate path to the model folder path
   string Folder = "/";
