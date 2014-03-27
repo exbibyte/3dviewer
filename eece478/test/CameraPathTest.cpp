@@ -91,17 +91,16 @@ void myIdle()
 
   cout<<"Time: "<<pClock->GetTime()<<endl;
 
-  if(TimeRunning)
+  if(TimeRunning == true)
   {
     pCurve->Increment();
+    glutPostRedisplay();
   }
 
   // if(pClock->GetTime() > 8)
   // {
   //   pClock->Pause();
   // }
-
-  glutPostRedisplay();
 }
 
 void fKeyboardDown(unsigned char key, int x, int y)
