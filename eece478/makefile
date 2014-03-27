@@ -41,3 +41,7 @@ curvedraw:
 #test for DOM parse
 domparse:
 	g++ -g -std=c++0x test/DOMParseTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/DOMParseTest
+
+#test for curve parse using DOM and curve drawing
+curveparsedraw:
+	g++ -g -std=c++0x test/CurveParseDraw.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CurveParseDrawTest
