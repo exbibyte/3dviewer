@@ -5,6 +5,7 @@
 
 using namespace std;
 
+/// provides timing and triggering ability
 class Clock
 {
  private:
@@ -41,6 +42,7 @@ class Clock
 
   float GetTime();
 
+  /// implementation method called after each clock Tick success
   virtual void TickAction(string a){};
 };
 
