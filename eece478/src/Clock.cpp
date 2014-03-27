@@ -1,5 +1,10 @@
 #include "Clock.h"
+
 #include <time.h>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 Clock::Clock()
 {
@@ -40,7 +45,14 @@ bool Clock::Tick()
   this->TimeSinceStart += this->Time - this->TimePrev;
 
   //tick complete
-  this->TimePrev = this->Time;  
+  this->TimePrev = this->Time; 
+  
+  //fire message of tick completion
+  stringstream ss;
+  ss << this->TimeSinceStart;
+
+  this->TickAction(ss.str()); 
+
   return true;
 }
 

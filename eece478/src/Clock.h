@@ -1,6 +1,10 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
+#include <string>
+
+using namespace std;
+
 class Clock
 {
  private:
@@ -36,6 +40,8 @@ class Clock
   bool IsRunning();
 
   float GetTime();
+
+  virtual void TickAction(string a){};
 };
 
 #endif
