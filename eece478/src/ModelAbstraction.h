@@ -38,6 +38,8 @@ class ModelAbstraction : public ModelTransform
   ///gets the parent transform if it exists
   void GetParentTransform();
 
+  /// draws this and all children entities in this hierarchy
+  void DrawCascade();
 };
 
 #endif

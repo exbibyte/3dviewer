@@ -96,3 +96,15 @@ void ModelAbstraction::GetParentTransform()
   delete [] ParentTransform;
   ParentTransform = NULL;
 }
+
+void ModelAbstraction::DrawCascade()
+{
+  //update and draw current entity
+  this->DrawModel();
+  
+  //do the same for children 
+  for(auto i : this->vChild)
+  {
+    i->DrawModel();
+  }
+}
