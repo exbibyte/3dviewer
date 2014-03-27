@@ -284,23 +284,13 @@ basic order of drawing operation:
     float rotatevec[] = {0,4,0};
     pLightSpot1->ApplyDeltaRotate(rotatevec);
 
-    // float dir[] = {-1,-1,-1,1};
-    // float exponent = 3;
-    // float cutoff = 5;
-    // pLightSpot1->SetLightParamSpot(dir, exponent, cutoff);
-
     //apply transforms to camera
     pCameraEntity->ApplyDeltaTranslate(DeltaTranslate);
     pCameraEntity->ApplyDeltaRotate(DeltaRotate);
     pCameraEntity->ApplyDeltaScale(DeltaScale);
 
-    pCameraEntity->DrawModel();
-
-    //updated chain reaction transforms to other entities
-    for(auto i : vpEntity)
-    {
-      i->DrawModel();
-    }
+    //draw scene graph 
+    pCameraEntity->DrawCascade();
 
     // //drawing different objects using q key toggle
     // if(!bKeyQDown)
