@@ -24,6 +24,9 @@ class ModelAbstraction : public ModelTransform
   ///implementable draw function
   virtual void Draw();
 
+  ///implementable action function
+  virtual void Action(string input);
+
   void AddChild(ModelAbstraction* child);
   void RemoveChild(ModelAbstraction* child);
   void AddParent(ModelAbstraction* parent);

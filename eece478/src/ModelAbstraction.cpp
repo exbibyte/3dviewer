@@ -22,6 +22,10 @@ void ModelAbstraction::Draw()
 {
 }
 
+void ModelAbstraction::Action(string input)
+{
+}
+
 void ModelAbstraction::AddChild(ModelAbstraction* child)
 {
   for(auto i : this->vChild)
