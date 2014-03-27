@@ -1,0 +1,15 @@
+<animation>
+  <name>CurveRun</name>
+  <time>5</time>		
+  <action>RunAndDraw</action>
+  <subject>curve1</subject>  
+  <extra>BLAH</extra>  
+</animation>
+
+<animation>
+  <name>CurveRun2</name>
+  <time>5</time>		
+  <action>RunAndDraw</action>
+  <subject>curve1</subject>  
+  <extra>BLAH</extra>  
+</animation>
