@@ -310,13 +310,7 @@ basic order of drawing operation:
     pCameraEntity->ApplyDeltaRotate(DeltaRotate);
     pCameraEntity->ApplyDeltaScale(DeltaScale);
 
-    pCameraEntity->DrawModel();
-    
-    //updated chain reaction transforms to other entities
-    for(auto i : vpEntity)
-    {
-      i->DrawModel();
-    }
+    pCameraEntity->DrawCascade();
 
   //revert state model stack
   glPopMatrix();
