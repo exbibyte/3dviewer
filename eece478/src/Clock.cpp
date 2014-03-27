@@ -28,16 +28,19 @@ bool Clock::Tick()
 
   float duration;
   
-  do
-  {
-    this->Time = clock();
-    duration = (float)(this->Time - this->TimePrev)/CLOCKS_PER_SEC;
-  }while(duration < 1.0/(this->Fps));
+  //get duration between previous tick and now
+  this->Time = clock();
+  duration = (float)(this->Time - this->TimePrev)/CLOCKS_PER_SEC;
+  
+  //test if this tick is complete or need more time
+  if(duration < 1.0/(this->Fps))
+    return false;
 
+  //save runnning time 
   this->TimeSinceStart += this->Time - this->TimePrev;
 
+  //tick complete
   this->TimePrev = this->Time;  
-
   return true;
 }
 
