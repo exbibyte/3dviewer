@@ -22,9 +22,9 @@ DOMParse::DOMParse()
   std::get<TDOMMATCHER_ENDTAG>(MatchModel) = "</modelindex>";
 
   tDOMMatcher MatchTime;
-  std::get<TDOMMATCHER_TYPE>(MatchTime) = "TIMEINDEX";
-  std::get<TDOMMATCHER_STARTTAG>(MatchTime) = "<timeindex>";
-  std::get<TDOMMATCHER_ENDTAG>(MatchTime) = "</timeindex>";
+  std::get<TDOMMATCHER_TYPE>(MatchTime) = "TIME";
+  std::get<TDOMMATCHER_STARTTAG>(MatchTime) = "<time>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchTime) = "</time>";
 
   tDOMMatcher MatchAction;
   std::get<TDOMMATCHER_TYPE>(MatchAction) = "ACTION";
@@ -61,6 +61,21 @@ DOMParse::DOMParse()
   std::get<TDOMMATCHER_STARTTAG>(MatchRotation) = "<rotation>";
   std::get<TDOMMATCHER_ENDTAG>(MatchRotation) = "</rotation>";
 
+  tDOMMatcher MatchSubject;
+  std::get<TDOMMATCHER_TYPE>(MatchSubject) = "SUBJECT";
+  std::get<TDOMMATCHER_STARTTAG>(MatchSubject) = "<subject>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchSubject) = "</subject>";
+
+  tDOMMatcher MatchExtra;
+  std::get<TDOMMATCHER_TYPE>(MatchExtra) = "EXTRA";
+  std::get<TDOMMATCHER_STARTTAG>(MatchExtra) = "<extra>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchExtra) = "</extra>";
+
+  tDOMMatcher MatchControlpoint;
+  std::get<TDOMMATCHER_TYPE>(MatchControlpoint) = "CONTROLPOINT";
+  std::get<TDOMMATCHER_STARTTAG>(MatchControlpoint) = "<controlpoint>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchControlpoint) = "</controlpoint>";
+
   vDOMMatcher.push_back(MatchAnimation);
   vDOMMatcher.push_back(MatchModel);
   vDOMMatcher.push_back(MatchTime);
@@ -71,6 +86,9 @@ DOMParse::DOMParse()
   vDOMMatcher.push_back(MatchTranslation);
   vDOMMatcher.push_back(MatchScale);
   vDOMMatcher.push_back(MatchRotation);
+  vDOMMatcher.push_back(MatchSubject);
+  vDOMMatcher.push_back(MatchExtra);
+  vDOMMatcher.push_back(MatchControlpoint);
 }
 
 DOMNode * DOMParse::GetDOM(string path)
