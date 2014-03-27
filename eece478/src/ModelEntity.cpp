@@ -367,7 +367,9 @@ void ModelEntity::Initialize(ModelName *a, ModelTexture *b, ModelVertice *c, Mod
   {
     tName tname = this->cModelName->vName.at(0);
     this->Name = std::get<1>(tname); // some problem with getting DEFINES in ModelName.h
+#ifdef DEBUG
     cout<<"model name: "<<this->Name<<endl;
+#endif
   }
 }
 
