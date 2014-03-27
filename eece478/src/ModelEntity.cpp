@@ -5,12 +5,13 @@
 #include <vector>
 #include <string>
 
-#include "ModelEntity.h"
 #include "ModelName.h"
+#include "ModelEntity.h"
 #include "ModelTexture.h"
 #include "ModelVertice.h"
 #include "ModelNormal.h"
 #include "ModelTriangle.h"
+#include "ModelAbstraction.h"
 
 #include "PPM.hpp"
 
@@ -350,6 +351,23 @@ updates interleaved render data buffers according to texture
     //save render data
     this->pRenderData[bufnum] = data;
     data = NULL;
+  }
+}
+
+void ModelEntity::Initialize(ModelName *a, ModelTexture *b, ModelVertice *c, ModelNormal *d, ModelTriangle *e)
+{
+  this->cModelName = a;
+  this->cModelTexture = b;
+  this->cModelVertice = c;
+  this->cModelNormal = d;
+  this->cModelTriangle = e;
+
+  //set ModelAbstraction name
+  if(this->cModelName->vName.size() > 0)
+  {
+    tName tname = this->cModelName->vName.at(0);
+    this->Name = std::get<1>(tname); // some problem with getting DEFINES in ModelName.h
+    cout<<"model name: "<<this->Name<<endl;
   }
 }
 

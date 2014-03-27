@@ -113,6 +113,9 @@ public:
   ///helper function to create 1D array of interleaved vertices, normals, texture coordinates
   void UpdateInterleavedArray();
 
+  //call after setting ModelName to set ModelAbstraction name
+  void Initialize(ModelName *, ModelTexture *, ModelVertice *, ModelNormal *, ModelTriangle *);
+
   //sortes and matches formatted data to create processed triangles
   void Update();
 
