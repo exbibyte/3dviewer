@@ -20,93 +20,55 @@ vector<CurvePath *> TrajectoryParse::GetTrajectories(string path)
 Parses and returns a camera path
 */
 {
+  //output vector of curves
   vector<CurvePath *> vpCurvePath;
 
-  ifstream ifs;
-  stringstream Ss;
+  //DOM parse
+  DOMNode * pDOM = this->GetDOM(path);
 
-  //open model file
-  ifs.open(path.c_str(), ifstream::in);
-  if(!ifs.is_open())
+  if(pDOM == NULL)
   {
-    cout<<"error opening file: "<<path<<endl;
+    cout<<"DOM not parsed"<<endl;
     return vpCurvePath;
   }
 
-  //creates containers for basic model data
-  CurveData * cCurveData = new CurveData();
+  //stores found curves
+  vector<DOMNode *> * pvpDOM = new vector<DOMNode *>();
 
-  //prepares to extract data using loop
-  this->vModelData.push_back(cCurveData);
+  //find nodes having a curve
+  this->FindCurve(pvpDOM, pDOM);
 
-  string line;
-  int LineNum = 0;
-
-  //remove parsed lines with #comments
-  while (getline(ifs, line)) 
-  {    
-    size_t found = line.find("#");
-    if(found == std::string::npos){
-      Ss<<line<<" "; // save remaining lines to a single lined buffer and add space to ensure data separation
-    }
-  }
-
-  this->bEmpty = true;
-
-  //find <tags> and </tags> defined in ModelData and extract string to ModelData
-  line.clear();
-  while (getline(Ss, line)) 
-  { 
-    for(auto i : vModelData)
+  for(auto i : *pvpDOM)
+  {
+    CurvePath * NewCurvePath = new CurvePath;
+    for(auto j : i->Children)
     {
-      bool foundall = false;
-      string linetemp = line;
-      do{
+      if(j->Type == "NAME")
+      {
+	NewCurvePath->Name = j->Data;
+      }
+      else if(j->Type == "DATA")
+      {
+	string curvecontrol = j->Data;
+
+	//creates a container for bezier curve data
+	CurveData * pCurveData = new CurveData();
 	
-	size_t FoundStartTag = linetemp.find(i->mBeginTag);
-	if(FoundStartTag != std::string::npos)
-	{
-	  size_t FoundEndTag = linetemp.find(i->mEndTag);
-	  if(FoundEndTag != std::string::npos)
-	  {
-	    //when found begin and end tags, extract string
-	    string SubString = linetemp.substr(FoundStartTag + i->mBeginTag.length(),FoundEndTag-(FoundStartTag + i->mBeginTag.length()));
-	  
-	    //continue search on rest of string
-	    linetemp = linetemp.substr(FoundEndTag + i->mEndTag.length(), std::string::npos);
+	// call derived ModelData classes to format and save data
+	pCurveData->SetData(curvecontrol); 
 
-	    i->SetData(SubString); // call derived ModelData classes to format and save data
+	cout<<"curve control: "<<curvecontrol<<endl;
+	
+	//creates a curve path with given control points
+	this->InitializeCurve(NewCurvePath, pCurveData);
+	vpCurvePath.push_back(NewCurvePath);  
 
-	    //creates a curve and initialize path
-	    CurvePath * NewCurvePath = new CurvePath();
-	    this->InitializeCurve(NewCurvePath, cCurveData);
-	    i->ClearData();
-
-	    vpCurvePath.push_back(NewCurvePath);  
-
-	    NewCurvePath = NULL;
-
-	    this->bEmpty = false;
-	  }
-	}
-	else
-	{
-	  foundall = true;
-	}
-      }while(foundall == false);
+	delete pCurveData;
+	pCurveData = NULL;
+	NewCurvePath = NULL;
+      }
     }
   }
-
-  //if can't find tags, return
-  if(this->bEmpty)
-  {
-    cout<<"empty curve file"<<endl;
-    return vpCurvePath;
-  }
-
-  //null pointers
-  cCurveData = NULL;
-  vModelData.clear();
 
   return vpCurvePath;
 }
@@ -139,5 +101,18 @@ void TrajectoryParse::InitializeCurve(CurvePath * pCurve, CurveData * pCurveData
     ctrlpoint4[2] = std::get<TCURVECONTROL_PT4_Z>(i);
 
     pCurve->AddCurve(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
+  }
+}
+
+void TrajectoryParse::FindCurve(vector<DOMNode *> * pvpDOM, DOMNode * node)
+{
+  if(node->Type == "CURVE")
+  {
+    pvpDOM->push_back(node);
+  }
+
+  for(auto i : node->Children)
+  {
+    this->FindCurve(pvpDOM, i);
   }
 }

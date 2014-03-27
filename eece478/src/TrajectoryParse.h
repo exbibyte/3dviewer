@@ -9,16 +9,21 @@
 #include "CurvePath.h"
 #include "CurveData.h"
 #include "ModelData.h"
+#include "DOMParse.h"
+#include "DOMNode.h"
 
 using namespace std;
 
 ///parses Trajectory input file and returns CurvePath entities
-class TrajectoryParse
+class TrajectoryParse : public DOMParse
 {
  private:
   bool bEmpty;
   ///container to hold parsed data types
   vector<ModelData*> vModelData; 
+
+  ///helper function to find all curves in DOM
+  void FindCurve(vector<DOMNode *> * pvpDOM, DOMNode * node);
 
   ///helper function to intialize curves to control points
   void InitializeCurve(CurvePath * pCurve, CurveData * pCurveData);
