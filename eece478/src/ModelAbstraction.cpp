@@ -1,6 +1,10 @@
 #include "ModelAbstraction.h"
 #include "ModelTransform.h"
 
+#include <iostream>
+
+using namespace std;
+
 ModelAbstraction::ModelAbstraction()
 {
 
@@ -24,6 +28,7 @@ void ModelAbstraction::Draw()
 
 void ModelAbstraction::Action(string input)
 {
+  cout<<this->Name<<" received action trigger"<<endl;
 }
 
 void ModelAbstraction::AddChild(ModelAbstraction* child)

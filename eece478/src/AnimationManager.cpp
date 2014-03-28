@@ -1,4 +1,5 @@
 #include "AnimationManager.h"
+#include "ModelPool.h"
 
 #include <vector>
 #include <string>
@@ -56,29 +57,28 @@ tAnimation AnimationManager::GetAnimation(string name)
   return output;
 }
 
-void AnimationManager::AddModel(ModelAbstraction * model)
-{
-  this->vpModel.push_back(model);
-}
-
-ModelAbstraction * AnimationManager::GetModel(string name)
-{
-  ModelAbstraction * output = NULL;
-
-  for(auto i : this->vpModel)
-  {
-    if(i->Name == name)
-    {
-      output = i;
-      break;
-    }
-  }
-
-  return output;
-}
-
 void AnimationManager::TickAction(string a)
 {
   // add stuff here to update models based on clock update
   // can call ModelAbstraction->Action method to update model
+
+  string actiondata = "";
+  
+  for(auto i : this->vAnimation)
+  {
+    //compare time
+    if(std::get<TANIMATION_TIME>(i) <= this->GetTime())
+    {
+      cout<<this->GetTime()<<" s"<<endl;
+
+      //get the right model
+      ModelAbstraction * match = this->GetModel(std::get<TANIMATION_SUBJECT>(i));
+      if(match != NULL)
+      {
+	actiondata = std::get<TANIMATION_ACTION>(i) + " " + std::get<TANIMATION_EXTRA>(i);
+	//send data to model
+	match->Action(actiondata);
+      }
+    }
+  }
 }

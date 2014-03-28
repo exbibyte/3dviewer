@@ -5,6 +5,7 @@
 #include "Clock.h"
 #include "ModelAbstraction.h"
 #include "AnimationParse.h"
+#include "ModelPool.h"
 
 #include <vector>
 #include <string>
@@ -12,14 +13,12 @@
 using namespace std;
 
 /// manages models based on clock trigger and parsed animation DOM tree
-class AnimationManager : public Clock
+class AnimationManager : public Clock, public ModelPool
 {
  private:
   /// storage for animation
   vector<tAnimation> vAnimation;
 
-  /// storage for managed models
-  vector<ModelAbstraction *> vpModel;
  public:
 
   AnimationManager();
@@ -33,12 +32,6 @@ class AnimationManager : public Clock
 
   /// gets animation from matching name
   tAnimation GetAnimation(string name);
-
-  /// gets model from matching name
-  ModelAbstraction * GetModel(string name);
-
-  /// add model to be managed
-  void AddModel(ModelAbstraction * model);
 
   /// implement function to update models based on clock trigger
   void TickAction(string a);

@@ -5,11 +5,12 @@
 #include <string>
 
 #include "ModelTransform.h"
+#include "ModelPool.h"
 
 using namespace std;
 
 ///provides ability to attach entities in a hierarchy and inherits entity transforms from ModelTransform
-class ModelAbstraction : public ModelTransform
+class ModelAbstraction : public ModelTransform, public ModelPool
 {
  private:
   ///storage for child and parent entities used for transforms
