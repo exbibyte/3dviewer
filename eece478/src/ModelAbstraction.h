@@ -19,6 +19,9 @@ class ModelAbstraction : public ModelTransform, public ModelPool
 
  public:	
 
+  ///storage for received action
+  vector<string> vAction;
+
   /// storage for model identifier
   string Name;
 
@@ -32,6 +35,9 @@ class ModelAbstraction : public ModelTransform, public ModelPool
 
   ///implementable action function
   virtual void Action(string input);
+
+  ///implementable action formatting
+  virtual void FormatAction(){};
 
   void AddChild(ModelAbstraction* child);
   void RemoveChild(ModelAbstraction* child);

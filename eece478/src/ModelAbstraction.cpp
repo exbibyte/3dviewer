@@ -2,6 +2,8 @@
 #include "ModelTransform.h"
 
 #include <iostream>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -28,7 +30,41 @@ void ModelAbstraction::Draw()
 
 void ModelAbstraction::Action(string input)
 {
-  cout<<this->Name<<" received action trigger"<<endl;
+  cout<<this->Name<<" received action trigger:"<<input<<endl;
+
+  stringstream Ss;
+  Ss.str(input);
+  string temp;
+
+  //separate items to vector
+  while (Ss>>temp)
+  {
+    this->vAction.push_back(temp);
+    temp.clear();
+  }
+
+  string actiontype = "";
+
+  int count = 0;
+  int actionsize = this->vAction.size();
+
+  for(auto i : this->vAction)
+  {
+    if(count == 0)
+    {
+      actiontype = i;
+      break;
+    }
+  }
+
+  if(actiontype == "draw")
+  {
+    this->DrawModel();
+  }
+
+  this->FormatAction();
+
+  this->vAction.clear();
 }
 
 void ModelAbstraction::AddChild(ModelAbstraction* child)
