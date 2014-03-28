@@ -19,16 +19,23 @@ void ModelName::FormatData()
 implemented formating for name
 */
 {
-  int i = 0;
- 
-  //convert data to expected format
+  if(this->vDataItem.empty())
+  {
+    cout<<"warning: a model name was not parsed since it has not enough arugments"<<endl;
+    return;
+  }
+
+  //combine name strings if the name contains spaces
+  string combinedname;
   for(std::vector<string>::iterator it = this->vDataItem.begin(); it != vDataItem.end(); ++it)
   {
-    tName NewData = std::make_tuple(i,*it);
-    this->vName.push_back(NewData);
-    i++;
+    combinedname += *it;
   }
   
+  //save
+  tName NewData = std::make_tuple(0,combinedname);
+  this->vName.push_back(NewData);
+
 #ifdef DEBUG 
   //check saved model data
   for(auto j : this->vName)
