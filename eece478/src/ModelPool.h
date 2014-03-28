@@ -8,7 +8,7 @@ using namespace std;
 
 class ModelAbstraction;
 
-/// provides storage of world objects
+/// provides storage and access of world objects
 class ModelPool
 {
  private:
@@ -19,6 +19,9 @@ class ModelPool
   bool AddModel(ModelAbstraction * model);
   bool RemoveModel(ModelAbstraction * model);
   bool RemoveModel(string name);
-  void SetModelSource(vector<ModelAbstraction*> *);
+  ///copies model pool from another source
+  void SetModelPool(vector<ModelAbstraction*> *);
+  ///gets the model pool
+  vector<ModelAbstraction*> * GetModelPool();
 };
 #endif

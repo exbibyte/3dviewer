@@ -3,7 +3,7 @@
 
 ModelPool::ModelPool()
 {
-  pvpModels = NULL;
+  pvpModels = new vector<ModelAbstraction*>();
 }
 
 ModelAbstraction * ModelPool::GetModel(string name)
@@ -57,8 +57,12 @@ bool ModelPool::RemoveModel(string name)
   return false;
 }
 
-void ModelPool::SetModelSource(vector<ModelAbstraction*> * source)
+void ModelPool::SetModelPool(vector<ModelAbstraction*> * source)
 {
   this->pvpModels = source;
 }
 
+vector<ModelAbstraction*> * ModelPool::GetModelPool()
+{
+  return this->pvpModels;
+}
