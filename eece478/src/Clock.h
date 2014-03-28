@@ -11,7 +11,7 @@ class Clock
  private:
   float Fps;
 
-  ///time in seconds
+  ///current time not counting paused time
   float TimeSinceStart;
 
   int TimePrev;
@@ -40,6 +40,7 @@ class Clock
 
   bool IsRunning();
 
+  /// get current time in seconds
   float GetTime();
 
   /// implementation method called after each clock Tick success
