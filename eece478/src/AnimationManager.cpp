@@ -7,22 +7,74 @@ using namespace std;
 
 AnimationManager::AnimationManager()
 {
-  this->pDOM = NULL;
 }
 
 AnimationManager::~AnimationManager()
 {
-  vpModel.clear();
 }
 
-void AnimationManager::SetAnimationDOM(DOMNode * node)
+void AnimationManager::AddAnimation(tAnimation animation)
 {
-  this->pDOM = node;
+  this->vAnimation.push_back(animation);
 }
 
-void AnimationManager::SetModels(ModelAbstraction * model)
+bool AnimationManager::RemoveAnimation(tAnimation animation)
 {
-  vpModel.push_back(model);
+  string name = std::get<TANIMATION_NAME>(animation);
+
+  auto it = this->vAnimation.begin();
+
+  bool removed = false;
+
+  while(it != this->vAnimation.end())
+  {
+    if(std::get<TANIMATION_NAME>(*it) == name)
+    {
+      this->vAnimation.erase(it);
+      removed = true;
+    }
+    else
+    {
+      it++;
+    }
+  }
+  
+  return removed;
+}
+
+tAnimation AnimationManager::GetAnimation(string name)
+{
+  tAnimation output;
+  for(auto i : this->vAnimation)
+  {
+    if(std::get<TANIMATION_NAME>(i) == name)
+    {   
+      output = i;
+      break;
+    }
+  }
+  return output;
+}
+
+void AnimationManager::AddModel(ModelAbstraction * model)
+{
+  this->vpModel.push_back(model);
+}
+
+ModelAbstraction * AnimationManager::GetModel(string name)
+{
+  ModelAbstraction * output = NULL;
+
+  for(auto i : this->vpModel)
+  {
+    if(i->Name == name)
+    {
+      output = i;
+      break;
+    }
+  }
+
+  return output;
 }
 
 void AnimationManager::TickAction(string a)

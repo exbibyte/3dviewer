@@ -4,6 +4,7 @@
 #include "DOMNode.h"
 #include "Clock.h"
 #include "ModelAbstraction.h"
+#include "AnimationParse.h"
 
 #include <vector>
 #include <string>
@@ -14,20 +15,30 @@ using namespace std;
 class AnimationManager : public Clock
 {
  private:
-  DOMNode * pDOM;
+  /// storage for animation
+  vector<tAnimation> vAnimation;
+
+  /// storage for managed models
+  vector<ModelAbstraction *> vpModel;
  public:
 
   AnimationManager();
   ~AnimationManager();
 
-  /// stores models to be managed
-  vector<ModelAbstraction *> vpModel;
+  /// adds animation
+  void AddAnimation(tAnimation animation);
+  
+  /// removes animations according to matching animation name
+  bool RemoveAnimation(tAnimation animation);
 
-  /// sets the parsed DOM tree
-  void SetAnimationDOM(DOMNode * node);
+  /// gets animation from matching name
+  tAnimation GetAnimation(string name);
+
+  /// gets model from matching name
+  ModelAbstraction * GetModel(string name);
 
   /// add model to be managed
-  void SetModels(ModelAbstraction * model);
+  void AddModel(ModelAbstraction * model);
 
   /// implement function to update models based on clock trigger
   void TickAction(string a);
