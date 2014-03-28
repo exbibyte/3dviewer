@@ -315,16 +315,10 @@ basic order of drawing operation:
     pCameraEntity->ApplyDeltaScale(DeltaScale);
 
     //update parents first
-    pCameraEntity->DrawModel();    
-    pcurveoffset->DrawModel();
-    pCurve->DrawModel();
+    pCameraEntity->DrawCascade();    
 
     //updated chain reaction transforms to other entities
-    for(auto i : vpEntity)
-    {
-      i->DrawModel();
-    }
-
+ 
     // //drawing different objects using q key toggle
     // if(!bKeyQDown)
     // {
