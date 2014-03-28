@@ -2,8 +2,9 @@
 <curve>
   <name>curve1</name>
   <controlpoint>
-    30 0 0 0 0 10 0 10 10 0 10 0 0
-    30 10 0 0 10 -10 0 0 -10 0 0 0 0
+   50 0 0 0 0 40 0 40 40 0 40 0 0
+   50 40 0 0 40 -40 0 0 -40 0 0 0 0
+   70 0 0 0 0 -40 0 -40 -40 0 -10 -40 -70
   </controlpoint>
   <translation>0 1 2</translation>
   <scale>3 4 5</scale>

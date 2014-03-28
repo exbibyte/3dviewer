@@ -24,6 +24,7 @@
 #include "AnimationParse.h"
 #include "TrajectoryParse.h"
 #include "CurvePath.h"
+#include "CityParse.h"
 
 #include <vector>
 
@@ -87,6 +88,7 @@ void myIdle()
   bool ticked = pmanager->Tick();
   if(ticked == true)
   {
+    cout<<"time: "<<pmanager->GetTime()<<" s"<<endl;
     glutPostRedisplay();
   }
 }
@@ -359,9 +361,9 @@ void fExit()
 int main(int argc, char** argv)
 {
    
-  if(argc < 3)
+  if(argc < 4)
   { 
-    cout<<"not enough arguments: <curve path> <animation path>"<<endl;
+    cout<<"not enough arguments: <curve path> <animation path> <cityfile>"<<endl;
     return -1;
   }
 
@@ -402,11 +404,19 @@ int main(int argc, char** argv)
   //exit callback
   atexit(fExit);
 
-  //initialize camera
+  //initialize camera stand and camera
   pCameraEntity = new ModelAbstraction();
+  pCameraEntity->Name = "camerastand";
+  ModelAbstraction * pCamera = new ModelAbstraction();
+  pCamera->Name = "camera";
+  pCameraEntity->AddChild(pCamera);
 
   float trans[] = {0,0,-40};
-  pCameraEntity->ApplyDeltaTranslate(trans);
+  pCamera->ApplyDeltaTranslate(trans);
+
+  //parse city
+  CityParse cityparser;
+  vector<ModelAbstraction *> vcitymodel = cityparser.ParseCity(argv[3]); 
 
   //parse curve
   TrajectoryParse parser;
@@ -420,30 +430,32 @@ int main(int argc, char** argv)
 
   //create animation manager 
   AnimationManager manager;
-  vector<ModelAbstraction*> * worldmodels = new vector<ModelAbstraction*>();
-  manager.SetModelSource(worldmodels);
   pmanager = &manager;
-
-  //make objects' transformation hierachy lower than the camera
-  for(auto i : vCurve)
-  {
-    pCameraEntity->AddChild(i);
-  }
-
-  //add models to animation manager
-  for(auto i : vCurve)
+  
+  //add models to world and sync model pool to each object
+  manager.AddModel(pCameraEntity);
+  pCameraEntity->SetModelPool(manager.GetModelPool());
+  manager.AddModel(pCamera);
+  pCamera->SetModelPool(manager.GetModelPool());
+  for(auto i: vCurve)
   {
     manager.AddModel(i);
+    i->SetModelPool(manager.GetModelPool());
+  }  
+  for(auto i: vcitymodel)
+  {
+    manager.AddModel(i);
+    i->SetModelPool(manager.GetModelPool());
   }
-
-  //add animation
+			 
+  //add animations
   for(auto i : vAnimation)
   {
     manager.AddAnimation(i);
   }
 
+  //set up fps and run clock
   manager.SetFps(30.0);
-  /// runs the clock
   manager.Run();
 
   //run gl loop

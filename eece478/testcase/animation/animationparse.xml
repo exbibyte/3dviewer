@@ -8,8 +8,41 @@
 
 <animation>
   <name>Curve1Increment2</name>
-  <time>6.5</time>		
+  <time>20</time>		
   <action>curve_stopincrement</action>
   <subject>curve1</subject>  
   <extra>BLAH</extra>  
 </animation>
+
+<animation>
+  <name>Transform_Camera_AddChild_CameraPath</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>camera</subject>  
+  <extra>curve1</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_BCPlace</name>
+  <time>0.2</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>BC Place</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_GasStation</name>
+  <time>0.2</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>GasStation</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_SeaIsland</name>
+  <time>0.2</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>SeaIsland</extra>  
+</animation>
+
