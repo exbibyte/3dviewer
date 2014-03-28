@@ -30,7 +30,7 @@ void ModelAbstraction::Draw()
 
 void ModelAbstraction::Action(string input)
 {
-  cout<<this->Name<<" received action trigger:"<<input<<endl;
+  // cout<<this->Name<<" received action trigger:"<<input<<endl;
 
   stringstream Ss;
   Ss.str(input);
@@ -60,6 +60,52 @@ void ModelAbstraction::Action(string input)
   if(actiontype == "draw")
   {
     this->DrawModel();
+  }
+  else if(actiontype == "transform_addchild")
+  {
+    //add a child model
+    if(this->vAction.size() < 2)
+    {
+      return;
+    }
+
+    //combine str if spaced name was separated
+    string combinestr;
+    for(int i = 1; i < this->vAction.size(); i++)
+    {
+      combinestr += this->vAction.at(i);
+    }
+
+    cout<<"finding model: "<<combinestr<<endl;
+    ModelAbstraction * model = this->GetModel(combinestr);
+    if(model != NULL)
+    {
+      cout<<"model found"<<endl;
+      this->AddChild(model);
+    }
+  }
+  else if(actiontype == "transform_addparent")
+  {
+    //add a child model
+    if(this->vAction.size() < 2)
+    {
+      return;
+    }
+
+    //combine str if spaced name was separated
+    string combinestr;
+    for(int i = 1; i < this->vAction.size(); i++)
+    {
+      combinestr += this->vAction.at(i);
+    }
+
+    cout<<"finding model: "<<combinestr<<endl;
+    ModelAbstraction * model = this->GetModel(combinestr);
+    if(model != NULL)
+    {
+      cout<<"model found"<<endl;
+      this->AddParent(model);
+    }
   }
 
   this->FormatAction();

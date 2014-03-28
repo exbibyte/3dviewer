@@ -9,7 +9,7 @@
 
 using namespace std;
 
-///provides ability to attach entities in a hierarchy and inherits entity transforms from ModelTransform
+///provides ability to attach entities in a hierarchy and inherits entity transforms from ModelTransform and ability to access other models from ModelPool
 class ModelAbstraction : public ModelTransform, public ModelPool
 {
  private:
