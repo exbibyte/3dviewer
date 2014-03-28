@@ -63,22 +63,29 @@ void AnimationManager::TickAction(string a)
   // can call ModelAbstraction->Action method to update model
 
   string actiondata = "";
+
+  vector<tAnimation>::iterator it = this->vAnimation.begin();
   
-  for(auto i : this->vAnimation)
+  cout<<this->GetTime()<<" s"<<endl;
+
+  while(it != this->vAnimation.end())
   {
     //compare time
-    if(std::get<TANIMATION_TIME>(i) <= this->GetTime())
+    if(std::get<TANIMATION_TIME>(*it) <= this->GetTime())
     {
-      cout<<this->GetTime()<<" s"<<endl;
-
       //get the right model
-      ModelAbstraction * match = this->GetModel(std::get<TANIMATION_SUBJECT>(i));
+      ModelAbstraction * match = this->GetModel(std::get<TANIMATION_SUBJECT>(*it));
       if(match != NULL)
       {
-	actiondata = std::get<TANIMATION_ACTION>(i) + " " + std::get<TANIMATION_EXTRA>(i);
+	actiondata = std::get<TANIMATION_ACTION>(*it) + " " + std::get<TANIMATION_EXTRA>(*it);
 	//send data to model
 	match->Action(actiondata);
       }
+      this->vAnimation.erase(it);
+    }
+    else
+    {
+      ++it;
     }
   }
 }
