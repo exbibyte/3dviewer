@@ -65,8 +65,6 @@ void AnimationManager::TickAction(string a)
   string actiondata = "";
 
   vector<tAnimation>::iterator it = this->vAnimation.begin();
-  
-  cout<<this->GetTime()<<" s"<<endl;
 
   while(it != this->vAnimation.end())
   {
