@@ -2,6 +2,7 @@
 #define MODELABSTRACTION_H
 
 #include <vector>
+#include <string>
 
 #include "ModelTransform.h"
 
@@ -17,6 +18,7 @@ class ModelAbstraction : public ModelTransform
 
  public:	
 
+  /// storage for model identifier
   string Name;
 
   ModelAbstraction();
