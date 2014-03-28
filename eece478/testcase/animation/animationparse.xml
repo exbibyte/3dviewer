@@ -1,15 +1,15 @@
 <animation>
-  <name>CurveRun</name>
-  <time>5</time>		
-  <action>RunAndDraw</action>
+  <name>Curve1Increment</name>
+  <time>5.0</time>		
+  <action>curve_increment</action>
   <subject>curve1</subject>  
   <extra>BLAH</extra>  
 </animation>
 
 <animation>
-  <name>CurveRun2</name>
-  <time>5</time>		
-  <action>RunAndDraw</action>
+  <name>Curve1Increment2</name>
+  <time>6.5</time>		
+  <action>curve_stopincrement</action>
   <subject>curve1</subject>  
   <extra>BLAH</extra>  
 </animation>

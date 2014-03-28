@@ -53,3 +53,7 @@ animationparsetest:
 #test for animation manager
 animationmanager:
 	g++ -g -std=c++0x test/AnimationManagerTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/AnimationManagerTest
+
+#test for animation manager
+animationmanagerdraw:
+	g++ -g -std=c++0x test/AnimationManagerDraw.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/AnimationManagerDrawTest
