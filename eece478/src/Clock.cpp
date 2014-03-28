@@ -19,6 +19,7 @@ bool Clock::SetFps(float fps)
     return false;
 
   this->Fps = fps;
+  this->AutoDuration = (float)1.0/fps;
 
   return true;
 }
@@ -38,8 +39,20 @@ bool Clock::Tick()
   duration = (float)(this->Time - this->TimePrev)/CLOCKS_PER_SEC;
   
   //test if this tick is complete or need more time
-  if(duration < 1.0/(this->Fps))
+  if(duration < this->AutoDuration)
     return false;
+
+  //adjust fps automatically
+  this->FpsActual = 1/duration;
+
+  if(FpsActual < this->Fps * 0.9)
+  {
+    this->AutoDuration--;
+  }
+  else if(FpsActual > this->Fps * 1.1)
+  {
+    this->AutoDuration++;  
+  }
 
   //save runnning time 
   this->TimeSinceStart += this->Time - this->TimePrev;

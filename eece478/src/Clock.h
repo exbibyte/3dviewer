@@ -11,6 +11,10 @@ class Clock
  private:
   float Fps;
 
+  float FpsActual;
+  /// used for fps adjustment
+  float AutoDuration;
+
   ///current time not counting paused time
   float TimeSinceStart;
 
