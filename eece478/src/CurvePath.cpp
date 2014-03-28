@@ -13,6 +13,7 @@ using namespace std;
 CurvePath::CurvePath()
 {
   this->CurveIndex = 0;
+  this->bKeepIncrementing = false;
 }
 
 CurvePath::~CurvePath()
@@ -63,6 +64,12 @@ void CurvePath::Increment()
 
 void CurvePath::Draw()
 {
+  //incrementing logic
+  if(this->bKeepIncrementing == true)
+  {
+    this->Increment();
+  }
+
   glBegin(GL_POINTS);
     glColor3f(1,1,1);
     // position is actually transformed using ModelTransform's ApplyTranslate in Increment function
@@ -78,4 +85,23 @@ void CurvePath::PrintPosition()
     cout<<this->Position[i]<<" ";
   }
   cout<<endl;
+}
+
+void CurvePath::FormatAction()
+{
+  int count = 0;
+  for(auto i: vAction)
+  {
+    if(count == 0)
+    {
+      if(i == "curve_increment")
+      {
+	this->bKeepIncrementing = true;
+      }
+      else if(i == "curve_stopincrement")
+      {
+	this->bKeepIncrementing = false;
+      }
+    }
+  }
 }

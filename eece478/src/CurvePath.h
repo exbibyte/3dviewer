@@ -21,6 +21,8 @@ class CurvePath : public ModelAbstraction
   /// stores position of current step
   float Position[3];
 
+  bool bKeepIncrementing;
+
  public:
   CurvePath();
   ~CurvePath();
@@ -35,6 +37,8 @@ class CurvePath : public ModelAbstraction
   void Draw();
 
   void PrintPosition();
+
+  void FormatAction();
 };
 
 #endif
