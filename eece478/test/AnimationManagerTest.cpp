@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 
+#include "ModelPool.h"
 #include "ModelAbstraction.h"
 #include "AnimationManager.h"
 #include "AnimationParse.h"
@@ -29,6 +30,9 @@ int main(int argc, char** argv)
   //create animation manager 
   AnimationManager manager;
 
+  vector<ModelAbstraction*> * worldmodels = new vector<ModelAbstraction*>();
+  manager.SetModelSource(worldmodels);
+
   //test model adding
   for(auto i : vpCurve)
   {
@@ -48,9 +52,18 @@ int main(int argc, char** argv)
     manager.AddAnimation(i);
   }
 
-  tAnimation queryanimation = manager.GetAnimation("CurveRun2");
+  tAnimation queryanimation = manager.GetAnimation("CurveRun1");
   
   cout<<std::get<TANIMATION_NAME>(queryanimation)<<", "<<std::get<TANIMATION_TIME>(queryanimation)<<endl;
+
+  manager.SetFps(30.0);
+  /// runs the clock
+  manager.Run();
+
+  while(true){
+    /// runs clock if fps is valid and clock is not paused
+    manager.Tick();
+  }
 
   return 0;
 }
