@@ -146,6 +146,6 @@ void ModelAbstraction::DrawCascade()
   //do the same for children 
   for(auto i : this->vChild)
   {
-    i->DrawModel();
+    i->DrawCascade();
   }
 }
