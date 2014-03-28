@@ -46,6 +46,10 @@ domparse:
 curveparsedraw:
 	g++ -g -std=c++0x test/CurveParseDraw.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/CurveParseDrawTest
 
-#test for curve parse using DOM and curve drawing
+#test for animation parsing
 animationparsetest:
 	g++ -g -std=c++0x test/AnimationParseTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/AnimationParseTest
+
+#test for animation manager
+animationmanager:
+	g++ -g -std=c++0x test/AnimationManagerTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/AnimationManagerTest
