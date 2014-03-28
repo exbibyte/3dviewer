@@ -363,7 +363,7 @@ void ModelEntity::Initialize(ModelName *a, ModelTexture *b, ModelVertice *c, Mod
   this->cModelTriangle = e;
 
   //set ModelAbstraction name
-  if(this->cModelName->vName.size() > 0)
+  if(this->cModelName->vName.empty() == false)
   {
     tName tname = this->cModelName->vName.at(0);
     this->Name = std::get<1>(tname); // some problem with getting DEFINES in ModelName.h
