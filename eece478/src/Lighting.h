@@ -43,6 +43,14 @@ class Lighting: public ModelAbstraction
   void SetLightParam(float amb[], float spec[], float dif[], float pos[]);
   void SetLightParamSpot(float dir[], float exp, float cutoff);
   void SetLightAttenuation(string type, float att);
+  
+  void SetLightAmbient(float[]);
+  void SetLightSpecular(float[]);
+  void SetLightDiffuse(float[]);
+  void SetLightPosition(float[]);
+  void SetLightDirection(float[]);
+  void SetLightExponent(float[]);
+  void SetLightCutoff(float[]);
 
   ///sets lighting type (optional)
   void SetType(string type);
@@ -50,6 +58,11 @@ class Lighting: public ModelAbstraction
 
   ///draws the lighting
   void Draw();
+
+  ///processes additional commannds
+  void FormatAction();
+
+  void FormatData();
 
 };
 
