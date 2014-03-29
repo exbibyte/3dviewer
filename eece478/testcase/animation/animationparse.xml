@@ -24,7 +24,7 @@
 
 <animation>
   <name>Transform_World_AddChild_BCPlace</name>
-  <time>0.2</time>		
+  <time>0</time>		
   <action>transform_addchild</action>
   <subject>curve1</subject>  
   <extra>BC Place</extra>  
@@ -32,7 +32,7 @@
 
 <animation>
   <name>Transform_World_AddChild_GasStation</name>
-  <time>0.2</time>		
+  <time>0</time>		
   <action>transform_addchild</action>
   <subject>curve1</subject>  
   <extra>GasStation</extra>  
@@ -40,9 +40,56 @@
 
 <animation>
   <name>Transform_World_AddChild_SeaIsland</name>
-  <time>0.2</time>		
+  <time>0</time>		
   <action>transform_addchild</action>
   <subject>curve1</subject>  
   <extra>SeaIsland</extra>  
 </animation>
 
+<animation>
+  <name>Transform_World_AddChild_BCPlace</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>BC Place</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_BusShelter</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>BusShelter</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_Bus</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>Bus</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_light1</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>light1</extra>  
+</animation>
+
+<animation>
+  <name>Transform_Light1_Translate</name>
+  <time>0</time>		
+  <action>transform_delta_translate</action>
+  <subject>light1</subject>  
+  <extra>0 150 0</extra>  
+</animation>
+
+<animation>
+  <name>Light1_Turnoff</name>
+  <time>10</time>		
+  <action>light_turnoff</action>
+  <subject>light1</subject>  
+  <extra></extra>  
+</animation>
