@@ -12,69 +12,119 @@ DOMParse::DOMParse()
 {
   //initialize DOM types to find
   tDOMMatcher MatchAnimation;
-  std::get<TDOMMATCHER_TYPE>(MatchAnimation) = "ANIMATION";
+  std::get<TDOMMATCHER_TYPE>(MatchAnimation) = "animation";
   std::get<TDOMMATCHER_STARTTAG>(MatchAnimation) = "<animation>";
   std::get<TDOMMATCHER_ENDTAG>(MatchAnimation) = "</animation>";
 
   tDOMMatcher MatchModel;
-  std::get<TDOMMATCHER_TYPE>(MatchModel) = "MODELINDEX";
+  std::get<TDOMMATCHER_TYPE>(MatchModel) = "modelindex";
   std::get<TDOMMATCHER_STARTTAG>(MatchModel) = "<modelindex>";
   std::get<TDOMMATCHER_ENDTAG>(MatchModel) = "</modelindex>";
 
   tDOMMatcher MatchTime;
-  std::get<TDOMMATCHER_TYPE>(MatchTime) = "TIME";
+  std::get<TDOMMATCHER_TYPE>(MatchTime) = "time";
   std::get<TDOMMATCHER_STARTTAG>(MatchTime) = "<time>";
   std::get<TDOMMATCHER_ENDTAG>(MatchTime) = "</time>";
 
   tDOMMatcher MatchAction;
-  std::get<TDOMMATCHER_TYPE>(MatchAction) = "ACTION";
+  std::get<TDOMMATCHER_TYPE>(MatchAction) = "action";
   std::get<TDOMMATCHER_STARTTAG>(MatchAction) = "<action>";
   std::get<TDOMMATCHER_ENDTAG>(MatchAction) = "</action>";
 
   tDOMMatcher MatchName;
-  std::get<TDOMMATCHER_TYPE>(MatchName) = "NAME";
+  std::get<TDOMMATCHER_TYPE>(MatchName) = "name";
   std::get<TDOMMATCHER_STARTTAG>(MatchName) = "<name>";
   std::get<TDOMMATCHER_ENDTAG>(MatchName) = "</name>";
 
   tDOMMatcher MatchCurve;
-  std::get<TDOMMATCHER_TYPE>(MatchCurve) = "CURVE";
+  std::get<TDOMMATCHER_TYPE>(MatchCurve) = "curve";
   std::get<TDOMMATCHER_STARTTAG>(MatchCurve) = "<curve>";
   std::get<TDOMMATCHER_ENDTAG>(MatchCurve) = "</curve>";
 
   tDOMMatcher MatchData;
-  std::get<TDOMMATCHER_TYPE>(MatchData) = "DATA";
+  std::get<TDOMMATCHER_TYPE>(MatchData) = "data";
   std::get<TDOMMATCHER_STARTTAG>(MatchData) = "<data>";
   std::get<TDOMMATCHER_ENDTAG>(MatchData) = "</data>";
 
   tDOMMatcher MatchTranslation;
-  std::get<TDOMMATCHER_TYPE>(MatchTranslation) = "TRANSLATION";
+  std::get<TDOMMATCHER_TYPE>(MatchTranslation) = "translation";
   std::get<TDOMMATCHER_STARTTAG>(MatchTranslation) = "<translation>";
   std::get<TDOMMATCHER_ENDTAG>(MatchTranslation) = "</translation>";
 
   tDOMMatcher MatchScale;
-  std::get<TDOMMATCHER_TYPE>(MatchScale) = "SCALE";
+  std::get<TDOMMATCHER_TYPE>(MatchScale) = "scale";
   std::get<TDOMMATCHER_STARTTAG>(MatchScale) = "<scale>";
   std::get<TDOMMATCHER_ENDTAG>(MatchScale) = "</scale>";
 
   tDOMMatcher MatchRotation;
-  std::get<TDOMMATCHER_TYPE>(MatchRotation) = "ROTATION";
+  std::get<TDOMMATCHER_TYPE>(MatchRotation) = "rotation";
   std::get<TDOMMATCHER_STARTTAG>(MatchRotation) = "<rotation>";
   std::get<TDOMMATCHER_ENDTAG>(MatchRotation) = "</rotation>";
 
   tDOMMatcher MatchSubject;
-  std::get<TDOMMATCHER_TYPE>(MatchSubject) = "SUBJECT";
+  std::get<TDOMMATCHER_TYPE>(MatchSubject) = "subject";
   std::get<TDOMMATCHER_STARTTAG>(MatchSubject) = "<subject>";
   std::get<TDOMMATCHER_ENDTAG>(MatchSubject) = "</subject>";
 
   tDOMMatcher MatchExtra;
-  std::get<TDOMMATCHER_TYPE>(MatchExtra) = "EXTRA";
+  std::get<TDOMMATCHER_TYPE>(MatchExtra) = "extra";
   std::get<TDOMMATCHER_STARTTAG>(MatchExtra) = "<extra>";
   std::get<TDOMMATCHER_ENDTAG>(MatchExtra) = "</extra>";
 
   tDOMMatcher MatchControlpoint;
-  std::get<TDOMMATCHER_TYPE>(MatchControlpoint) = "CONTROLPOINT";
+  std::get<TDOMMATCHER_TYPE>(MatchControlpoint) = "controlpoint";
   std::get<TDOMMATCHER_STARTTAG>(MatchControlpoint) = "<controlpoint>";
   std::get<TDOMMATCHER_ENDTAG>(MatchControlpoint) = "</controlpoint>";
+
+  tDOMMatcher MatchLight_Ambient;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Ambient) = "light_ambient";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Ambient) = "<light_ambient>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Ambient) = "</light_ambient>";
+
+  tDOMMatcher MatchLight_Specular;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Specular) = "light_specular";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Specular) = "<light_specular>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Specular) = "</light_specular>";
+
+  tDOMMatcher MatchLight_Diffuse;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Diffuse) = "light_diffuse";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Diffuse) = "<light_diffuse>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Diffuse) = "</light_diffuse>";
+
+  tDOMMatcher MatchLight_Position;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Position) = "light_position";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Position) = "<light_position>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Position) = "</light_position>";
+
+  tDOMMatcher MatchLight_Direction;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Direction) = "light_direction";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Direction) = "<light_direction>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Direction) = "</light_direction>";
+
+  tDOMMatcher MatchLight_Exponent;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Exponent) = "light_exponent";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Exponent) = "<light_exponent>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Exponent) = "</light_exponent>";
+
+  tDOMMatcher MatchLight_Cutoff;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Cutoff) = "light_cutoff";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Cutoff) = "<light_cutoff>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Cutoff) = "</light_cutoff>";
+
+  tDOMMatcher MatchLighting;
+  std::get<TDOMMATCHER_TYPE>(MatchLighting) = "lighting";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLighting) = "<lighting>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLighting) = "</lighting>";
+
+  tDOMMatcher MatchLight_Turnon;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Turnon) = "light_turnon";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Turnon) = "<light_turnon>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Turnon) = "</light_turnon>";
+
+  tDOMMatcher MatchLight_Turnoff;
+  std::get<TDOMMATCHER_TYPE>(MatchLight_Turnoff) = "light_turnoff";
+  std::get<TDOMMATCHER_STARTTAG>(MatchLight_Turnoff) = "<light_turnoff>";
+  std::get<TDOMMATCHER_ENDTAG>(MatchLight_Turnoff) = "</light_turnoff>";
 
   vDOMMatcher.push_back(MatchAnimation);
   vDOMMatcher.push_back(MatchModel);
@@ -89,6 +139,16 @@ DOMParse::DOMParse()
   vDOMMatcher.push_back(MatchSubject);
   vDOMMatcher.push_back(MatchExtra);
   vDOMMatcher.push_back(MatchControlpoint);
+  vDOMMatcher.push_back(MatchLight_Ambient);
+  vDOMMatcher.push_back(MatchLight_Specular);
+  vDOMMatcher.push_back(MatchLight_Diffuse);
+  vDOMMatcher.push_back(MatchLight_Position);
+  vDOMMatcher.push_back(MatchLight_Direction);
+  vDOMMatcher.push_back(MatchLight_Exponent);
+  vDOMMatcher.push_back(MatchLight_Cutoff);
+  vDOMMatcher.push_back(MatchLighting);
+  vDOMMatcher.push_back(MatchLight_Turnon);
+  vDOMMatcher.push_back(MatchLight_Turnoff);
 }
 
 DOMNode * DOMParse::GetDOM(string path)
