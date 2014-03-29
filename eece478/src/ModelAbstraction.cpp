@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -107,9 +109,26 @@ void ModelAbstraction::Action(string input)
       this->AddParent(model);
     }
   }
-
-  this->FormatAction();
-
+  else if(actiontype == "transform_delta_translate")
+  {
+    //translate model
+    if(this->vAction.size() < 4)
+    {
+      return;
+    }    
+    float nums[4];
+    for(int i = 1; i < 4; i++)
+    {
+      nums[i-1] = atof(this->vAction.at(i).c_str());
+    }
+    this->ApplyDeltaTranslate(nums);
+  }
+  else
+  {
+    //call implementable method in derived class
+    this->FormatAction();
+  }
+  //clear the action
   this->vAction.clear();
 }
 
