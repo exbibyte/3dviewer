@@ -49,23 +49,23 @@ Parses and returns a camera path
 
     for(auto j : i->Children)
     {
-      if(j->Type == "NAME")
+      if(j->Type == "name")
       {
 	std::get<TANIMATION_NAME>(NewAnimation) = j->Data;
       }
-      else if(j->Type == "TIME")
+      else if(j->Type == "time")
       {
 	std::get<TANIMATION_TIME>(NewAnimation) = atof(j->Data.c_str());
       }
-      else if(j->Type == "ACTION")
+      else if(j->Type == "action")
       {
 	std::get<TANIMATION_ACTION>(NewAnimation) = j->Data;
       }
-      else if(j->Type == "SUBJECT")
+      else if(j->Type == "subject")
       {
 	std::get<TANIMATION_SUBJECT>(NewAnimation) = j->Data;
       }
-      else if(j->Type == "EXTRA")
+      else if(j->Type == "extra")
       {
 	std::get<TANIMATION_EXTRA>(NewAnimation) = j->Data;
       }
@@ -77,7 +77,7 @@ Parses and returns a camera path
 
 void AnimationParse::FindAnimation(vector<DOMNode *> * pvpDOM, DOMNode * node)
 {
-  if(node->Type == "ANIMATION")
+  if(node->Type == "animation")
   {
     pvpDOM->push_back(node);
   }
