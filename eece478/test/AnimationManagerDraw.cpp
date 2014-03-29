@@ -25,6 +25,8 @@
 #include "TrajectoryParse.h"
 #include "CurvePath.h"
 #include "CityParse.h"
+#include "Lighting.h"
+#include "LightingParse.h"
 
 #include <vector>
 
@@ -39,7 +41,8 @@ namespace glut_global
   AnimationParse * panimationparser;
 
   //camera entity
-  ModelAbstraction* pCameraEntity;
+  ModelAbstraction* pCameraEntityRotate;
+  ModelAbstraction* pCameraTranslate;
 
   ///transformation variables
   float vCamRotX = 0;
@@ -77,8 +80,6 @@ namespace glut_global
   ///window dimensions
   int vWidth;
   int vHeight;
-
-  vector<CurvePath *> * pvCurve;
 }
 
 using namespace glut_global;
@@ -292,11 +293,11 @@ basic order of drawing operation:
     }
 
     //apply transforms to camera
-    pCameraEntity->ApplyDeltaTranslate(DeltaTranslate);
-    pCameraEntity->ApplyDeltaRotate(DeltaRotate);
-    pCameraEntity->ApplyDeltaScale(DeltaScale);
+    pCameraTranslate->ApplyDeltaTranslate(DeltaTranslate);
+    pCameraEntityRotate->ApplyDeltaRotate(DeltaRotate);
+    pCameraEntityRotate->ApplyDeltaScale(DeltaScale);
 
-    pCameraEntity->DrawCascade();
+    pCameraEntityRotate->DrawCascade();
 
   //revert state model stack
   glPopMatrix();
@@ -361,9 +362,9 @@ void fExit()
 int main(int argc, char** argv)
 {
    
-  if(argc < 4)
+  if(argc < 5)
   { 
-    cout<<"not enough arguments: <curve path> <animation path> <cityfile>"<<endl;
+    cout<<"not enough arguments: <curve path> <animation path> <city path> <light path>"<<endl;
     return -1;
   }
 
@@ -389,7 +390,7 @@ int main(int argc, char** argv)
   glCullFace(GL_BACK);
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);    
   glEnable(GL_DEPTH_TEST);
-  // glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHTING);	
   glutReshapeFunc(reshape);
   init();
 
@@ -405,14 +406,14 @@ int main(int argc, char** argv)
   atexit(fExit);
 
   //initialize camera stand and camera
-  pCameraEntity = new ModelAbstraction();
-  pCameraEntity->Name = "camerastand";
-  ModelAbstraction * pCamera = new ModelAbstraction();
-  pCamera->Name = "camera";
-  pCameraEntity->AddChild(pCamera);
+  pCameraEntityRotate = new ModelAbstraction();
+  pCameraEntityRotate->Name = "camerarotate";
+  pCameraTranslate = new ModelAbstraction();
+  pCameraTranslate->Name = "camera";
+  pCameraEntityRotate->AddChild(pCameraTranslate);
 
   float trans[] = {0,0,-40};
-  pCamera->ApplyDeltaTranslate(trans);
+  pCameraTranslate->ApplyDeltaTranslate(trans);
 
   //parse city
   CityParse cityparser;
@@ -421,28 +422,36 @@ int main(int argc, char** argv)
   //parse curve
   TrajectoryParse parser;
   vector<CurvePath *> vCurve = parser.GetTrajectories(argv[1]);
-  pvCurve = &vCurve;
   
   //parse animation
   AnimationParse animationparser;
   vector<tAnimation> vAnimation = animationparser.GetAnimations(argv[2]);  
   panimationparser = &animationparser;
 
+  //parse lights
+  LightingParse lightparser;
+  vector<Lighting*> vlights = lightparser.GetLightings(argv[4]);
+  
   //create animation manager 
   AnimationManager manager;
   pmanager = &manager;
   
   //add models to world and sync model pool to each object
-  manager.AddModel(pCameraEntity);
-  pCameraEntity->SetModelPool(manager.GetModelPool());
-  manager.AddModel(pCamera);
-  pCamera->SetModelPool(manager.GetModelPool());
+  manager.AddModel(pCameraEntityRotate);
+  pCameraEntityRotate->SetModelPool(manager.GetModelPool());
+  manager.AddModel(pCameraTranslate);
+  pCameraTranslate->SetModelPool(manager.GetModelPool());
   for(auto i: vCurve)
   {
     manager.AddModel(i);
     i->SetModelPool(manager.GetModelPool());
   }  
   for(auto i: vcitymodel)
+  {
+    manager.AddModel(i);
+    i->SetModelPool(manager.GetModelPool());
+  }
+  for(auto i: vlights)
   {
     manager.AddModel(i);
     i->SetModelPool(manager.GetModelPool());
