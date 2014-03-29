@@ -43,11 +43,11 @@ Parses and returns a camera path
     CurvePath * NewCurvePath = new CurvePath;
     for(auto j : i->Children)
     {
-      if(j->Type == "NAME")
+      if(j->Type == "name")
       {
 	NewCurvePath->Name = j->Data;
       }
-      else if(j->Type == "CONTROLPOINT")
+      else if(j->Type == "controlpoint")
       {
 	string curvecontrol = j->Data;
 
@@ -104,7 +104,7 @@ void TrajectoryParse::InitializeCurve(CurvePath * pCurve, CurveData * pCurveData
 
 void TrajectoryParse::FindCurve(vector<DOMNode *> * pvpDOM, DOMNode * node)
 {
-  if(node->Type == "CURVE")
+  if(node->Type == "curve")
   {
     pvpDOM->push_back(node);
   }
