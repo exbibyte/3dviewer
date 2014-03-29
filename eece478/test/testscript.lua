@@ -1,0 +1,1 @@
+os.execute("../build/AnimationManagerDrawTest ../testcase/motionpaths/curvetest1.xml ../testcase/animation/animationparse.xml ../testcase/city1/funland.city ../testcase/lighting/lighting.xml")
