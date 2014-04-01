@@ -33,11 +33,13 @@ void Recorder::Start()
   {
     this->IsRecording = true;
   }
+  cout<<"start recording.."<<endl;
 }
 
 void Recorder::End()
 {
   this->IsRecording = false;
+  cout<<"end recording.."<<endl;
 }
 
 void Recorder::SetImageParam(int posx, int posy, int width, int height)
