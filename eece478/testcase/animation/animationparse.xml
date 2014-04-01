@@ -15,16 +15,16 @@
 </animation>
 
 <animation>
-  <name>Curve1Increment</name>
-  <time>5.0</time>		
+  <name>Curve1_Increment</name>
+  <time>0</time>		
   <action>curve_increment</action>
   <subject>curve1</subject>  
   <extra>BLAH</extra>  
 </animation>
 
 <animation>
-  <name>Curve1Increment2</name>
-  <time>20</time>		
+  <name>Curve1_StopIncrement</name>
+  <time>100</time>		
   <action>curve_stopincrement</action>
   <subject>curve1</subject>  
   <extra>BLAH</extra>  
