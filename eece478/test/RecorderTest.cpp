@@ -481,10 +481,11 @@ int main(int argc, char** argv)
   manager.SetFps(30);
   manager.Run();
 
+  //set recording output folder
+  pRecorder->SetOutputPath(argv[6]);
   if(strcmp(argv[5], "record")==0)
   {
     //start record
-    pRecorder->SetOutputPath(argv[6]);
     pRecorder->Start();
     cout<<"recording.."<<endl;
   }
