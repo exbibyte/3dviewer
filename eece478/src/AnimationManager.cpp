@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -69,17 +70,34 @@ void AnimationManager::TickAction(string a)
   while(it != this->vAnimation.end())
   {
     //compare time
-    if(std::get<TANIMATION_TIME>(*it) <= this->GetTime())
+    if(std::get<TANIMATION_TIME>(*it) <= this->GetTime()/1000)
     {
-      //get the right model
-      ModelAbstraction * match = this->GetModel(std::get<TANIMATION_SUBJECT>(*it));
-      if(match != NULL)
+      
+      if(std::get<TANIMATION_SUBJECT>(*it) == "clock")
       {
-	actiondata = std::get<TANIMATION_ACTION>(*it) + " " + std::get<TANIMATION_EXTRA>(*it);
-	//send data to model
-	match->Action(actiondata);
+	//set clock parameters
+	if(std::get<TANIMATION_ACTION>(*it) == "clock_setfps")
+	{
+	  this->SetFps(atof(std::get<TANIMATION_EXTRA>(*it).c_str()));
+	}
+	else if(std::get<TANIMATION_ACTION>(*it) == "clock_setscale")
+	{
+	  this->SetClockScale(atof(std::get<TANIMATION_EXTRA>(*it).c_str()));          
+	}
+	this->vAnimation.erase(it);
       }
-      this->vAnimation.erase(it);
+      else
+      {
+	//get the right model
+	ModelAbstraction * match = this->GetModel(std::get<TANIMATION_SUBJECT>(*it));
+	if(match != NULL)
+	{
+	  actiondata = std::get<TANIMATION_ACTION>(*it) + " " + std::get<TANIMATION_EXTRA>(*it);
+	  //send data to model
+	  match->Action(actiondata);
+	}
+	this->vAnimation.erase(it);
+      }
     }
     else
     {
