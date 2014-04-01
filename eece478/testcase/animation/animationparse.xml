@@ -1,4 +1,20 @@
 <animation>
+  <name>SetClockScale</name>
+  <time>6</time>		
+  <action>clock_setscale</action>
+  <subject>clock</subject>  
+  <extra>0.15</extra>  
+</animation>
+
+<animation>
+  <name>SetClockFps</name>
+  <time>6.2</time>		
+  <action>clock_setfps</action>
+  <subject>clock</subject>  
+  <extra>25</extra>  
+</animation>
+
+<animation>
   <name>Curve1Increment</name>
   <time>5.0</time>		
   <action>curve_increment</action>
