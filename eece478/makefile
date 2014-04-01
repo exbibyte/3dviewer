@@ -54,6 +54,10 @@ animationparsetest:
 animationmanager:
 	g++ -g -std=c++0x test/AnimationManagerTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/AnimationManagerTest
 
-#test for animation manager
+#test for animation manager with drawing
 animationmanagerdraw:
 	g++ -g -std=c++0x test/AnimationManagerDraw.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/AnimationManagerDrawTest
+
+#test for image capture
+recordertest:
+	g++ -g -std=c++0x test/RecorderTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/RecorderTest
