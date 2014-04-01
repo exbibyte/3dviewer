@@ -103,6 +103,30 @@
 </animation>
 
 <animation>
+  <name>Transform_World_AddChild_light3</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>light3</extra>  
+</animation>
+
+<animation>
+  <name>Transform_Light2_Translate</name>
+  <time>0</time>		
+  <action>transform_delta_translate</action>
+  <subject>light2</subject>  
+  <extra>0 500 0 0</extra>  
+</animation>
+
+<animation>
+  <name>Transform_Light3_Translate</name>
+  <time>0</time>		
+  <action>transform_delta_translate</action>
+  <subject>light3</subject>  
+  <extra>0 3000 0 0</extra>  
+</animation>
+
+<animation>
   <name>Transform_World_AddChild_SkyDome</name>
   <time>0</time>		
   <action>transform_addchild</action>
@@ -120,7 +144,7 @@
 
 <animation>
   <name>Light1_Turnoff</name>
-  <time>10</time>		
+  <time>0</time>		
   <action>light_turnoff</action>
   <subject>light1</subject>  
   <extra></extra>  
