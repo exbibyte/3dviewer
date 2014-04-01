@@ -30,6 +30,7 @@
 #include "Recorder.h"
 
 #include <vector>
+#include <string.h>
 
 using namespace std;
 
@@ -92,7 +93,7 @@ void myIdle()
   bool ticked = pmanager->Tick();
   if(ticked == true)
   {
-    cout<<"time: "<<pmanager->GetTime()<<" s"<<endl;
+    cout<<"time: "<<pmanager->GetTime()/1000<<" s"<<endl;
     glutPostRedisplay();
     //record
     pRecorder->SaveImage();
@@ -301,7 +302,7 @@ basic order of drawing operation:
     pCameraTranslate->ApplyDeltaTranslate(DeltaTranslate);
     pCameraEntityRotate->ApplyDeltaRotate(DeltaRotate);
     pCameraEntityRotate->ApplyDeltaScale(DeltaScale);
-
+    //draw scene
     pCameraEntityRotate->DrawCascade();
 
   //revert state model stack
@@ -368,17 +369,17 @@ void fExit()
 int main(int argc, char** argv)
 {
    
-  if(argc < 6)
+  if(argc < 7)
   { 
-    cout<<"not enough arguments: <curve path> <animation path> <city path> <light path> <saved image path>"<<endl;
+    cout<<"not enough arguments: <curve path> <animation path> <city path> <light path> <'record'/'norecord'> <saved image path>"<<endl;
     return -1;
   }
 
   //boilerplate
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-  glutInitWindowSize (500, 500); 
-  glutInitWindowPosition (100, 100);
+  glutInitWindowSize (1280, 720); 
+  glutInitWindowPosition (0, 0);
   glutCreateWindow ("Assignment 1");
   
   //initialize glew for vertex shader
@@ -397,6 +398,7 @@ int main(int argc, char** argv)
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);    
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);	
+  glEnable(GL_NORMALIZE);
   glutReshapeFunc(reshape);
   init();
 
@@ -469,15 +471,23 @@ int main(int argc, char** argv)
     manager.AddAnimation(i);
   }
 
+  //set up a recorder and add to manager
+  pRecorder = new Recorder();
+  pRecorder->Name = "recorder";
+  manager.AddModel(pRecorder);
+
   //set up fps and run clock
-  manager.SetFps(30.0);
-  manager.SetClockScale(0.3);
+  manager.SetClockScale(1);
+  manager.SetFps(30);
   manager.Run();
 
-  //set up a recorder
-  pRecorder = new Recorder();
-  pRecorder->SetOutputPath(argv[5]);
-  pRecorder->Start();
+  if(strcmp(argv[5], "record")==0)
+  {
+    //start record
+    pRecorder->SetOutputPath(argv[6]);
+    pRecorder->Start();
+    cout<<"recording.."<<endl;
+  }
 
   //run gl loop
   glutMainLoop();
