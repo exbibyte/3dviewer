@@ -95,6 +95,22 @@
 </animation>
 
 <animation>
+  <name>Transform_World_AddChild_light2</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>light2</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_SkyDome</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>SkyDome</extra>  
+</animation>
+
+<animation>
   <name>Transform_Light1_Translate</name>
   <time>0</time>		
   <action>transform_delta_translate</action>

@@ -1,11 +1,20 @@
 <lighting>
   <name>light1</name>
-  <light_ambient>0 0 0 1</light_ambient>
+  <light_ambient>0.3 0.3 0.3 1</light_ambient>
   <light_specular>0.5 0.5 0.5 0 </light_specular>
   <light_diffuse>0.5 0.5 0.5 0</light_diffuse>
   <light_position>0 0 0 1</light_position>
   <light_direction>0.2 -1 0 1</light_direction>
-  <light_exponent>1</light_exponent>
-  <light_cutoff>8</light_cutoff>
+  <light_exponent>2</light_exponent>
+  <light_cutoff>15</light_cutoff>
+  <light_turnon></light_turnon>
+</lighting>
+
+<lighting>
+  <name>light2</name>
+  <light_ambient>0.7 0.7 0.7 1</light_ambient>
+  <light_specular>0 0 0 0 </light_specular>
+  <light_diffuse>0.7 0.7 0.7 0</light_diffuse>
+  <light_position>0 1 0 0</light_position>
   <light_turnon></light_turnon>
 </lighting>
