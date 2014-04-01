@@ -1,4 +1,5 @@
 #include "Recorder.h"
+#include "ModelAbstraction.h"
 #include "PPM.hpp"
 
 #include <GL/glew.h>
@@ -83,4 +84,23 @@ void Recorder::SaveImage()
   cout<<"image file path: "<<filepath<<endl;
   PPM::Write(filepath, this->pImage, this->Width, this->Height);
   this->ImageCount++;
+}
+
+void Recorder::FormatAction()
+{
+  int count = 0;
+  for(auto i: vAction)
+  {
+    if(count == 0)
+    {
+      if(i == "recorder_start")
+      {
+	this->Start();
+      }
+      else if(i == "recorder_end")
+      {
+	this->End();
+      }
+    }
+  }
 }

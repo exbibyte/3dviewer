@@ -3,9 +3,11 @@
 
 #include <string>
 
+#include "ModelAbstraction.h"
+
 using namespace std;
 
-class Recorder
+class Recorder : public ModelAbstraction
 {
  private:
   bool IsRecording;
@@ -28,6 +30,9 @@ class Recorder
   void End();
   /// write to file
   void SaveImage();
+
+  ///implemented method from ModelAbstraction for recording
+  void FormatAction();
 };
 
 #endif
