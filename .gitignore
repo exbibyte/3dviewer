@@ -13,6 +13,7 @@ documentation/
 *.cpp~
 *.ppm
 *.model
+*.zip
 
 *.pydevproject
 .project
