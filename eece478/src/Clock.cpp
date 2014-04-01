@@ -1,8 +1,9 @@
 #include "Clock.h"
 
-#include <time.h>
+#include <chrono>
 #include <sstream>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -11,6 +12,7 @@ Clock::Clock()
   this->Fps = -1;
   this->bRunning = false;
   this->TimeSinceStart = 0;
+  this->ClockScale = 1;
 }
 
 bool Clock::SetFps(float fps)
@@ -19,7 +21,9 @@ bool Clock::SetFps(float fps)
     return false;
 
   this->Fps = fps;
-  this->AutoDuration = (float)1.0/fps;
+  //milliseconds per frame
+  this->AutoDuration = (float)1.0/fps*1000;
+  this->AutoDurationScaled = this->AutoDuration / this->ClockScale;
 
   return true;
 }
@@ -31,31 +35,22 @@ bool Clock::Tick()
   
   if(this->bRunning == false)
     return false;
+  
+  //get duration between previous tick and now in milliseconds
+  this->Time = chrono::high_resolution_clock::now();
+  auto diff = this->Time - this->TimePrev;
+  auto duration = chrono::duration<double,milli>(diff).count();
 
-  float duration;
-  
-  //get duration between previous tick and now
-  this->Time = clock();
-  duration = (float)(this->Time - this->TimePrev)/CLOCKS_PER_SEC;
-  
-  //test if this tick is complete or need more time
-  if(duration < this->AutoDuration)
+  //test if this tick is complete with clock scaling adjustment
+  if(duration < this->AutoDurationScaled)
     return false;
 
-  //adjust fps automatically
-  this->FpsActual = 1/duration;
-
-  if(FpsActual < this->Fps * 0.9)
-  {
-    this->AutoDuration--;
-  }
-  else if(FpsActual > this->Fps * 1.1)
-  {
-    this->AutoDuration++;  
-  }
+  //calculate fps
+  this->FpsActual = 1.0/(duration/1000)/this->ClockScale;
+  cout<<"Time Scale: "<<this->ClockScale<< " Time Scaled FPS: "<<this->FpsActual<<endl;
 
   //save runnning time 
-  this->TimeSinceStart += this->Time - this->TimePrev;
+  this->TimeSinceStart += duration*this->ClockScale;
 
   //tick complete
   this->TimePrev = this->Time; 
@@ -73,7 +68,7 @@ void Clock::Run()
 {
   this->bRunning = true;
 
-  this->TimePrev = clock();
+  this->TimePrev = chrono::high_resolution_clock::now();
 }
 
 void Clock::Pause()
@@ -93,6 +88,14 @@ bool Clock::IsRunning()
 
 float Clock::GetTime()
 {
-  return this->TimeSinceStart/CLOCKS_PER_SEC;
+  return this->TimeSinceStart;
 }
 
+void Clock::SetClockScale(float val)
+{
+  if(val<= 0)
+    return;
+
+  this->ClockScale = val;
+  this->AutoDurationScaled = this->AutoDuration / this->ClockScale;
+}

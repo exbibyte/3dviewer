@@ -2,6 +2,7 @@
 #define CLOCK_H
 
 #include <string>
+#include <chrono>
 
 using namespace std;
 
@@ -12,17 +13,21 @@ class Clock
   float Fps;
 
   float FpsActual;
-  /// used for fps adjustment
-  float AutoDuration;
 
-  ///current time not counting paused time
+  /// stores how many milliseconds between consecutive frames
+  float AutoDuration;
+  float AutoDurationScaled;
+
+  ///current time not counting paused time in milliseconds
   float TimeSinceStart;
 
-  int TimePrev;
-  int Time;
+  chrono::high_resolution_clock::time_point TimePrev;
+  chrono::high_resolution_clock::time_point Time;
   
   ///flag indicating if clock is running
   bool bRunning;
+
+  float ClockScale;
 
  public:
 
@@ -42,9 +47,11 @@ class Clock
 
   float GetFps();
 
+  void SetClockScale(float);
+
   bool IsRunning();
 
-  /// get current time in seconds
+  /// get current time in milliseconds
   float GetTime();
 
   /// implementation method called after each clock Tick success
