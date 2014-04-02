@@ -1,4 +1,5 @@
 #include "ParametricCurve.h"
+#include "MatrixMath.h"
 
 #include <iostream>
 
@@ -65,13 +66,16 @@ void ParametricCurve::Start()
   float * pVec = &cVec[0][0];
   float * pLeftSide = px;  
   float * basis = &this->mBezierBasis[0][0];
-  this->MatMult(pLeftSide, basis, pVec);
+  MatrixMath::Mat4x4Mult4x1(pLeftSide, basis, pVec);
+  // this->MatMult(pLeftSide, basis, pVec);
   pLeftSide = py;
   pVec += 4;
-  this->MatMult(pLeftSide, basis, pVec);
+  MatrixMath::Mat4x4Mult4x1(pLeftSide, basis, pVec);
+  // this->MatMult(pLeftSide, basis, pVec);
   pLeftSide = pz;
   pVec += 4;
-  this->MatMult(pLeftSide, basis, pVec);
+  MatrixMath::Mat4x4Mult4x1(pLeftSide, basis, pVec);
+  // this->MatMult(pLeftSide, basis, pVec);
 
   for(int i = 0; i < 3; i++)
   {
@@ -100,19 +104,4 @@ bool ParametricCurve::Done()
 bool ParametricCurve::Started()
 {
   return this->bStarted;
-}
-
-void ParametricCurve::MatMult(float * FourByOne, float * FourbyFour, float *& out)
-{
-  // for each column
-  for(int i = 0; i < 4; i++)
-  {
-    float sum = 0;
-    // for each row
-    for(int j = 0; j < 4; j++)
-     {
-      sum += (FourByOne[j] * FourbyFour[i + j*4]);
-    }    
-    out[i] = sum;
-  }
 }

@@ -45,9 +45,6 @@ class ParametricCurve
   bool Done();
 
   bool Started();
-
-  /// provides 4x1 * 4x4 matrix operation 
-  void MatMult(float * FourByOne, float * FourbyFour, float *& out); 
 };
 
 #endif
