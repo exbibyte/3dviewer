@@ -27,6 +27,7 @@ void ModelTransform::ApplyTransform()
     //translate
     if(std::get<TRANSFORMQUEUE_TYPE>(i) == TRANSFORMTYPE_TRANSLATE)
     {
+      //current implementation uses absolute translate instead
       glPushMatrix();     
         glLoadIdentity();
 	//delta translate
@@ -51,13 +52,15 @@ void ModelTransform::ApplyTransform()
     //rotate
     else if(std::get<TRANSFORMQUEUE_TYPE>(i) == TRANSFORMTYPE_ROTATE)
     {
+      //curent implementation uses rotate absolute instead
+
       //start of object rotation transform
       glPushMatrix();    
         glLoadIdentity();
     	//2nd, apply additional delta transform
         glRotatef(abs(data[0]),data[0],0,0);
     	glRotatef(abs(data[1]),0,data[1],0);
-    	glRotatef(abs(data[2]),0,data[2],0);
+    	glRotatef(abs(data[2]),0,0,data[2]);
     	//1st, apply old rotation transform
     	glMultMatrixf(this->vModelRotation);
     	//save the new rotation transform
@@ -81,6 +84,8 @@ void ModelTransform::ApplyTransform()
     //scale
     else if(std::get<TRANSFORMQUEUE_TYPE>(i) == TRANSFORMTYPE_SCALE)
     {
+      //curent implementation uses absolute scaling
+
       float DeltaScale[3];
       for(int k = 0; k < 3; k++)
       {
@@ -145,32 +150,65 @@ void ModelTransform::ApplyTransform()
 
 void ModelTransform::ApplyDeltaScale(float scale[])
 {
-  this->PutInTransformQueue(TRANSFORMTYPE_SCALE, scale);
+  for(int i = 0; i < 3; i++)
+  {
+    this->ModelScale[i] += scale[i];
+    if(this->ModelScale[i] < 0)
+      this->ModelScale[i] = 0;
+  }
+
+  //uses absolute scaling
+  this->PutInTransformQueue(TRANSFORMTYPE_SCALE_ABS, this->ModelScale);
+  // this->PutInTransformQueue(TRANSFORMTYPE_SCALE, scale);
 }
 
 void ModelTransform::ApplyScale(float scale[])
 {
-  this->PutInTransformQueue(TRANSFORMTYPE_SCALE_ABS, scale);
+ for(int i = 0; i < 3; i++)
+  {
+    this->ModelScale[i] = scale[i];
+    if(this->ModelScale[i] < 0)
+      this->ModelScale[i] = 0;
+  }
+
+  this->PutInTransformQueue(TRANSFORMTYPE_SCALE_ABS, this->ModelScale);
 }
 
 void ModelTransform::ApplyDeltaRotate(float rotate[])
 {
-  this->PutInTransformQueue(TRANSFORMTYPE_ROTATE, rotate);
+  for(int i = 0; i < 3; i++)
+    this->ModelRotate[i] += rotate[i];
+ 
+  //uses absolute rotate
+  this->PutInTransformQueue(TRANSFORMTYPE_ROTATE_ABS, this->ModelRotate);
+
+  // this->PutInTransformQueue(TRANSFORMTYPE_ROTATE, this->ModelRotate);
 }
 
 void ModelTransform::ApplyRotate(float rotate[])
 {
-  this->PutInTransformQueue(TRANSFORMTYPE_ROTATE_ABS, rotate);
+  for(int i = 0; i < 3; i++)
+    this->ModelRotate[i] = rotate[i];
+
+  this->PutInTransformQueue(TRANSFORMTYPE_ROTATE_ABS, this->ModelRotate);
 }
 
 void ModelTransform::ApplyDeltaTranslate(float translate[])
 {
-  this->PutInTransformQueue(TRANSFORMTYPE_TRANSLATE, translate);
+ for(int i = 0; i < 3; i++)
+    this->ModelTranslate[i] += translate[i];
+
+ //uses absolute translate
+  this->PutInTransformQueue(TRANSFORMTYPE_TRANSLATE_ABS, this->ModelTranslate); 
+ // this->PutInTransformQueue(TRANSFORMTYPE_TRANSLATE, this->ModelTranslate);
 }
 
 void ModelTransform::ApplyTranslate(float translate[])
 {
-  this->PutInTransformQueue(TRANSFORMTYPE_TRANSLATE_ABS, translate);
+  for(int i = 0; i < 3; i++)
+    this->ModelTranslate[i] = translate[i];
+
+  this->PutInTransformQueue(TRANSFORMTYPE_TRANSLATE_ABS, this->ModelTranslate);
 }
 
 void ModelTransform::PutInTransformQueue(int type, float input [])
@@ -189,6 +227,13 @@ void ModelTransform::PutInTransformQueue(int type, float input [])
 
 void ModelTransform::InitializeOrientation(float scale[], float rotate[], float translate[])
 {
+  for(int i = 0; i < 3; i++)
+  {
+    this->ModelRotate[i] = rotate[i];
+    this->ModelTranslate[i] = translate[i];
+    this->ModelScale[i] = scale[i];
+  }
+
   this->ApplyScale(scale);
   this->ApplyRotate(rotate);
   this->ApplyTranslate(translate);
