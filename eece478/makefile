@@ -61,3 +61,7 @@ animationmanagerdraw:
 #test for image capture
 recordertest:
 	g++ -g -std=c++0x test/RecorderTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/RecorderTest
+
+#test for image capture
+matrixmathtest:
+	g++ -g -std=c++0x test/MatrixMathTest.cpp $(src_files) -I$(inc_dir) $(lib) -o $(out)/MatrixMathTest
