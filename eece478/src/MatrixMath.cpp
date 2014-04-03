@@ -1,5 +1,10 @@
 #include "MatrixMath.h"
 
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
 bool MatrixMath::InvertMatrix(const float m[16], float invOut[16])
 {
     double inv[16], det;
@@ -179,4 +184,60 @@ void MatrixMath::Mat4x4Transpose(float in[], float out[])
       out[i*4+j] = in[j*4+i]; 
     }
   }
+}
+
+void MatrixMath::Mat4x4Normalize(float in[], float out[])
+{
+  float factor = in[15];
+
+  for(int i = 0; i < 16; i++)
+  {
+    out[i] = in[i]/factor;
+  }
+}
+
+void MatrixMath::Mat4x1Normalize(float in[], float out[])
+{
+  float factor = in[3];
+
+  for(int i = 0; i < 4; i++)
+  {
+    out[i] = in[i]/factor;
+  }
+}
+
+void MatrixMath::PrintMat4x4(float in[])
+{
+  //for each row
+  for(int i = 0; i < 4; i++)
+  {
+    //for each column
+    for(int j = 0; j < 4; j++)
+    {
+      cout<<in[j + i*4]<<" ";
+    }
+    cout<<endl;
+  }
+  cout<<endl;
+}
+
+void MatrixMath::PrintMat4x1(float in[])
+{
+  //for each row
+  for(int i = 0; i < 4; i++)
+  {
+    cout<<in[i]<<", ";
+  }
+  cout<<endl;
+}
+
+void MatrixMath::GetMat4x4Identity(float out[])
+{
+  for(int i = 0; i <16; i++)
+    out[i] = 0;
+
+  out[0] = 1;
+  out[5] = 1;
+  out[10] = 1;
+  out[15] = 1;
 }

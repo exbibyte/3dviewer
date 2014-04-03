@@ -15,5 +15,15 @@ namespace MatrixMath{
 
   /// transposes 4x4 matrix
   void Mat4x4Transpose(float in[], float out[]);
+  
+  /// normalizes transformation matrix
+  void Mat4x4Normalize(float in[], float out[]);
+  void Mat4x1Normalize(float in[], float out[]);
+
+  /// prints matrix
+  void PrintMat4x4(float in[]);
+  void PrintMat4x1(float in[]);
+
+  void GetMat4x4Identity(float out[]);
 }
 #endif
