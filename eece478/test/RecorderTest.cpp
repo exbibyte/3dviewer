@@ -302,14 +302,14 @@ basic order of drawing operation:
     }
     
     //apply transforms to camera
-    pCameraTranslate->ApplyDeltaTranslate(DeltaTranslate);
+    pCameraEntityRotate->ApplyDeltaTranslate(DeltaTranslate);
     pCameraEntityRotate->ApplyDeltaScale(DeltaScale);
     pCameraEntityRotate->ApplyDeltaRotate(DeltaRotate);
     
     //update world to camera transformation first
-    pCameraEntityRotate->UpdateWorldToEyeTransform();
+    pCameraEntityRotate->UpdateWorldToCameraTransform();
 
-    //draw rest of scene
+    //draw world along with world to cam transformation
     pWorld->DrawCascade();
 
   //revert state model stack
