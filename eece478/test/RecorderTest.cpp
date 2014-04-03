@@ -42,6 +42,9 @@ namespace glut_global
 
   AnimationParse * panimationparser;
 
+  //world entity
+  ModelAbstraction * pWorld;
+
   //camera entity
   ModelAbstraction* pCameraEntityRotate;
   ModelAbstraction* pCameraTranslate;
@@ -297,13 +300,17 @@ basic order of drawing operation:
       vScale = 0;
       vScaleOld = 0;
     }
-
+    
     //apply transforms to camera
     pCameraTranslate->ApplyDeltaTranslate(DeltaTranslate);
-    pCameraEntityRotate->ApplyDeltaRotate(DeltaRotate);
     pCameraEntityRotate->ApplyDeltaScale(DeltaScale);
-    //draw scene
-    pCameraEntityRotate->DrawCascade();
+    pCameraEntityRotate->ApplyDeltaRotate(DeltaRotate);
+    
+    //update world to camera transformation first
+    pCameraEntityRotate->UpdateWorldToEyeTransform();
+
+    //draw rest of scene
+    pWorld->DrawCascade();
 
   //revert state model stack
   glPopMatrix();
@@ -416,12 +423,20 @@ int main(int argc, char** argv)
   //initialize camera stand and camera
   pCameraEntityRotate = new ModelAbstraction();
   pCameraEntityRotate->Name = "camerarotate";
+  pCameraEntityRotate->SetCamera(pCameraEntityRotate);
+
   pCameraTranslate = new ModelAbstraction();
   pCameraTranslate->Name = "camera";
-  pCameraEntityRotate->AddChild(pCameraTranslate);
+  pCameraTranslate->SetCamera(pCameraEntityRotate);
 
-  float trans[] = {0,0,-40};
-  pCameraTranslate->ApplyDeltaTranslate(trans);
+  //main world
+  pWorld = new ModelAbstraction();
+  pWorld->Name = "world";
+  pWorld->SetCamera(pCameraEntityRotate);
+
+  //add camera to world
+  // pWorld->AddChild(pCameraTranslate);
+  pCameraTranslate->AddChild(pCameraEntityRotate);
 
   //parse city
   CityParse cityparser;
@@ -444,25 +459,30 @@ int main(int argc, char** argv)
   AnimationManager manager;
   pmanager = &manager;
   
-  //add models to world and sync model pool to each object
+  //add models to world and sync model pool to each object and also set camera for each entity to calculate world-eye transform
   manager.AddModel(pCameraEntityRotate);
   pCameraEntityRotate->SetModelPool(manager.GetModelPool());
   manager.AddModel(pCameraTranslate);
   pCameraTranslate->SetModelPool(manager.GetModelPool());
+  manager.AddModel(pWorld);
+  pWorld->SetModelPool(manager.GetModelPool());
   for(auto i: vCurve)
   {
     manager.AddModel(i);
     i->SetModelPool(manager.GetModelPool());
+    i->SetCamera(pCameraEntityRotate);
   }  
   for(auto i: vcitymodel)
   {
     manager.AddModel(i);
     i->SetModelPool(manager.GetModelPool());
+    i->SetCamera(pCameraEntityRotate);
   }
   for(auto i: vlights)
   {
     manager.AddModel(i);
     i->SetModelPool(manager.GetModelPool());
+    i->SetCamera(pCameraEntityRotate);
   }
 			 
   //add animations
