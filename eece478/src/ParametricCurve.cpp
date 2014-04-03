@@ -67,15 +67,12 @@ void ParametricCurve::Start()
   float * pLeftSide = px;  
   float * basis = &this->mBezierBasis[0][0];
   MatrixMath::Mat4x4Mult4x1(pLeftSide, basis, pVec);
-  // this->MatMult(pLeftSide, basis, pVec);
   pLeftSide = py;
   pVec += 4;
   MatrixMath::Mat4x4Mult4x1(pLeftSide, basis, pVec);
-  // this->MatMult(pLeftSide, basis, pVec);
   pLeftSide = pz;
   pVec += 4;
   MatrixMath::Mat4x4Mult4x1(pLeftSide, basis, pVec);
-  // this->MatMult(pLeftSide, basis, pVec);
 
   for(int i = 0; i < 3; i++)
   {
