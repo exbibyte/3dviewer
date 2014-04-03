@@ -12,62 +12,22 @@ using namespace std;
 
 CurvePath::CurvePath()
 {
-  this->CurveIndex = 0;
-  this->bKeepIncrementing = false;
 }
 
 CurvePath::~CurvePath()
 {
-  this->vpParametricCurve.clear();
-}
-
-void CurvePath::AddCurve(int steps, float ctrlpoint1[], float ctrlpoint2[], float ctrlpoint3[], float ctrlpoint4[])
-{
-  ParametricCurve * pcurve = new ParametricCurve();
-  
-  pcurve->SetParameter(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
-
-  this->vpParametricCurve.push_back(pcurve);
-}
-  
-void CurvePath::Increment()
-{
-  if(this->vpParametricCurve.empty())
-    return;
-
-  this->itCurve = this->vpParametricCurve.begin();
-  this->itCurve += this->CurveIndex;
-
-  if(this->itCurve != this->vpParametricCurve.end())
-  {  
-    // initialize curve 
-    if((*itCurve)->Started() == false)
-    {
-      (*itCurve)->Start(); 
-    }
-    
-    if((*itCurve)->Done() == false)
-    {
-      // update current curve
-      float * pPosition = &this->Position[0];   
-      (*itCurve)->GetCurrent(pPosition);
-      (*itCurve)->Increment();
-    }
-    else
-    {
-      //go to next curve if current curve is finished
-      this->CurveIndex++;
-    }
-  }
-  this->ApplyTranslate(this->Position);
 }
 
 void CurvePath::Draw()
 {
   //incrementing logic
-  if(this->bKeepIncrementing == true)
+  if(this->GetKeepIncrementing() == true)
   {
     this->Increment();
+    //save new position
+    float pos[3];
+    this->GetPosition(pos);
+    this->ApplyTranslate(pos);
   }
 
   glBegin(GL_POINTS);
@@ -75,16 +35,6 @@ void CurvePath::Draw()
     // position is actually transformed using ModelTransform's ApplyTranslate in Increment function
     glVertex3f(0,0,0);
   glEnd();
-}
-
-void CurvePath::PrintPosition()
-{
-
-  for(int i = 0; i < 3; i++)
-  {
-    cout<<this->Position[i]<<" ";
-  }
-  cout<<endl;
 }
 
 void CurvePath::FormatAction()
@@ -96,12 +46,18 @@ void CurvePath::FormatAction()
     {
       if(i == "curve_increment")
       {
-	this->bKeepIncrementing = true;
+	this->SetKeepIncrementing(true);
       }
       else if(i == "curve_stopincrement")
       {
-	this->bKeepIncrementing = false;
+	this->SetKeepIncrementing(false);
       }
     }
   }
 }
+
+void CurvePath::AddCurve(int steps, float ctrlpoint1[], float ctrlpoint2[], float ctrlpoint3[], float ctrlpoint4[])
+{
+  Interpolate::AddCurve(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
+}
+  
