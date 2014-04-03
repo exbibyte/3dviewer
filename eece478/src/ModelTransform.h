@@ -66,8 +66,14 @@ class ModelTransform
   void SetParentTransform(float matrix[]);
 
   ///returns combined transform of current entity
-  float* GetCombinedTransform();
+  void GetCombinedTransform(float out[]);
 
+  //gets the parent transformation of the current entity
+  void GetParentTransform(float out[]);
+
+  void GetScale(float out[]);
+  void GetTranslate(float out[]);
+  void GetRotate(float out[]);
 };
 
 #endif

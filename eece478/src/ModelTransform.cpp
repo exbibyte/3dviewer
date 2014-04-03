@@ -247,11 +247,35 @@ void ModelTransform::SetParentTransform(float matrix[])
   }
 }
 
-float * ModelTransform::GetCombinedTransform()
+void ModelTransform::GetCombinedTransform(float out[])
 {
-  float * out = new float[16];
+  // float * out = new float[16];
   for(int i = 0; i < 16; i++)
     out[i] = this->vModelCombinedTransform[i];
 
-  return out;
+  // return out;
+}
+
+void ModelTransform::GetParentTransform(float out[])
+{
+  for(int i = 0; i < 16; i++)
+    out[i] = this->vModelParentTransform[i];
+}
+
+void ModelTransform::GetScale(float out[])
+{
+  for(int i = 0; i < 3; i++)
+    out[i] = this->ModelScale[i];
+}
+
+void ModelTransform::GetTranslate(float out[])
+{
+  for(int i = 0; i < 3; i++)
+    out[i] = this->ModelTranslate[i];
+}
+
+void ModelTransform::GetRotate(float out[])
+{
+  for(int i = 0; i < 3; i++)
+    out[i] = this->ModelRotate[i];
 }
