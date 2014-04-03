@@ -43,8 +43,8 @@ class ModelTransform
 
   void PutInTransformQueue(int, float[]);
 
-  ///stores WorldToEyeTransform
-  float vWorldToEyeTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  ///stores world to camera transformation
+  float vWorldtoCamTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
  public:
 
@@ -79,10 +79,10 @@ class ModelTransform
   void GetRotate(float out[]);
 
   ///sets the world to eye transform
-  void SetWorldToEyeTransform(float[]);
+  void SetWorldtoCamTransform(float[]);
 
   ///gets the world to eye transform
-  void GetWorldToEyeTransform(float[]);
+  void GetWorldtoCamTransform(float[]);
 
   ///gets local transform
   void GetLocalTransform(float out[]);

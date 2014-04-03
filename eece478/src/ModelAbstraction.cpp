@@ -25,11 +25,11 @@ void ModelAbstraction::DrawModel()
   float worldtoeyeInv[16];
   if(this->pCamera != NULL)
   {
-    this->pCamera->GetWorldToEyeTransform(worldtoeye);
+    this->pCamera->GetWorldtoCamTransform(worldtoeye);
     // MatrixMath::PrintMat4x4(worldtoeye);
     
     //saves world to eye transform
-    this->SetWorldToEyeTransform(worldtoeye);
+    this->SetWorldtoCamTransform(worldtoeye);
   }
   
   //grabs parent transform
@@ -229,7 +229,7 @@ void ModelAbstraction::UpdateParentTransform()
   this->SetParentTransform(ParentTransform);
 }
 
-void ModelAbstraction::UpdateWorldToEyeTransform()
+void ModelAbstraction::GetWorldToEntityTransform(float entitytoworld[])
 {
   //search for root node
   bool foundroot = false;
@@ -256,21 +256,28 @@ void ModelAbstraction::UpdateWorldToEyeTransform()
   current = NULL;
 
   //get transformations from starting node to root node
-  float worldtoeye[16];
   float temp[16];
   float temp2[16];
-  MatrixMath::GetMat4x4Identity(worldtoeye);
+  MatrixMath::GetMat4x4Identity(entitytoworld);
   for(int i = 0; i < sequence.size(); i++)
   {
     sequence[i]->ApplyTransform();
     sequence[i]->GetLocalTransform(temp);
     //concatenate transforms
-    MatrixMath::Mat4x4Mult4x4(worldtoeye, temp, temp2);
+    MatrixMath::Mat4x4Mult4x4(entitytoworld, temp, temp2);
     for(int j = 0; j < 16; j++)
-      worldtoeye[j] = temp2[j];
+      entitytoworld[j] = temp2[j];
   }
-  //save transform
-  this->SetWorldToEyeTransform(worldtoeye);
+}
+
+void ModelAbstraction::UpdateWorldToCameraTransform()
+{
+  if(this->pCamera == NULL)
+    return;
+  
+  float transform[16];
+  this->pCamera->GetWorldToEntityTransform(transform);
+  this->pCamera->SetWorldtoCamTransform(transform);
 }
 
 void ModelAbstraction::DrawCascade()
@@ -284,7 +291,7 @@ void ModelAbstraction::DrawCascade()
     i->DrawCascade();
   }
 
-  // this->GetAlignTargetOrientation();
+  this->GetAlignTargetOrientation();
 }
 
 void ModelAbstraction::ConvertTransform(float target[16], float reference[16], float out[16])

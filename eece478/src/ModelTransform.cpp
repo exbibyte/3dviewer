@@ -154,7 +154,7 @@ void ModelTransform::ApplyTransform()
 
   glLoadIdentity();  
   //apply world to eye transform
-  glMultMatrixf(this->vWorldToEyeTransform);
+  glMultMatrixf(this->vWorldtoCamTransform);
   //apply combined world to entity transformation
   glMultMatrixf(this->vModelCombinedTransform);
 }
@@ -288,16 +288,16 @@ void ModelTransform::GetRotate(float out[])
     out[i] = this->ModelRotate[i];
 }
 
-void ModelTransform::SetWorldToEyeTransform(float in[])
+void ModelTransform::SetWorldtoCamTransform(float in[])
 {
   for(int i = 0; i < 16; i++)
-    this->vWorldToEyeTransform[i] = in[i];
+    this->vWorldtoCamTransform[i] = in[i];
 }
 
-void ModelTransform::GetWorldToEyeTransform(float out[])
+void ModelTransform::GetWorldtoCamTransform(float out[])
 {
   for(int i = 0; i < 16; i++)
-    out[i] = this->vWorldToEyeTransform[i];
+    out[i] = this->vWorldtoCamTransform[i];
 }
 
 void ModelTransform::GetLocalTransform(float out[])

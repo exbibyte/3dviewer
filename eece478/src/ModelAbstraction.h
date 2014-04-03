@@ -53,8 +53,11 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   ///gets the parent transform if it exists
   void UpdateParentTransform();
 
-  //recursively update transforms from root node to current node
-  void UpdateWorldToEyeTransform();
+  //updates and gets transforms from world (root node) to current node
+  void GetWorldToEntityTransform(float out[]);
+
+  //updates and gets transforms from world (root node) to camera
+  void UpdateWorldToCameraTransform();
 
   /// draws this and all children entities in this hierarchy
   void DrawCascade();
