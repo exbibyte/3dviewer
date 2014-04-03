@@ -16,6 +16,12 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   ///storage for child and parent entities used for transforms
   vector<ModelAbstraction*> vChild;
   vector<ModelAbstraction*> vParent;
+  
+  ///root node for rendering using world to eye transform from the camera
+  ModelAbstraction* pCamera;
+
+  ///target entity to align to
+  ModelAbstraction* pAlignTarget;
 
  public:	
 
@@ -45,10 +51,25 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   void RemoveParent(ModelAbstraction* parent);
 
   ///gets the parent transform if it exists
-  void GetParentTransform();
+  void UpdateParentTransform();
+
+  //recursively update transforms from root node to current node
+  void UpdateWorldToEyeTransform();
 
   /// draws this and all children entities in this hierarchy
   void DrawCascade();
+
+  //aligns input vector to another model entity
+  void ConvertTransform(float target[16], float reference[16], float out[16]);
+
+  ///sets the entity to align to
+  bool SetAlignTarget(string target);
+
+  ///gets the target orientation with respect to this transformation
+  bool GetAlignTargetOrientation();
+
+  ///sets the camera node to apply world to eye transform to this entity
+  void SetCamera(ModelAbstraction * cam);
 };
 
 #endif

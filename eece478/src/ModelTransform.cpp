@@ -133,10 +133,14 @@ void ModelTransform::ApplyTransform()
   //combine transformations
   glPushMatrix();     
     glLoadIdentity();
+    //lastly, apply local transform
     glMultMatrixf(this->vModelTranslation);
     glMultMatrixf(this->vModelRotation);
     glMultMatrixf(this->vModelScaling);  
+
+    //save local transformation
     glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelAllTransform);
+
   glPopMatrix();
   
   glLoadIdentity();
@@ -146,6 +150,13 @@ void ModelTransform::ApplyTransform()
   glMultMatrixf(vModelAllTransform);   
   //save this combined transform
   glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelCombinedTransform);
+
+
+  glLoadIdentity();  
+  //apply world to eye transform
+  glMultMatrixf(this->vWorldToEyeTransform);
+  //apply combined world to entity transformation
+  glMultMatrixf(this->vModelCombinedTransform);
 }
 
 void ModelTransform::ApplyDeltaScale(float scale[])
@@ -249,11 +260,8 @@ void ModelTransform::SetParentTransform(float matrix[])
 
 void ModelTransform::GetCombinedTransform(float out[])
 {
-  // float * out = new float[16];
   for(int i = 0; i < 16; i++)
     out[i] = this->vModelCombinedTransform[i];
-
-  // return out;
 }
 
 void ModelTransform::GetParentTransform(float out[])
@@ -278,4 +286,22 @@ void ModelTransform::GetRotate(float out[])
 {
   for(int i = 0; i < 3; i++)
     out[i] = this->ModelRotate[i];
+}
+
+void ModelTransform::SetWorldToEyeTransform(float in[])
+{
+  for(int i = 0; i < 16; i++)
+    this->vWorldToEyeTransform[i] = in[i];
+}
+
+void ModelTransform::GetWorldToEyeTransform(float out[])
+{
+  for(int i = 0; i < 16; i++)
+    out[i] = this->vWorldToEyeTransform[i];
+}
+
+void ModelTransform::GetLocalTransform(float out[])
+{
+  for(int i = 0; i < 16; i++)
+    out[i] = this->vModelAllTransform[i];
 }
