@@ -130,7 +130,7 @@ bool MatrixMath::InvertMatrix(const float m[16], float invOut[16])
     return true;
 }
 
-void MatrixMath::Mat4x4Mult4x1(float * FourByOne, float * FourbyFour, float *& out)
+void MatrixMath::Mat4x4Mult4x1(float FourByOne[], float FourbyFour[], float out[])
 {
   // for each column
   for(int i = 0; i < 4; i++)
@@ -142,5 +142,24 @@ void MatrixMath::Mat4x4Mult4x1(float * FourByOne, float * FourbyFour, float *& o
       sum += (FourByOne[j] * FourbyFour[i + j*4]);
     }    
     out[i] = sum;
+  }
+}
+
+void MatrixMath::Mat4x4Mult4x4(float Left[], float Right[], float out[])
+{
+  // for each column in Right
+  for(int i = 0; i < 4; i++)
+  {
+    // for each row in Left
+    for(int j = 0; j < 4; j++)
+    {
+      float sum = 0;
+      // compute dot product of row and column
+      for(int k = 0; k < 4; k++)
+      {
+	sum += Left[j + k*4] * Right[i*4 + k];
+      }
+      out[i + j*4] = sum;
+    }    
   }
 }
