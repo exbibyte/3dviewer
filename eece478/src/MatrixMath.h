@@ -12,5 +12,7 @@ namespace MatrixMath{
 
   /// provides 4x4 * 4x4 matrix operation 
   void Mat4x4Mult4x4(float Left[], float Right[], float out[]);
+
+  void Mat4x4Transpose(float in[], float out[]);
 }
 #endif

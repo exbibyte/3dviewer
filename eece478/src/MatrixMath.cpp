@@ -124,8 +124,12 @@ bool MatrixMath::InvertMatrix(const float m[16], float invOut[16])
 
     det = 1.0 / det;
 
+    float invOutTemp[16];
+    //get the row major matrix result
     for (i = 0; i < 16; i++)
-        invOut[i] = inv[i] * det;
+        invOutTemp[i] = inv[i] * det;
+
+    MatrixMath::Mat4x4Transpose(invOutTemp, invOut);
 
     return true;
 }
@@ -161,5 +165,18 @@ void MatrixMath::Mat4x4Mult4x4(float Left[], float Right[], float out[])
       }
       out[i + j*4] = sum;
     }    
+  }
+}
+
+void MatrixMath::Mat4x4Transpose(float in[], float out[])
+{
+  //for each output column
+  for(int i = 0; i < 4; i++)
+  {
+    //for each output row
+    for(int j = 0; j < 4; j++)
+    {
+      out[i*4+j] = in[j*4+i]; 
+    }
   }
 }
