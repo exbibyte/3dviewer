@@ -154,6 +154,21 @@ void MatrixMath::Mat4x4Mult4x1(float FourByOne[], float FourbyFour[], float out[
   }
 }
 
+void MatrixMath::Mat1x4Mult4x4(float Onebyfour[], float FourbyFour[], float out[])
+{
+  // for each row
+  for(int i = 0; i < 4; i++)
+  {
+    float sum = 0;
+    // for each column
+    for(int j = 0; j < 4; j++)
+     {
+      sum += (Onebyfour[j] * FourbyFour[i*4 + j]);
+    }    
+    out[i] = sum;
+  }
+}
+
 void MatrixMath::Mat4x4Mult4x4(float Left[], float Right[], float out[])
 {
   // for each column in Right
