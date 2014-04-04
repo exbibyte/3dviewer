@@ -252,9 +252,9 @@ basic order of drawing operation:
     //apply translation
     
     float DeltaTranslate[3]={0,0,0};
-    DeltaTranslate[0] = vTransX;
-    DeltaTranslate[1] = vTransY;
-    DeltaTranslate[2] = vTransZ;       
+    DeltaTranslate[0] = -1*vTransX;
+    DeltaTranslate[1] = -1*vTransY;
+    DeltaTranslate[2] = -1*vTransZ;       
 
     //apply rotation transform if only left mouse is down
     float DeltaRotate[3]={0,0,0};
@@ -265,8 +265,8 @@ basic order of drawing operation:
       vCamRotY = vMouseDx/1.f;
       vCamRotX = vMouseDy/1.f;
 
-      DeltaRotate[0] = vCamRotX - vCamRotOldX;
-      DeltaRotate[1] = vCamRotY - vCamRotOldY;
+      DeltaRotate[0] = -1*(vCamRotX - vCamRotOldX);
+      DeltaRotate[1] = -1*(vCamRotY - vCamRotOldY);
       DeltaRotate[2] = 0;
 
       //update rotation delta
