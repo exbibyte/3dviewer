@@ -50,6 +50,8 @@ void Interpolate::Increment()
       float * pPosition = &this->Position[0];   
       (*itCurve)->GetCurrent(pPosition);
       (*itCurve)->Increment();
+      if((*itCurve)->Done() == true)		
+	this->CurveIndex++;
     }
     else
     {
