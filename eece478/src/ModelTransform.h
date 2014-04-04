@@ -86,6 +86,9 @@ class ModelTransform
 
   ///gets local transform
   void GetLocalTransform(float out[]);
+
+  ///inverts to negative of current transform 
+  void InvertTransform();
 };
 
 #endif

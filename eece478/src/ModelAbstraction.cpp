@@ -34,7 +34,6 @@ void ModelAbstraction::DrawModel()
   
   //grabs parent transform
   this->UpdateParentTransform();
-
   //update model view transformations
   this->ApplyTransform();
 
@@ -229,7 +228,7 @@ void ModelAbstraction::UpdateParentTransform()
   this->SetParentTransform(ParentTransform);
 }
 
-void ModelAbstraction::GetWorldToEntityTransform(float entitytoworld[])
+void ModelAbstraction::GetWorldToEntityTransform(float worldtoentity[])
 {
   //search for root node
   bool foundroot = false;
@@ -258,15 +257,20 @@ void ModelAbstraction::GetWorldToEntityTransform(float entitytoworld[])
   //get transformations from starting node to root node
   float temp[16];
   float temp2[16];
-  MatrixMath::GetMat4x4Identity(entitytoworld);
+  MatrixMath::GetMat4x4Identity(worldtoentity);
   for(int i = 0; i < sequence.size(); i++)
   {
+    sequence[i]->InvertTransform();
+   
     sequence[i]->ApplyTransform();
     sequence[i]->GetLocalTransform(temp);
     //concatenate transforms
-    MatrixMath::Mat4x4Mult4x4(entitytoworld, temp, temp2);
+    MatrixMath::Mat4x4Mult4x4(worldtoentity,temp,temp2);
     for(int j = 0; j < 16; j++)
-      entitytoworld[j] = temp2[j];
+      worldtoentity[j] = temp2[j];
+
+    sequence[i]->InvertTransform();
+    // sequence[i]->ApplyTransform();    
   }
 }
 
@@ -323,30 +327,26 @@ bool ModelAbstraction::GetAlignTargetOrientation()
   if(this->pAlignTarget == NULL)
     return false;
  
-  float TargetParentTransform[16];
-  // this->pAlignTarget->GetParentTransform(TargetParentTransform);
-  this->pAlignTarget->GetCombinedTransform(TargetParentTransform);
+  float TargetToWorld[16];
+  this->pAlignTarget->GetCombinedTransform(TargetToWorld);
 
-  float ReferenceParentTransform[16];
-  // this->GetParentTransform(ReferenceParentTransform);
-  this->GetCombinedTransform(ReferenceParentTransform);
+  float WorldToCurrent[16];
+  bool invert = false;
+  this->GetWorldToEntityTransform(WorldToCurrent);
 
-  float RelativeTransform[16];
-
-  this->ConvertTransform(TargetParentTransform, ReferenceParentTransform, RelativeTransform);
+  float TargetToCurrent[16];
+  MatrixMath::Mat4x4Mult4x4(WorldToCurrent,TargetToWorld,TargetToCurrent);
 
   float TargetScale[4];
   this->pAlignTarget->GetScale(TargetScale);
   TargetScale[3] = 0;
 
-  float TargetTranslate[4];
-  this->pAlignTarget->GetTranslate(TargetTranslate);
+  float TargetTranslate[4] = {0,0,0,1};
+  // this->pAlignTarget->GetTranslate(TargetTranslate);
   cout<<"target local translation: ";
   for(int i = 0; i < 3; i++)
     cout<<TargetTranslate[i]<<",";
   cout<<endl;
-  
-  TargetTranslate[3] = 1;
 
   float TargetRotate[4];
   this->pAlignTarget->GetRotate(TargetRotate);
@@ -356,15 +356,18 @@ bool ModelAbstraction::GetAlignTargetOrientation()
   float RelativeTranslate[4];
   float RelativeRotate[4];
 
-  cout<<"parent transform: "<<endl;
-  MatrixMath::PrintMat4x4(TargetParentTransform);
+  cout<<"WorldToCamera transform: "<<endl;
+  MatrixMath::PrintMat4x4(WorldToCurrent);
 
-  cout<<"relative transform: "<<endl;
-  MatrixMath::PrintMat4x4(RelativeTransform);
+  cout<<"TargetToWorld transform: "<<endl;
+  MatrixMath::PrintMat4x4(TargetToWorld);
 
-  MatrixMath::Mat4x4Mult4x1(TargetScale, RelativeTransform, RelativeScale);
-  MatrixMath::Mat4x4Mult4x1(TargetTranslate, RelativeTransform, RelativeTranslate);
-  MatrixMath::Mat4x4Mult4x1(TargetRotate, RelativeTransform, RelativeRotate);
+  cout<<"TargetToCurrent transform: "<<endl;
+  MatrixMath::PrintMat4x4(TargetToCurrent);
+
+  MatrixMath::Mat1x4Mult4x4(TargetScale, TargetToCurrent, RelativeScale);
+  MatrixMath::Mat1x4Mult4x4(TargetTranslate, TargetToCurrent, RelativeTranslate);
+  MatrixMath::Mat1x4Mult4x4(TargetRotate, TargetToCurrent, RelativeRotate);
 
   float RelativeTranslateNorm[16];
   MatrixMath::Mat4x1Normalize(RelativeTranslate,RelativeTranslateNorm);  
@@ -372,6 +375,8 @@ bool ModelAbstraction::GetAlignTargetOrientation()
   cout<<"input target Coordinates: "<<TargetTranslate[0]<<","<<TargetTranslate[1]<<","<<TargetTranslate[2]<<endl;
 
   cout<<"relative Coordinates: "<<RelativeTranslateNorm[0]<<","<<RelativeTranslateNorm[1]<<","<<RelativeTranslateNorm[2]<<","<<RelativeTranslateNorm[3]<<endl;
+
+  // cout<<"relative Coordinates: "<<RelativeTranslate[0]<<","<<RelativeTranslate[1]<<","<<RelativeTranslate[2]<<","<<RelativeTranslate[3]<<endl;
 
   return true;
 }
