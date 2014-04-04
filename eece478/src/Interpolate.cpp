@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -20,7 +22,7 @@ Interpolate::~Interpolate()
 void Interpolate::AddCurve(int steps, float ctrlpoint1[], float ctrlpoint2[], float ctrlpoint3[], float ctrlpoint4[])
 {
   ParametricCurve * pcurve = new ParametricCurve();
-  
+ 
   pcurve->SetParameter(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
 
   this->vpParametricCurve.push_back(pcurve);
@@ -55,12 +57,10 @@ void Interpolate::Increment()
       this->CurveIndex++;
     }
   }
-  // this->ApplyTranslate(this->Position);
 }
 
 void Interpolate::PrintPosition()
 {
-
   for(int i = 0; i < 3; i++)
   {
     cout<<this->Position[i]<<" ";
