@@ -27,14 +27,15 @@ void CurvePath::Draw()
     //save new position
     float pos[3];
     this->GetPosition(pos);
+    // this->PrintPosition();
     this->ApplyTranslate(pos);
   }
 
-  glBegin(GL_POINTS);
-    glColor3f(1,1,1);
-    // position is actually transformed using ModelTransform's ApplyTranslate in Increment function
-    glVertex3f(0,0,0);
-  glEnd();
+  // glBegin(GL_POINTS);
+  //   glColor3f(1,1,1);
+  //   // position is actually transformed using ModelTransform's ApplyTranslate in Increment function
+  //   glVertex3f(0,0,0);
+  // glEnd();
 }
 
 void CurvePath::FormatAction()
