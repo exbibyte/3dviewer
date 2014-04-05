@@ -1,6 +1,8 @@
 #ifndef MATRIXMATH_H
 #define MATRIXMATH_H
 
+#define PI 3.14159265359
+
 ///methods for matrix arithmetic in column major format
 namespace MatrixMath{
   /// provides matrix inversion
