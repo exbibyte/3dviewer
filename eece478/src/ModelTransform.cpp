@@ -44,7 +44,7 @@ void ModelTransform::ApplyTransform()
 	
 	glRotatef(abs(data[0]),data[0],0,0);
 	glRotatef(abs(data[1]),0,data[1],0);
-	glRotatef(abs(data[2]),0,data[2],0);
+	glRotatef(abs(data[2]),0,0,data[2]);
 
     	glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelRotation);
       glPopMatrix();
