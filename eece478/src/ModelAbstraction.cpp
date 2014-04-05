@@ -7,6 +7,7 @@
 #include <string>
 #include <stdlib.h>
 #include <vector>
+#include <cmath>
 
 #include "MatrixMath.h"
 
@@ -14,7 +15,7 @@ using namespace std;
 
 ModelAbstraction::ModelAbstraction()
 {
-  this->pAlignTarget = NULL;
+  this->pLookatTarget = NULL;
   this->pCamera = NULL;
 }
 
@@ -26,7 +27,6 @@ void ModelAbstraction::DrawModel()
   if(this->pCamera != NULL)
   {
     this->pCamera->GetWorldtoCamTransform(worldtoeye);
-    // MatrixMath::PrintMat4x4(worldtoeye);
     
     //saves world to eye transform
     this->SetWorldtoCamTransform(worldtoeye);
@@ -138,15 +138,16 @@ void ModelAbstraction::Action(string input)
     }
     this->ApplyDeltaTranslate(nums);
   }
-  else if(actiontype == "transform_align_to_target")
+  else if(actiontype == "lookat")
   {
-    //aligns to target entity's orientation
+    //lookats to target entity's orientation
     if(this->vAction.size() < 2)
     {
       return;
     }    
     string targetname = this->vAction[1];
-    this->SetAlignTarget(targetname);
+    this->SetLookatTarget(targetname);
+    
   }
   else
   {
@@ -268,9 +269,9 @@ void ModelAbstraction::GetWorldToEntityTransform(float worldtoentity[])
     MatrixMath::Mat4x4Mult4x4(worldtoentity,temp,temp2);
     for(int j = 0; j < 16; j++)
       worldtoentity[j] = temp2[j];
-
+    //invert back
     sequence[i]->InvertTransform();
-    // sequence[i]->ApplyTransform();    
+    sequence[i]->ApplyTransform();
   }
 }
 
@@ -286,6 +287,9 @@ void ModelAbstraction::UpdateWorldToCameraTransform()
 
 void ModelAbstraction::DrawCascade()
 {
+  //sets rotation orientation to look at set target
+  this->LookAtTarget();
+
   //update and draw current entity
   this->DrawModel();
 
@@ -294,89 +298,33 @@ void ModelAbstraction::DrawCascade()
   {
     i->DrawCascade();
   }
-
-  this->GetAlignTargetOrientation();
 }
 
-void ModelAbstraction::ConvertTransform(float target[16], float reference[16], float out[16])
+bool ModelAbstraction::SetLookatTarget(string target)
 {
-  //get inverse of reference matrix
-  float refinverse[16];
-  MatrixMath::InvertMatrix(reference, refinverse);
+  this->pLookatTarget = this->GetModel(target);
 
-  float unnormalized[16];
-  
-  //pre multiply target transform by inverse of reference transform
-  MatrixMath::Mat4x4Mult4x4(target, refinverse, unnormalized);
-
-  MatrixMath::Mat4x4Normalize(unnormalized, out);  
-}
-
-bool ModelAbstraction::SetAlignTarget(string target)
-{
-  this->pAlignTarget = this->GetModel(target);
-
-  if(this->pAlignTarget == NULL)
+  if(this->pLookatTarget == NULL)
     return false;
 
   return true;
 }
 
-bool ModelAbstraction::GetAlignTargetOrientation()
+bool ModelAbstraction::GetTargetToCurrentTransform(ModelAbstraction * target, float out[])
 {
-  if(this->pAlignTarget == NULL)
+  if(target == NULL)
     return false;
  
   float TargetToWorld[16];
-  this->pAlignTarget->GetCombinedTransform(TargetToWorld);
+  this->pLookatTarget->GetCombinedTransform(TargetToWorld);
 
   float WorldToCurrent[16];
-  bool invert = false;
   this->GetWorldToEntityTransform(WorldToCurrent);
 
   float TargetToCurrent[16];
   MatrixMath::Mat4x4Mult4x4(WorldToCurrent,TargetToWorld,TargetToCurrent);
 
-  float TargetScale[4];
-  this->pAlignTarget->GetScale(TargetScale);
-  TargetScale[3] = 0;
-
-  float TargetTranslate[4] = {0,0,0,1};
-  // this->pAlignTarget->GetTranslate(TargetTranslate);
-  cout<<"target local translation: ";
-  for(int i = 0; i < 3; i++)
-    cout<<TargetTranslate[i]<<",";
-  cout<<endl;
-
-  float TargetRotate[4];
-  this->pAlignTarget->GetRotate(TargetRotate);
-  TargetRotate[3] = 0;
-  
-  float RelativeScale[4];
-  float RelativeTranslate[4];
-  float RelativeRotate[4];
-
-  cout<<"WorldToCamera transform: "<<endl;
-  MatrixMath::PrintMat4x4(WorldToCurrent);
-
-  cout<<"TargetToWorld transform: "<<endl;
-  MatrixMath::PrintMat4x4(TargetToWorld);
-
-  cout<<"TargetToCurrent transform: "<<endl;
-  MatrixMath::PrintMat4x4(TargetToCurrent);
-
-  MatrixMath::Mat1x4Mult4x4(TargetScale, TargetToCurrent, RelativeScale);
-  MatrixMath::Mat1x4Mult4x4(TargetTranslate, TargetToCurrent, RelativeTranslate);
-  MatrixMath::Mat1x4Mult4x4(TargetRotate, TargetToCurrent, RelativeRotate);
-
-  float RelativeTranslateNorm[16];
-  MatrixMath::Mat4x1Normalize(RelativeTranslate,RelativeTranslateNorm);  
-
-  cout<<"input target Coordinates: "<<TargetTranslate[0]<<","<<TargetTranslate[1]<<","<<TargetTranslate[2]<<endl;
-
-  cout<<"relative Coordinates: "<<RelativeTranslateNorm[0]<<","<<RelativeTranslateNorm[1]<<","<<RelativeTranslateNorm[2]<<","<<RelativeTranslateNorm[3]<<endl;
-
-  // cout<<"relative Coordinates: "<<RelativeTranslate[0]<<","<<RelativeTranslate[1]<<","<<RelativeTranslate[2]<<","<<RelativeTranslate[3]<<endl;
+  MatrixMath::Mat4x4Normalize(TargetToCurrent, out);
 
   return true;
 }
@@ -384,4 +332,38 @@ bool ModelAbstraction::GetAlignTargetOrientation()
 void ModelAbstraction::SetCamera(ModelAbstraction * cam)
 {
   this->pCamera = cam;
+}
+
+void ModelAbstraction::LookAtTarget()
+{
+  if(this->pLookatTarget!=NULL)
+  {
+    float TargetToCurrent[16];
+    //get relative transform to target
+    this->GetTargetToCurrentTransform(this->pLookatTarget, TargetToCurrent);
+    MatrixMath::PrintMat4x4(TargetToCurrent);
+
+    //get offset to target
+    float targetorigin[4] = {0,0,0,1};
+    float offset[4];
+    MatrixMath::Mat1x4Mult4x4(targetorigin, TargetToCurrent, offset);
+    // cout<<"offset:"<<endl;
+    // MatrixMath::PrintMat4x1(offset);
+    
+    //rotate to face target entity
+    float rotate[4] = {0,0,0,0};
+    if(abs(offset[2])>0.01)
+    {
+      float ry = atan2(offset[2],offset[0])*180/PI+90;
+      float rx = atan2(offset[2],offset[1])*180/PI+90;
+      rotate[0] = rx;
+      rotate[1] = ry;
+    }
+    
+    // cout<<"rotation:"<<endl;
+    // MatrixMath::PrintMat4x1(rotate);
+
+    this->ApplyDeltaRotate(rotate);
+    this->ApplyTransform();
+  }
 }

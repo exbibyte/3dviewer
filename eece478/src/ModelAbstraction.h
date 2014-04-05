@@ -20,8 +20,8 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   ///root node for rendering using world to eye transform from the camera
   ModelAbstraction* pCamera;
 
-  ///target entity to align to
-  ModelAbstraction* pAlignTarget;
+  ///target entity to lookat to
+  ModelAbstraction* pLookatTarget;
 
  public:	
 
@@ -62,14 +62,14 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   /// draws this and all children entities in this hierarchy
   void DrawCascade();
 
-  //aligns input vector to another model entity
-  void ConvertTransform(float target[16], float reference[16], float out[16]);
+  ///sets the entity to look at
+  bool SetLookatTarget(string target);
 
-  ///sets the entity to align to
-  bool SetAlignTarget(string target);
+  ///rotates to face set lookat target
+  void LookAtTarget();
 
   ///gets the target orientation with respect to this transformation
-  bool GetAlignTargetOrientation();
+  bool GetTargetToCurrentTransform(ModelAbstraction * target, float out[]);
 
   ///sets the camera node to apply world to eye transform to this entity
   void SetCamera(ModelAbstraction * cam);
