@@ -15,7 +15,7 @@ class ModelAbstraction : public ModelTransform, public ModelPool
  private:
   ///storage for child and parent entities used for transforms
   vector<ModelAbstraction*> vChild;
-  vector<ModelAbstraction*> vParent;
+  ModelAbstraction* Parent;
   
   ///root node for rendering using world to eye transform from the camera
   ModelAbstraction* pCamera;

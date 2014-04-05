@@ -17,6 +17,7 @@ ModelAbstraction::ModelAbstraction()
 {
   this->pLookatTarget = NULL;
   this->pCamera = NULL;
+  this->Parent = NULL;
 }
 
 void ModelAbstraction::DrawModel()
@@ -189,43 +190,32 @@ void ModelAbstraction::RemoveChild(ModelAbstraction* child)
 
 void ModelAbstraction::AddParent(ModelAbstraction* parent)
 {
-  for(auto i : this->vParent)
+  if(this->Parent == parent)
   {
-    if(i == parent)
-    {
-      return;
-    }
+    return;
   }
-
-  this->vParent.push_back(parent);
-  parent->AddChild(this);
+  else
+  {
+    this->Parent = parent;
+  }
 }
 
 void ModelAbstraction::RemoveParent(ModelAbstraction* parent)
 {
-  auto i = this->vParent.begin();
-  
-  while (i != this->vParent.end()) 
+  if(this->Parent == parent)
   {
-    if(*i == parent)
-    {
-      parent->RemoveChild(this);
-      this->vParent.erase(i);
-      return;
-    }
+    this->Parent = NULL;
   }
 }
 
 void ModelAbstraction::UpdateParentTransform()
 {
   //pick the 1st parent for now
-  if(vParent.empty() == true)
+  if(this->Parent == NULL)
     return;
 
-  ModelAbstraction * parent = vParent.at(0);
-
   float ParentTransform[16]; 
-  parent->GetCombinedTransform(ParentTransform); 
+  this->Parent->GetCombinedTransform(ParentTransform); 
   this->SetParentTransform(ParentTransform);
 }
 
@@ -240,7 +230,7 @@ void ModelAbstraction::GetWorldToEntityTransform(float worldtoentity[])
 
   while(foundroot == false)
   {
-    if(current->vParent.empty() == true)
+    if(current->Parent == NULL)
     {
       //found
       foundroot = true;
@@ -248,7 +238,7 @@ void ModelAbstraction::GetWorldToEntityTransform(float worldtoentity[])
     else
     {
       //save current node to list and continue search
-      current = current->vParent[0];
+      current = current->Parent;
       sequence.push_back(current);
     }
   } 
