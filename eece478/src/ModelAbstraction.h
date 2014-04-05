@@ -22,6 +22,7 @@ class ModelAbstraction : public ModelTransform, public ModelPool
 
   ///target entity to lookat to
   ModelAbstraction* pLookatTarget;
+  ModelAbstraction* pMoveToTarget;
 
  public:	
 
@@ -48,7 +49,7 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   void AddChild(ModelAbstraction* child);
   void RemoveChild(ModelAbstraction* child);
   void AddParent(ModelAbstraction* parent);
-  void RemoveParent(ModelAbstraction* parent);
+  void RemoveParent();
 
   ///gets the parent transform if it exists
   void UpdateParentTransform();
@@ -63,7 +64,7 @@ class ModelAbstraction : public ModelTransform, public ModelPool
   void DrawCascade();
 
   ///sets the entity to look at
-  bool SetLookatTarget(string target);
+  bool SetLookatTarget(ModelAbstraction *);
 
   ///rotates to face set lookat target
   void LookAtTarget();
@@ -73,6 +74,12 @@ class ModelAbstraction : public ModelTransform, public ModelPool
 
   ///sets the camera node to apply world to eye transform to this entity
   void SetCamera(ModelAbstraction * cam);
+
+  ///moves to target location
+  void MoveToTarget();
+
+  ///sets target to move to
+  void SetMoveToTarget(ModelAbstraction *);
 };
 
 #endif

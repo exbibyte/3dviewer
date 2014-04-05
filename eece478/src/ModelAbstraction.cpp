@@ -16,12 +16,18 @@ using namespace std;
 ModelAbstraction::ModelAbstraction()
 {
   this->pLookatTarget = NULL;
+  this->pMoveToTarget = NULL;
   this->pCamera = NULL;
   this->Parent = NULL;
 }
 
 void ModelAbstraction::DrawModel()
 {
+  this->MoveToTarget();
+
+  //sets rotation orientation to look at set target
+  this->LookAtTarget();
+
   //grabs world to eye transform from camera
   float worldtoeye[16];
   float worldtoeyeInv[16];
@@ -147,8 +153,19 @@ void ModelAbstraction::Action(string input)
       return;
     }    
     string targetname = this->vAction[1];
-    this->SetLookatTarget(targetname);
-    
+    ModelAbstraction * model = this->GetModel(targetname);
+    this->SetLookatTarget(model);
+  }
+  else if(actiontype == "transform_moveto")
+  {
+    //lookats to target entity's orientation
+    if(this->vAction.size() < 2)
+    {
+      return;
+    }    
+    string targetname = this->vAction[1];
+    ModelAbstraction * model = this->GetModel(targetname);
+    this->SetMoveToTarget(model);
   }
   else
   {
@@ -170,7 +187,7 @@ void ModelAbstraction::AddChild(ModelAbstraction* child)
   }
 
   this->vChild.push_back(child);
-  child->AddParent(this);
+  child->Parent = this;
 }
 
 void ModelAbstraction::RemoveChild(ModelAbstraction* child)
@@ -181,7 +198,7 @@ void ModelAbstraction::RemoveChild(ModelAbstraction* child)
   {
     if(*i == child)
     {
-      child->RemoveParent(this);
+      child->Parent = NULL;
       this->vChild.erase(i);
       return;
     }
@@ -190,21 +207,15 @@ void ModelAbstraction::RemoveChild(ModelAbstraction* child)
 
 void ModelAbstraction::AddParent(ModelAbstraction* parent)
 {
-  if(this->Parent == parent)
-  {
-    return;
-  }
-  else
-  {
-    this->Parent = parent;
-  }
+  if(parent != NULL)
+    parent->AddChild(this);
 }
 
-void ModelAbstraction::RemoveParent(ModelAbstraction* parent)
+void ModelAbstraction::RemoveParent()
 {
-  if(this->Parent == parent)
+  if(this->Parent != NULL)
   {
-    this->Parent = NULL;
+    this->Parent->RemoveChild(this);
   }
 }
 
@@ -277,9 +288,6 @@ void ModelAbstraction::UpdateWorldToCameraTransform()
 
 void ModelAbstraction::DrawCascade()
 {
-  //sets rotation orientation to look at set target
-  this->LookAtTarget();
-
   //update and draw current entity
   this->DrawModel();
 
@@ -290,14 +298,9 @@ void ModelAbstraction::DrawCascade()
   }
 }
 
-bool ModelAbstraction::SetLookatTarget(string target)
+bool ModelAbstraction::SetLookatTarget(ModelAbstraction * target)
 {
-  this->pLookatTarget = this->GetModel(target);
-
-  if(this->pLookatTarget == NULL)
-    return false;
-
-  return true;
+  this->pLookatTarget = target;
 }
 
 bool ModelAbstraction::GetTargetToCurrentTransform(ModelAbstraction * target, float out[])
@@ -306,7 +309,7 @@ bool ModelAbstraction::GetTargetToCurrentTransform(ModelAbstraction * target, fl
     return false;
  
   float TargetToWorld[16];
-  this->pLookatTarget->GetCombinedTransform(TargetToWorld);
+  target->GetCombinedTransform(TargetToWorld);
 
   float WorldToCurrent[16];
   this->GetWorldToEntityTransform(WorldToCurrent);
@@ -356,4 +359,39 @@ void ModelAbstraction::LookAtTarget()
     this->ApplyDeltaRotate(rotate);
     this->ApplyTransform();
   }
+}
+
+void ModelAbstraction::SetMoveToTarget(ModelAbstraction * target)
+{
+  if(target!=NULL)
+    this->pMoveToTarget = target;
+}
+void ModelAbstraction::MoveToTarget()
+{
+  if(this->pMoveToTarget == NULL)
+    return;
+
+  float TargetToWorld[16];
+  this->pMoveToTarget->GetCombinedTransform(TargetToWorld);
+  //get offset to target
+  float targetorigin[4] = {0,0,0,1};
+  float targetpos[4];
+  MatrixMath::Mat4x4Mult4x1(targetorigin, TargetToWorld, targetpos);
+  cout<<"BusShelter world transform"<<endl;
+  MatrixMath::PrintMat4x4(TargetToWorld);
+
+  float CurrentToWorld[16];
+  float currentpos[4];
+  this->GetCombinedTransform(CurrentToWorld);
+  MatrixMath::Mat4x4Mult4x1(targetorigin, CurrentToWorld, currentpos);
+  cout<<"current world transform"<<endl;
+  MatrixMath::PrintMat4x4(CurrentToWorld);
+  float offset[3];
+  for(int i = 0; i < 3; i++)
+    offset[i] = targetpos[i] - currentpos[i];
+
+  cout<<"offset world pos"<<endl;
+  MatrixMath::PrintMat4x1(offset);
+  if(this->pCamera != this)
+    this->ApplyDeltaTranslate(offset);
 }
