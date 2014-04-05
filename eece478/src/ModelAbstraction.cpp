@@ -110,7 +110,6 @@ void ModelAbstraction::Action(string input)
   }
   else if(actiontype == "transform_addparent")
   {
-    //add a child model
     if(this->vAction.size() < 2)
     {
       return;
@@ -130,6 +129,10 @@ void ModelAbstraction::Action(string input)
       cout<<"model found"<<endl;
       this->AddParent(model);
     }
+  }
+  else if(actiontype == "transform_removeparent")
+  {
+    this->RemoveParent();
   }
   else if(actiontype == "transform_delta_translate")
   {
@@ -198,7 +201,9 @@ void ModelAbstraction::RemoveChild(ModelAbstraction* child)
   {
     if(*i == child)
     {
-      child->Parent = NULL;
+      if(child->Parent == this)
+	child->Parent = NULL;
+
       this->vChild.erase(i);
       return;
     }
@@ -212,10 +217,38 @@ void ModelAbstraction::AddParent(ModelAbstraction* parent)
 }
 
 void ModelAbstraction::RemoveParent()
-{
+{ 
   if(this->Parent != NULL)
   {
-    this->Parent->RemoveChild(this);
+    //get world coodinate of the object and save it
+    float entitytoworld[16];
+    this->GetCombinedTransform(entitytoworld);
+    float origin[4] = {0,0,0,1};
+    float offset[4];
+    MatrixMath::Mat4x4Mult4x1(origin,entitytoworld,offset);
+    this->ApplyTranslate(offset);
+    cout<<"offset:"<<endl;
+    MatrixMath::PrintMat4x1(offset);
+
+    //add this to root
+    ModelAbstraction * root = this;
+    bool foundroot = false;
+    while(foundroot == false)
+    {
+      if(root->Parent == NULL)
+	foundroot = true;
+      else
+	root = root->Parent;
+
+      cout<<root->Name<<endl;
+    }
+
+    if(root == this->Parent)
+      return;
+
+    ModelAbstraction * oldparent = this->Parent;
+    root->AddChild(this);
+    oldparent->RemoveChild(this);
   }
 }
 
@@ -294,7 +327,10 @@ void ModelAbstraction::DrawCascade()
   //do the same for children 
   for(auto i : this->vChild)
   {
-    i->DrawCascade();
+    if( i != NULL)
+    {
+      i->DrawCascade();
+    }
   }
 }
 
@@ -334,7 +370,7 @@ void ModelAbstraction::LookAtTarget()
     float TargetToCurrent[16];
     //get relative transform to target
     this->GetTargetToCurrentTransform(this->pLookatTarget, TargetToCurrent);
-    MatrixMath::PrintMat4x4(TargetToCurrent);
+    // MatrixMath::PrintMat4x4(TargetToCurrent);
 
     //get offset to target
     float targetorigin[4] = {0,0,0,1};
@@ -364,34 +400,35 @@ void ModelAbstraction::LookAtTarget()
 void ModelAbstraction::SetMoveToTarget(ModelAbstraction * target)
 {
   if(target!=NULL)
+  {
+    this->RemoveParent();
     this->pMoveToTarget = target;
+  }
 }
 void ModelAbstraction::MoveToTarget()
 {
   if(this->pMoveToTarget == NULL)
     return;
 
+  cout<<"running"<<endl;
   float TargetToWorld[16];
   this->pMoveToTarget->GetCombinedTransform(TargetToWorld);
   //get offset to target
   float targetorigin[4] = {0,0,0,1};
   float targetpos[4];
   MatrixMath::Mat4x4Mult4x1(targetorigin, TargetToWorld, targetpos);
-  cout<<"BusShelter world transform"<<endl;
-  MatrixMath::PrintMat4x4(TargetToWorld);
+  // cout<<"BusShelter world transform"<<endl;
+  // MatrixMath::PrintMat4x4(TargetToWorld);
 
   float CurrentToWorld[16];
   float currentpos[4];
   this->GetCombinedTransform(CurrentToWorld);
   MatrixMath::Mat4x4Mult4x1(targetorigin, CurrentToWorld, currentpos);
-  cout<<"current world transform"<<endl;
-  MatrixMath::PrintMat4x4(CurrentToWorld);
+  // cout<<"current world transform"<<endl;
+  // MatrixMath::PrintMat4x4(CurrentToWorld);
   float offset[3];
   for(int i = 0; i < 3; i++)
     offset[i] = targetpos[i] - currentpos[i];
 
-  cout<<"offset world pos"<<endl;
-  MatrixMath::PrintMat4x1(offset);
-  if(this->pCamera != this)
-    this->ApplyDeltaTranslate(offset);
+  this->ApplyDeltaTranslate(offset);
 }
