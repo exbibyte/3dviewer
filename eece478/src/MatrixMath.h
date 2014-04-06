@@ -30,5 +30,11 @@ namespace MatrixMath{
   void PrintMat4x1(float in[]);
 
   void GetMat4x4Identity(float out[]);
+
+  void GetMat4x4Rotation(float in[], float r[]);
+
+  void NormalizeScalingMat4x4(float in[], float out[]);
+
+  void InvertTranslateMat4x4(float in[], float out[]);
 }
 #endif

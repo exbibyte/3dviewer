@@ -256,3 +256,75 @@ void MatrixMath::GetMat4x4Identity(float out[])
   out[10] = 1;
   out[15] = 1;
 }
+
+void MatrixMath::GetMat4x4Rotation(float in[], float r[])
+{
+  //normalize scaling
+  float sx = sqrt(pow(in[0],2) + pow(in[4],2) + pow(in[8],2));
+  float sy = sqrt(pow(in[1],2) + pow(in[5],2) + pow(in[9],2));
+  float sz = sqrt(pow(in[2],2) + pow(in[6],2) + pow(in[10],2));
+
+  float mat3x3[3][3];
+
+  //each row
+  for(int i = 0; i < 3; i++)
+  {
+    //each column
+    for(int j = 0; j < 3; j++)
+    {
+      if(j == 0)
+	mat3x3[i][j] = in[i+j*4]/sx;
+      else if(j == 1)
+	mat3x3[i][j] = in[i+j*4]/sy;
+      else if(j == 2)
+	mat3x3[i][j] = in[i+j*4]/sz;
+    }
+  }
+
+  //rx
+  r[0] = atan2(mat3x3[3][2], mat3x3[3][3])*180/PI;
+  //ry
+  r[1] = atan2(-mat3x3[3][1], sqrt(pow(mat3x3[3][2],2) + pow(mat3x3[3][3],2)))*180/PI;
+  //rz
+  r[2] = atan2(mat3x3[2][1], mat3x3[1][1])*180/PI;
+
+}
+
+void MatrixMath::NormalizeScalingMat4x4(float in[], float out[])
+{
+  //normalize scaling
+  float sx = sqrt(pow(in[0],2) + pow(in[4],2) + pow(in[8],2));
+  float sy = sqrt(pow(in[1],2) + pow(in[5],2) + pow(in[9],2));
+  float sz = sqrt(pow(in[2],2) + pow(in[6],2) + pow(in[10],2));
+
+  for(int i = 0; i < 16; i++)
+    out[i] = in[i];
+
+  //each row
+  for(int i = 0; i < 3; i++)
+  {
+    //each column
+    for(int j = 0; j < 3; j++)
+    {
+      if(j == 0)
+	out[i+j*4] = in[i+j*4]/sx;
+      else if(j == 1)
+        out[i+j*4] = in[i+j*4]/sy;
+      else if(j == 2)
+        out[i+j*4] = in[i+j*4]/sz;
+    }  
+  }
+}
+
+void MatrixMath::InvertTranslateMat4x4(float in[], float out[])
+{
+  for(int i = 0; i < 12; i++)
+  {
+    out[i] = in[i];
+  }
+  for(int i = 12; i < 15; i++)
+  {
+    out[i] = -1*in[i];
+  }
+  out[15] = in[15];
+}

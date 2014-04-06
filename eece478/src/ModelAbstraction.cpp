@@ -155,13 +155,22 @@ void ModelAbstraction::Action(string input)
     {
       return;
     }    
-    string targetname = this->vAction[1];
-    ModelAbstraction * model = this->GetModel(targetname);
+    
+    //combine str if spaced name was separated
+    string combinestr;
+    for(int i = 1; i < this->vAction.size(); i++)
+    {
+      combinestr += this->vAction.at(i);
+    }    
+
+    ModelAbstraction * model = this->GetModel(combinestr);
     
     //test to see if it's the camera that is being rotated
     if(this == this->pCamera->Parent)
+    {
       //set camerarotate to look at things
       this->pCamera->SetLookatTarget(model);
+    }
     else
       this->SetLookatTarget(model);
   }
@@ -172,8 +181,14 @@ void ModelAbstraction::Action(string input)
     {
       return;
     }    
-    string targetname = this->vAction[1];
-    ModelAbstraction * model = this->GetModel(targetname);
+
+    //combine str if spaced name was separated
+    string combinestr;
+    for(int i = 1; i < this->vAction.size(); i++)
+    {
+      combinestr += this->vAction.at(i);
+    }
+    ModelAbstraction * model = this->GetModel(combinestr);
     this->SetMoveToTarget(model);
   }
   else
@@ -233,8 +248,8 @@ void ModelAbstraction::RemoveParent()
     float offset[4];
     MatrixMath::Mat4x4Mult4x1(origin,entitytoworld,offset);
     this->ApplyTranslate(offset);
-    cout<<"offset:"<<endl;
-    MatrixMath::PrintMat4x1(offset);
+    // cout<<"offset:"<<endl;
+    // MatrixMath::PrintMat4x1(offset);
 
     //add this to root
     ModelAbstraction * root = this;
@@ -350,14 +365,38 @@ bool ModelAbstraction::GetTargetToCurrentTransform(ModelAbstraction * target, fl
   if(target == NULL)
     return false;
  
+  float TargetToWorldNormScale[16];
+  float WorldToCurrentNormScale[16];
+
   float TargetToWorld[16];
   target->GetCombinedTransform(TargetToWorld);
+
+  //normalize scaling
+  MatrixMath::NormalizeScalingMat4x4(TargetToWorld, TargetToWorldNormScale);
+ 
+  //   cout<<"targettoworld:"<<endl;
+  //   MatrixMath::PrintMat4x4(TargetToWorldNormScale);
+ 
 
   float WorldToCurrent[16];
   this->GetWorldToEntityTransform(WorldToCurrent);
 
+  //normalize scaling
+  MatrixMath::NormalizeScalingMat4x4(WorldToCurrent, WorldToCurrentNormScale);
+ 
+  //   cout<<"WorldToCurrent:"<<endl;
+  //   MatrixMath::PrintMat4x4(WorldToCurrentNormScale);
+
+  //invert current entity's translation
+  float WorldToCurrentNormScaleInvertTranslate[16];
+  MatrixMath::InvertTranslateMat4x4(WorldToCurrentNormScale,WorldToCurrentNormScaleInvertTranslate);
+
   float TargetToCurrent[16];
-  MatrixMath::Mat4x4Mult4x4(WorldToCurrent,TargetToWorld,TargetToCurrent);
+  //concatenate transforms to get target to current entity's transform
+  MatrixMath::Mat4x4Mult4x4(WorldToCurrentNormScaleInvertTranslate,TargetToWorldNormScale,TargetToCurrent);
+
+  //   cout<<"TargetToCurrent_before_normalize:"<<endl;
+  //   MatrixMath::PrintMat4x4(TargetToCurrent);
 
   MatrixMath::Mat4x4Normalize(TargetToCurrent, out);
 
@@ -374,17 +413,19 @@ void ModelAbstraction::LookAtTarget()
   if(this->pLookatTarget!=NULL)
   {
     float TargetToCurrent[16];
+
     //get relative transform to target
     this->GetTargetToCurrentTransform(this->pLookatTarget, TargetToCurrent);
-    cout<<"targettocurrent:"<<endl;
-    MatrixMath::PrintMat4x4(TargetToCurrent);
+
+    // cout<<"targettocurrent:"<<endl;
+    // MatrixMath::PrintMat4x4(TargetToCurrent);
 
     //get offset to target
     float targetorigin[4] = {0,0,0,1};
     float offset[4];
     MatrixMath::Mat1x4Mult4x4(targetorigin, TargetToCurrent, offset);
-    cout<<"offset:"<<endl;
-    MatrixMath::PrintMat4x1(offset);
+    // cout<<"offset:"<<endl;
+    // MatrixMath::PrintMat4x1(offset);
     
     //rotate to face target entity
     float rotate[4] = {0,0,0,0};
@@ -393,7 +434,7 @@ void ModelAbstraction::LookAtTarget()
       float ry = atan2(offset[2],offset[0])*180/PI + 90;
       float rx = atan2(offset[2],offset[1])*180/PI + 90;
       
-      cout<<"ry: "<<ry<<", rx: "<<rx<<endl;
+      // cout<<"ry: "<<ry<<", rx: "<<rx<<endl;
       if(ry > 180)
 	ry = 180 - ry;
       if(rx > 180)
@@ -406,8 +447,8 @@ void ModelAbstraction::LookAtTarget()
     // cout<<"rotation:"<<endl;
     // MatrixMath::PrintMat4x1(rotate);
 
+    //reorient entity's rotation
     this->ApplyDeltaRotate(rotate);
-    this->ApplyTransform();
   }
 }
 
