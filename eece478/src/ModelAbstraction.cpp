@@ -157,7 +157,13 @@ void ModelAbstraction::Action(string input)
     }    
     string targetname = this->vAction[1];
     ModelAbstraction * model = this->GetModel(targetname);
-    this->SetLookatTarget(model);
+    
+    //test to see if it's the camera that is being rotated
+    if(this == this->pCamera->Parent)
+      //set camerarotate to look at things
+      this->pCamera->SetLookatTarget(model);
+    else
+      this->SetLookatTarget(model);
   }
   else if(actiontype == "transform_moveto")
   {
@@ -370,21 +376,29 @@ void ModelAbstraction::LookAtTarget()
     float TargetToCurrent[16];
     //get relative transform to target
     this->GetTargetToCurrentTransform(this->pLookatTarget, TargetToCurrent);
-    // MatrixMath::PrintMat4x4(TargetToCurrent);
+    cout<<"targettocurrent:"<<endl;
+    MatrixMath::PrintMat4x4(TargetToCurrent);
 
     //get offset to target
     float targetorigin[4] = {0,0,0,1};
     float offset[4];
     MatrixMath::Mat1x4Mult4x4(targetorigin, TargetToCurrent, offset);
-    // cout<<"offset:"<<endl;
-    // MatrixMath::PrintMat4x1(offset);
+    cout<<"offset:"<<endl;
+    MatrixMath::PrintMat4x1(offset);
     
     //rotate to face target entity
     float rotate[4] = {0,0,0,0};
     if(abs(offset[2])>0.01)
     {
-      float ry = atan2(offset[2],offset[0])*180/PI+90;
-      float rx = atan2(offset[2],offset[1])*180/PI+90;
+      float ry = atan2(offset[2],offset[0])*180/PI + 90;
+      float rx = atan2(offset[2],offset[1])*180/PI + 90;
+      
+      cout<<"ry: "<<ry<<", rx: "<<rx<<endl;
+      if(ry > 180)
+	ry = 180 - ry;
+      if(rx > 180)
+	rx = 180 - rx;
+
       rotate[0] = rx;
       rotate[1] = ry;
     }
@@ -428,7 +442,9 @@ void ModelAbstraction::MoveToTarget()
   // MatrixMath::PrintMat4x4(CurrentToWorld);
   float offset[3];
   for(int i = 0; i < 3; i++)
+  {
     offset[i] = targetpos[i] - currentpos[i];
-
+  }
+  
   this->ApplyDeltaTranslate(offset);
 }

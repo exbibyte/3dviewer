@@ -16,143 +16,256 @@
 
 <animation>
   <name>Curve1_Increment</name>
-  <time>0</time>		
+  <time>1</time>		
   <action>curve_increment</action>
   <subject>curve1</subject>  
-  <extra>BLAH</extra>  
+  <extra></extra>  
 </animation>
 
 <animation>
-  <name>Curve1_StopIncrement</name>
-  <time>100</time>		
-  <action>curve_stopincrement</action>
-  <subject>curve1</subject>  
-  <extra>BLAH</extra>  
-</animation>
-
-<animation>
-  <name>Transform_Camera_AddChild_CameraPath</name>
+  <name>Transform_World_AddChild_CameraPath</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>camera</subject>  
+  <subject>world</subject>  
   <extra>curve1</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_BCPlace</name>
+  <name>Transform_World_AddChild_CameraPath</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>BC Place</extra>  
+  <subject>world</subject>  
+  <extra>curve_plane</extra>  
+</animation>
+
+<animation>
+  <name>CurvePlane_Increment</name>
+  <time>0</time>		
+  <action>curve_increment</action>
+  <subject>curve_plane</subject>  
+  <extra></extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_CameraPath</name>
+  <time>0.3</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>curve_plane_lookat</extra>  
+</animation>
+
+<animation>
+  <name>CurvePlane_Increment</name>
+  <time>0</time>		
+  <action>curve_increment</action>
+  <subject>curve_plane_lookat</subject>  
+  <extra></extra>  
 </animation>
 
 <animation>
   <name>Transform_World_AddChild_GasStation</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
+  <subject>world</subject>  
   <extra>GasStation</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_SeaIsland</name>
+  <name>Transform_World_AddChild_Robson</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>SeaIsland</extra>  
+  <subject>world</subject>  
+  <extra>1238RobsonStreet</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_BCPlace</name>
+  <name>Transform_World_AddChild_Robson</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>BC Place</extra>  
+  <subject>world</subject>  
+  <extra>MarineDriveResidences</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_FairmontWaterfront</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>FairmontWaterfront</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_FrankForward</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>FrankForward</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_TotemHumlesome</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>TotemHumlesome</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_TotemHumlesome</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>StudentRecreationCentre</extra>  
 </animation>
 
 <animation>
   <name>Transform_World_AddChild_BusShelter</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
+  <subject>world</subject>  
   <extra>BusShelter</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_Bus</name>
+  <name>Transform_World_AddChild_ScotiaTower</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>Bus</extra>  
+  <subject>world</subject>  
+  <extra>Scotiabank Tower</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_light1</name>
+  <name>Transform_World_AddChild_ScotiaTower</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>light1</extra>  
+  <subject>world</subject>  
+  <extra>Theatre</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_light2</name>
+  <name>Transform_World_AddChild_ContinuingStudies</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>light2</extra>  
+  <subject>world</subject>  
+  <extra>Continuing Studies</extra>  
 </animation>
 
 <animation>
-  <name>Transform_World_AddChild_light3</name>
+  <name>Transform_World_AddChild_SpaceCenter</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
-  <extra>light3</extra>  
+  <subject>world</subject>  
+  <extra>HRMacMillanSpaceCentre</extra>  
 </animation>
 
 <animation>
-  <name>Transform_Light2_Translate</name>
+  <name>Transform_World_AddChild_MBAHouse</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>MBAHouse</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_Sportscentre</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>ThunderbirdSportsCentre</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_SeaIsland</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>SeaIsland</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_lightspot1</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>lightspot1</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_lightsky1</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>lightsky1</extra>  
+</animation>
+
+<animation>
+  <name>Transform_World_AddChild_lightsky2</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>lightsky2</extra>  
+</animation>
+
+<animation>
+  <name>Transform_Lightsky1_Translate</name>
   <time>0</time>		
   <action>transform_delta_translate</action>
-  <subject>light2</subject>  
+  <subject>lightsky1</subject>  
   <extra>0 500 0 0</extra>  
 </animation>
 
 <animation>
-  <name>Transform_Light3_Translate</name>
+  <name>Transform_Lightsky2_Translate</name>
   <time>0</time>		
   <action>transform_delta_translate</action>
-  <subject>light3</subject>  
-  <extra>0 3000 0 0</extra>  
+  <subject>lightsky2</subject>  
+  <extra>0 -500 0 0</extra>  
 </animation>
 
 <animation>
   <name>Transform_World_AddChild_SkyDome</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>curve1</subject>  
+  <subject>world</subject>  
   <extra>SkyDome</extra>  
 </animation>
 
 <animation>
-  <name>Transform_Light1_Translate</name>
+  <name>Transform_World_AddChild_SkyIsland</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>SkyIsland</extra>  
+</animation>
+
+
+<animation>
+  <name>Transform_World_AddChild_Su37</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>su37</extra>  
+</animation>
+
+<animation>
+  <name>Transform_Lightspot1_Translate</name>
   <time>0</time>		
   <action>transform_delta_translate</action>
-  <subject>light1</subject>  
+  <subject>lightspot1</subject>  
   <extra>0 150 0</extra>  
 </animation>
 
-<animation>
-  <name>Light1_Turnoff</name>
-  <time>0</time>		
-  <action>light_turnoff</action>
-  <subject>light1</subject>  
-  <extra></extra>  
-</animation>
+#<animation>
+#  <name>Lightspot1_Turnoff</name>
+#  <time>0</time>		
+#  <action>light_turnoff</action>
+#  <subject>lightspot1</subject>  
+#  <extra></extra>  
+#</animation>
 
 <animation>
   <name>Recorder_Start</name>
-  <time>7</time>		
+  <time>0</time>		
   <action>recorder_start</action>
   <subject>recorder</subject>  
   <extra></extra>  
@@ -160,8 +273,40 @@
 
 <animation>
   <name>Recorder_End</name>
-  <time>14</time>		
+  <time>4</time>		
   <action>recorder_end</action>
   <subject>recorder</subject>  
   <extra></extra>  
+</animation>
+
+<animation>
+  <name>Transform_Attach_Camera_to_curve1</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve1</subject>  
+  <extra>camera</extra>  
+</animation>
+
+<animation>
+  <name>Transform_Attach_Plane_to_curve_plane</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve_plane</subject>  
+  <extra>su37</extra>  
+</animation>
+
+<animation>
+  <name>Lookat_Camera_to_building</name>
+  <time>0</time>		
+  <action>lookat</action>
+  <subject>camera</subject>  
+  <extra>SeaIsland</extra>  
+</animation>
+
+<animation>
+  <name>Lookat_plane</name>
+  <time>0.3</time>		
+  <action>lookat</action>
+  <subject>su37</subject>  
+  <extra>curve_plane_lookat</extra>  
 </animation>
