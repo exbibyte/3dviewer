@@ -285,7 +285,16 @@
   <time>0</time>		
   <action>transform_delta_translate</action>
   <subject>camera</subject>  
-  <extra>300 300 0</extra>  
+  <extra>400 350 0</extra>  
+</animation>
+
+#######testing only for camera
+<animation>
+  <name>Lookat_Camera_to_building</name>
+  <time>2</time>		
+  <action>lookat</action>
+  <subject>camera</subject>  
+  <extra>SkyIsland3</extra>  
 </animation>
 
 #add camera curve path for touring skyisland1
@@ -309,7 +318,7 @@
   <name>attach camera</name>
   <time>5.5</time>		
   <action>transform_moveto</action>
-  <subject>camera</subject>  
+  <subject>su37</subject>  
   <extra>curve_skyisland1_camera</extra>  
 </animation>
 #camera look at skyisland1
@@ -317,7 +326,7 @@
   <name>Lookat_Camera_to_building</name>
   <time>0</time>		
   <action>lookat</action>
-  <subject>camera</subject>  
+  <subject>su37</subject>  
   <extra>SkyIsland1</extra>  
 </animation>
 
@@ -333,7 +342,7 @@
 #start camera path 2
 <animation>
   <name>skyisland 2 tour</name>
-  <time>20</time>		
+  <time>30</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland2_camera</subject>  
   <extra></extra>  
@@ -341,20 +350,19 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>21</time>		
+  <time>31</time>		
   <action>transform_moveto</action>
-  <subject>camera</subject>  
+  <subject>su37</subject>  
   <extra>curve_skyisland2_camera</extra>  
 </animation>
 #camera look at skyisland 2
 <animation>
   <name>Lookat_Camera_to_building</name>
-  <time>21</time>		
+  <time>31</time>		
   <action>lookat</action>
-  <subject>camera</subject>  
+  <subject>su37</subject>  
   <extra>SkyIsland2</extra>  
 </animation>
-
 
 #add camera curve path for touring skyisland 3
 <animation>
@@ -367,7 +375,7 @@
 #start camera path 3
 <animation>
   <name>skyisland 3 tour</name>
-  <time>40</time>		
+  <time>55</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland3_camera</subject>  
   <extra></extra>  
@@ -375,69 +383,152 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>41</time>		
+  <time>56</time>		
   <action>transform_moveto</action>
-  <subject>camera</subject>  
+  <subject>su37</subject>  
   <extra>curve_skyisland3_camera</extra>  
 </animation>
 #camera look at skyisland 3
 <animation>
   <name>Lookat_Camera_to_building</name>
-  <time>41</time>		
+  <time>56</time>		
   <action>lookat</action>
-  <subject>camera</subject>  
+  <subject>su37</subject>  
   <extra>SkyIsland3</extra>  
 </animation>
 
-################## end of curve path
+################## end of camera curve path
 
-<animation>
-  <name>Curve1_Increment</name>
-  <time>1.5</time>		
-  <action>curve_increment</action>
-  <subject>curve1</subject>  
-  <extra></extra>  
-</animation>
+################# add motion path for skyislands
 
+########### start of skyisland2 motion curve
 <animation>
-  <name>Transform_World_AddChild_CameraPath</name>
+  <name>Add skyisland 2 motion handle</name>
   <time>0</time>		
   <action>transform_addchild</action>
   <subject>world</subject>  
-  <extra>curve1</extra>  
+  <extra>curve_skyisland2_handle</extra>  
 </animation>
-
+#skyisland2 motion curve
 <animation>
-  <name>Transform_World_AddChild_CameraPath</name>
+  <name>Add skyisland2 motion curve</name>
+  <time>1</time>		
+  <action>transform_addchild</action>
+  <subject>curve_skyisland2_handle</subject>  
+  <extra>curve_skyisland2_motion</extra>  
+</animation>
+#offset curve to near skyisland 2
+<animation>
+  <name>Translate SkyIsland2 curve handle</name>
+  <time>3</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_skyisland2_handle</subject>  
+  <extra>0 -100 0</extra>  
+</animation>
+#start motion for skyisland2
+<animation>
+  <name>skyisland 2 start motion</name>
+  <time>5.5</time>		
+  <action>curve_increment</action>
+  <subject>curve_skyisland2_motion</subject>  
+  <extra></extra>  
+</animation>
+#attach skycity2 to motion curve
+<animation>
+  <name>attach skyisland2 to skyisland2 motion curve</name>
+  <time>6</time>		
+  <action>transform_moveto</action>
+  <subject>SkyIsland2</subject>  
+  <extra>curve_skyisland2_motion</extra>  
+</animation>
+########### end of skycity 2 motion curve
+
+########### start of skyisland 1 motion curve
+<animation>
+  <name>Add skyisland1 motion handle</name>
   <time>0</time>		
   <action>transform_addchild</action>
   <subject>world</subject>  
-  <extra>curve_plane</extra>  
+  <extra>curve_skyisland1_handle</extra>  
 </animation>
-
+#skyisland1 motion curve
 <animation>
-  <name>CurvePlane_Increment</name>
-  <time>0.5</time>		
+  <name>Add skyisland1 motion curve</name>
+  <time>1</time>		
+  <action>transform_addchild</action>
+  <subject>curve_skyisland1_handle</subject>  
+  <extra>curve_skyisland1_motion</extra>  
+</animation>
+#offset curve to near skyisland1
+<animation>
+  <name>Translate SkyIsland1 curve handle</name>
+  <time>3</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_skyisland1_handle</subject>  
+  <extra>0 100 0</extra>  
+</animation>
+#start motion for skyisland1
+<animation>
+  <name>skyisland 2 start motion</name>
+  <time>5.5</time>		
   <action>curve_increment</action>
-  <subject>curve_plane</subject>  
+  <subject>curve_skyisland1_motion</subject>  
   <extra></extra>  
 </animation>
-
+#attach skycity 1 to motion curve
 <animation>
-  <name>Transform_World_AddChild_CameraPath</name>
+  <name>attach skyisland1 to skyisland1 motion curve</name>
+  <time>6</time>		
+  <action>transform_moveto</action>
+  <subject>SkyIsland1</subject>  
+  <extra>curve_skyisland1_motion</extra>  
+</animation>
+########### end of skyisland 1 motion curve
+
+
+########### start of skyisland 3 motion curve
+<animation>
+  <name>Add skyisland3 motion handle</name>
   <time>0</time>		
   <action>transform_addchild</action>
   <subject>world</subject>  
-  <extra>curve_plane_lookat</extra>  
+  <extra>curve_skyisland3_handle</extra>  
 </animation>
-
+#skyisland3 motion curve
 <animation>
-  <name>curve_plane_lookat_Increment</name>
-  <time>0</time>		
+  <name>Add skyisland3 motion curve</name>
+  <time>1</time>		
+  <action>transform_addchild</action>
+  <subject>curve_skyisland3_handle</subject>  
+  <extra>curve_skyisland3_motion</extra>  
+</animation>
+#offset curve to near skyisland3
+<animation>
+  <name>Translate SkyIsland3 curve handle</name>
+  <time>3</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_skyisland3_handle</subject>  
+  <extra>0 0 0</extra>  
+</animation>
+#start motion for skyisland3
+<animation>
+  <name>skyisland 2 start motion</name>
+  <time>5.5</time>		
   <action>curve_increment</action>
-  <subject>curve_plane_lookat</subject>  
+  <subject>curve_skyisland3_motion</subject>  
   <extra></extra>  
 </animation>
+#attach skycity 1 to motion curve
+<animation>
+  <name>attach skyisland3 to skyisland3 motion curve</name>
+  <time>6</time>		
+  <action>transform_moveto</action>
+  <subject>SkyIsland3</subject>  
+  <extra>curve_skyisland3_motion</extra>  
+</animation>
+########### end of skyisland 3 motion curve
+
+#################### end of motion paths for skyislands
 
 <animation>
   <name>Transform_Lightspot1_Translate</name>
@@ -463,4 +554,12 @@
   <extra>asdfasdfcamera</extra>  
 </animation>
 
+##dummy object to act as camera
+<animation>
+  <name>Transform_Attach_Camera</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>su37</extra>  
+</animation>
 
