@@ -50,13 +50,29 @@ void Interpolate::Increment()
       float * pPosition = &this->Position[0];   
       (*itCurve)->GetCurrent(pPosition);
       (*itCurve)->Increment();
-      if((*itCurve)->Done() == true)		
+      if((*itCurve)->Done() == true)
+      {	
 	this->CurveIndex++;
+	auto a = this->vpParametricCurve.begin() + this->CurveIndex;
+	if(a != this->vpParametricCurve.end())
+	{
+	  (*a)->Start();
+	}
+      }
     }
     else
     {
       //go to next curve if current curve is finished
       this->CurveIndex++;
+      auto a = this->vpParametricCurve.begin() + this->CurveIndex;
+      if(a != this->vpParametricCurve.end())
+      {
+	(*a)->Start();
+	// update current curve
+	float * pPosition = &this->Position[0];   
+	(*a)->GetCurrent(pPosition);
+	(*a)->Increment();
+      }
     }
   }
 }

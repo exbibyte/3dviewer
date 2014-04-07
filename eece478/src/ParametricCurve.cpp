@@ -95,7 +95,7 @@ void ParametricCurve::Start()
 
 bool ParametricCurve::Done()
 {
-  return (this->mCurrentStep == this->mTotalStep);
+  return (this->mCurrentStep == this->mTotalStep-1);
 }
 
 bool ParametricCurve::Started()
