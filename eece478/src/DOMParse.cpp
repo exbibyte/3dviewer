@@ -16,11 +16,6 @@ DOMParse::DOMParse()
   std::get<TDOMMATCHER_STARTTAG>(MatchAnimation) = "<animation>";
   std::get<TDOMMATCHER_ENDTAG>(MatchAnimation) = "</animation>";
 
-  tDOMMatcher MatchModel;
-  std::get<TDOMMATCHER_TYPE>(MatchModel) = "modelindex";
-  std::get<TDOMMATCHER_STARTTAG>(MatchModel) = "<modelindex>";
-  std::get<TDOMMATCHER_ENDTAG>(MatchModel) = "</modelindex>";
-
   tDOMMatcher MatchTime;
   std::get<TDOMMATCHER_TYPE>(MatchTime) = "time";
   std::get<TDOMMATCHER_STARTTAG>(MatchTime) = "<time>";
@@ -127,7 +122,6 @@ DOMParse::DOMParse()
   std::get<TDOMMATCHER_ENDTAG>(MatchLight_Turnoff) = "</light_turnoff>";
 
   vDOMMatcher.push_back(MatchAnimation);
-  vDOMMatcher.push_back(MatchModel);
   vDOMMatcher.push_back(MatchTime);
   vDOMMatcher.push_back(MatchAction);
   vDOMMatcher.push_back(MatchName);
