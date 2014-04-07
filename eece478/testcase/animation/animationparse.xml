@@ -174,11 +174,11 @@
 
 ########## add to SkyIsland3
 <animation>
-  <name>Add ContinuingStudies</name>
+  <name>Add Clock Tower</name>
   <time>1</time>		
   <action>transform_addchild</action>
   <subject>SkyIsland3</subject>  
-  <extra>Continuing Studies</extra>  
+  <extra>Clock Tower</extra>  
 </animation>
 <animation>
   <name>Add HRMacMillanSpaceCentre</name>
@@ -393,7 +393,7 @@
 #camera look at skyisland2
 <animation>
   <name>move lookat point</name>
-  <time>46</time>		
+  <time>50</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland2</extra>  
@@ -418,7 +418,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>86</time>		
+  <time>85</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland3_camera</extra>  
@@ -426,7 +426,7 @@
 #camera look at skyisland3
 <animation>
   <name>move lookat point</name>
-  <time>86</time>		
+  <time>83</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
@@ -460,7 +460,7 @@
   <time>0</time>		
   <action>transform_abs_translate</action>
   <subject>curve_skyisland2_aerial_offset</subject>  
-  <extra>-130 50 -130 0</extra>  
+  <extra>-125 100 -130 0</extra>  
 </animation>
 <animation>
   <name>add aerial3 curve</name>
@@ -474,7 +474,7 @@
   <time>0</time>		
   <action>transform_abs_translate</action>
   <subject>curve_skyisland3_aerial_offset</subject>  
-  <extra>70 50 -130 0</extra>  
+  <extra>70 65 -135 0</extra>  
 </animation>
 
 #attach aerial paths to skyislands
@@ -549,6 +549,63 @@
   <extra></extra>  
 </animation>
 
+#camera path near end
+<animation>
+  <name>add zoomout camera path</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>curve_zoomout</extra>  
+</animation>
+<animation>
+  <name>zoomout start motion</name>
+  <time>130</time>		
+  <action>curve_increment</action>
+  <subject>curve_zoomout</subject>  
+  <extra></extra>  
+</animation>
+<animation>
+  <name>attach camera</name>
+  <time>132</time>		
+  <action>transform_moveto</action>
+  <subject>camera</subject>  
+  <extra>curve_zoomout</extra>  
+</animation>
+<animation>
+  <name>move lookat point</name>
+  <time>120</time>		
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
+  <extra>SkyIsland3</extra>  
+</animation>
+<animation>
+  <name>move lookat point</name>
+  <time>134</time>		
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
+  <extra>SkyIsland2</extra>  
+</animation>
+<animation>
+  <name>move lookat point</name>
+  <time>136</time>		
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
+  <extra>SkyIsland1</extra>  
+</animation>
+<animation>
+  <name>move lookat point</name>
+  <time>138</time>		
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
+  <extra>SkyIsland3</extra>  
+</animation>
+<animation>
+  <name>set camera lookat </name>
+  <time>130</time>		
+  <action>lookat</action>
+  <subject>camera</subject>  
+  <extra>camera_lookat_point</extra>  
+</animation>
 ################## end of camera curve path
 
 ################# add motion path for skyislands
