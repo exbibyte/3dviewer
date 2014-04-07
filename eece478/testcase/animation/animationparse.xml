@@ -268,6 +268,15 @@
   <subject>lightsky2</subject>  
   <extra>0 -500 0 0</extra>  
 </animation>
+
+<animation>
+  <name>Transform_lightskyambient_Translate</name>
+  <time>0</time>		
+  <action>transform_delta_translate</action>
+  <subject>lightskyambient</subject>  
+  <extra>0 500 0</extra>  
+</animation>
+
 ################## end of lighting
 
 ################## start of curve path for camera
@@ -303,6 +312,15 @@
   <action>lookat</action>
   <subject>camera</subject>  
   <extra>camera_lookat_point</extra>  
+</animation>
+
+#add camera position point used for looking at individual buildings
+<animation>
+  <name>Add camera position point</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>camera_position_point</extra>  
 </animation>
 
 #######testing only for camera

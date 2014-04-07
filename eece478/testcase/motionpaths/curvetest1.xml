@@ -114,3 +114,9 @@
   <controlpoint>
   </controlpoint>
 </curve>
+
+<curve>
+  <name>camera_position_point</name>
+  <controlpoint>
+  </controlpoint>
+</curve>
