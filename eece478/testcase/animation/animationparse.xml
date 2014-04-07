@@ -294,7 +294,7 @@
   <time>0</time>		
   <action>transform_delta_translate</action>
   <subject>camera</subject>  
-  <extra>400 350 0</extra>  
+  <extra>0 -300 800</extra>  
 </animation>
 
 #add camera lookat point
@@ -308,11 +308,19 @@
 #set camera to lookat point
 <animation>
   <name>set camera lookat point</name>
-  <time>2</time>		
+  <time>1</time>		
   <action>lookat</action>
   <subject>camera</subject>  
   <extra>camera_lookat_point</extra>  
 </animation>
+<animation>
+  <name>Transform_Camera_Translate</name>
+  <time>0</time>		
+  <action>transform_delta_translate</action>
+  <subject>camera_lookat_point</subject>  
+  <extra>-500 -1000 400</extra>  
+</animation>
+
 
 #add camera position point used for looking at individual buildings
 <animation>
@@ -351,7 +359,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>5.5</time>		
+  <time>6</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland1_camera</extra>  
@@ -359,7 +367,7 @@
 #camera look at skyisland1
 <animation>
   <name>move lookat point</name>
-  <time>5.5</time>		
+  <time>5</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland1</extra>  

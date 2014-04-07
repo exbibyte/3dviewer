@@ -5,7 +5,7 @@ FairmontWaterfront/FairmontWaterfront.model 1.2 1.2 1.2 0 0 0 120 0 85
 FrankForward/FrankForward.model 0.8 0.8 0.8 -90 0 0 90 0 115
 TotemHumlesome/TotemHumlesome.model 0.02 0.02 0.02 -90 0 0 -100 0 -105
 StudentRecCentre/StudentRecCentre.model 2.5 2.5 2.5 0 0 0 -70 0 -115
-BusShelter/BusShelter.model 2.1 2.1 2.1 0 0 0 -125 4 -105
+BusShelter/BusShelter.model 2.1 2.1 2.1 0 0 0 -125 0.5 -105
 ScotiaTower/ScotiaTower.model 4 4 4 0 0 0 -100 0 -80
 Theatre/Theatre.model 0.6 0.6 0.6 0 0 0 -80 0 -125
 ClockTower/ClockTower.model 2 2 2 -90 0 0 120 0 -105
