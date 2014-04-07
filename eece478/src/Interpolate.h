@@ -22,6 +22,8 @@ class Interpolate
 
   bool bKeepIncrementing;
 
+  bool bActivated;
+
  public:
   Interpolate();
   ~Interpolate();
@@ -42,6 +44,11 @@ class Interpolate
 
   ///gets the current interpolation
   void GetPosition(float out[]);
+
+  /// get and set flags for using interpolation
+  bool GetActivated();
+  bool SetActivated(bool val);
+
 };
 
 #endif

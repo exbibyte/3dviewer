@@ -4,11 +4,12 @@
 #include <string> 
 
 #include "ModelAbstraction.h"
+#include "Interpolate.h"
 
 using namespace std;
 
 ///inherits transformation functionality from ModelAbstraction
-class Lighting: public ModelAbstraction 
+class Lighting: public ModelAbstraction, public Interpolate
 {
  private:
   ///storage for this light id
@@ -63,6 +64,9 @@ class Lighting: public ModelAbstraction
   void FormatAction();
 
   void FormatData();
+
+  /// redirects this to Iterpolate class
+  void AddCurve(int steps, float ctrlpoint1[], float ctrlpoint2[], float ctrlpoint3[], float ctrlpoint4[]);
 
 };
 

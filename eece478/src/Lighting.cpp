@@ -1,4 +1,5 @@
 #include "Lighting.h"
+#include "Interpolate.h"
 
 #include <cstring>
 #include <string>
@@ -96,6 +97,38 @@ string Lighting::GetType()
 
 void Lighting::Draw()
 {
+  float LightAmbianceInterpolate[4];
+  float LightSpecularInterpolate[4];
+  float LightDiffuseInterpolate[4];
+
+  for(int i = 0; i < 4; i++)
+  {
+    LightAmbianceInterpolate[i] = this->LightAmbiance[i];
+    LightSpecularInterpolate[i] = this->LightSpecular[i];
+    LightDiffuseInterpolate[i] = this->LightDiffuse[i];
+  }
+
+  //get interpolated values if set
+  if(Interpolate::GetActivated() == true)
+  {
+    //increment interpolation
+    if(this->GetKeepIncrementing() == true)
+    {
+      this->Increment();
+      
+      float pos[3];
+      this->GetPosition(pos);
+      // calculate intensities based on interpolated values
+      for(int i = 0; i < 3; i++)
+      {
+	cout<<"light interpolate: "<<pos[0]<<endl;
+	LightAmbianceInterpolate[i] = pos[0] * LightAmbianceInterpolate[i];
+	LightSpecularInterpolate[i] = pos[1] * LightSpecularInterpolate[i];
+	LightDiffuseInterpolate[i] = pos[2] * LightDiffuseInterpolate[i];
+      }
+    }
+  }
+  
   glLightfv(GL_LIGHT0 + this->NumLight, GL_SPOT_DIRECTION, this->LightDirection);
   glLightfv(GL_LIGHT0 + this->NumLight, GL_SPOT_EXPONENT, &this->LightExponent);
   glLightfv(GL_LIGHT0 + this->NumLight, GL_SPOT_CUTOFF, &this->LightCutoff);
@@ -104,9 +137,9 @@ void Lighting::Draw()
   glLightfv(GL_LIGHT0 + this->NumLight, GL_LINEAR_ATTENUATION, &this->LightAttenLinear);
   glLightfv(GL_LIGHT0 + this->NumLight, GL_QUADRATIC_ATTENUATION, &this->LightAttenQuadratic);
 
-  glLightfv(GL_LIGHT0 + this->NumLight, GL_AMBIENT, this->LightAmbiance);
-  glLightfv(GL_LIGHT0 + this->NumLight, GL_SPECULAR, this->LightSpecular);
-  glLightfv(GL_LIGHT0 + this->NumLight, GL_DIFFUSE, this->LightDiffuse);
+  glLightfv(GL_LIGHT0 + this->NumLight, GL_AMBIENT, LightAmbianceInterpolate);
+  glLightfv(GL_LIGHT0 + this->NumLight, GL_SPECULAR, LightSpecularInterpolate);
+  glLightfv(GL_LIGHT0 + this->NumLight, GL_DIFFUSE, LightDiffuseInterpolate);
   glLightfv(GL_LIGHT0 + this->NumLight, GL_POSITION, this->LightPosition);
 }
 
@@ -118,7 +151,7 @@ void Lighting::FormatAction()
   if(size < 1)
     return;
 
-  float data[4];
+  float* data = new float[size];
 
   string action = vAction[0];
 
@@ -180,6 +213,35 @@ void Lighting::FormatAction()
   {
     this->TurnOff();
   }
+  else if(action == "light_interpolate")
+  {
+    if(size-1 == 0 || (size-1)%13 != 0)
+      return;
+
+    int div = size/13;
+    
+    for(int j = 0; j < div; j++)
+    {
+      float steps = data[j*13];
+      float ctrlpoint1[3];
+      float ctrlpoint2[3];
+      float ctrlpoint3[3];
+      float ctrlpoint4[3];
+      
+      for(int i = 0; i < 3; i++)
+      {
+	ctrlpoint1[i] = data[j*13 + 1+i];
+	ctrlpoint2[i] = data[j*13 + 4+i];
+	ctrlpoint3[i] = data[j*13 + 7+i];
+	ctrlpoint4[i] = data[j*13 + 10+i];
+      }
+      Interpolate::AddCurve(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
+    }
+
+    Interpolate::SetActivated(true);
+    Interpolate::SetKeepIncrementing(true);
+  }
+  delete [] data;
 }
 
 void Lighting::SetLightAmbient(float in[])
@@ -229,4 +291,9 @@ void Lighting::SetLightExponent(float in[])
 void Lighting::SetLightCutoff(float in[])
 {
   this->LightCutoff = in[0];
+}
+
+void Lighting::AddCurve(int steps, float ctrlpoint1[], float ctrlpoint2[], float ctrlpoint3[], float ctrlpoint4[])
+{
+  Interpolate::AddCurve(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
 }

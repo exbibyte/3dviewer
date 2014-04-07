@@ -12,6 +12,10 @@ Interpolate::Interpolate()
 {
   this->CurveIndex = 0;
   this->bKeepIncrementing = false;
+  for(int i = 0; i < 3; i++)
+    this->Position[i] = 0;
+
+  this->bActivated = false;
 }
 
 Interpolate::~Interpolate()
@@ -26,12 +30,16 @@ void Interpolate::AddCurve(int steps, float ctrlpoint1[], float ctrlpoint2[], fl
   pcurve->SetParameter(steps, ctrlpoint1, ctrlpoint2, ctrlpoint3, ctrlpoint4);
 
   this->vpParametricCurve.push_back(pcurve);
+
+  this->bActivated = true;
 }
   
 void Interpolate::Increment()
 {
   if(this->vpParametricCurve.empty())
     return;
+
+  bActivated = true;
 
   this->itCurve = this->vpParametricCurve.begin();
   this->itCurve += this->CurveIndex;
@@ -94,10 +102,21 @@ bool Interpolate::GetKeepIncrementing()
 bool Interpolate::SetKeepIncrementing(bool val)
 {
   this->bKeepIncrementing = val;
+  bActivated = true;
 }
 
 void Interpolate::GetPosition(float out[])
 {
   for(int i = 0; i < 3; i++)
     out[i] = this->Position[i];
+}
+
+bool Interpolate::GetActivated()
+{
+  return this->bActivated;
+}
+
+bool Interpolate::SetActivated(bool val)
+{
+  this->bActivated = val;
 }
