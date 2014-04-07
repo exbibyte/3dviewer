@@ -264,7 +264,7 @@ void ModelAbstraction::AddChild(ModelAbstraction* child)
   float offset[4];
   for(int i = 0; i < 3; i++)
   {
-    offset[i] = entitypos[i] - targetpos[i];
+    offset[i] = targetpos[i] - entitypos[i];
   }
   
   if(this->Name == "SkyIsland1")
@@ -274,16 +274,15 @@ void ModelAbstraction::AddChild(ModelAbstraction* child)
   }
 
   ModelAbstraction * temp = child;
-
-  //remove it from parent
-  if(child->Parent != NULL)
-    child->Parent->RemoveChild(child);
   
   //save absolute offset to child
   child->ApplyTranslate(offset);
 
   //add this child
   this->vChild.push_back(child);
+
+  //remove it from parent
+  child->RemoveParent();
 
   child->Parent = this;
 }
@@ -296,9 +295,7 @@ void ModelAbstraction::RemoveChild(ModelAbstraction* child)
   {
     if(*i == child)
     {
-      if(child->Parent == this)
-	child->Parent = NULL;
-
+      (*i)->Parent = NULL;
       this->vChild.erase(i);
       return;
     }
