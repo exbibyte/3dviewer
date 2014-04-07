@@ -154,6 +154,20 @@ void ModelAbstraction::Action(string input)
     }
     this->ApplyDeltaTranslate(nums);
   }
+  else if(actiontype == "transform_abs_translate")
+  {
+    //translate model
+    if(this->vAction.size() < 4)
+    {
+      return;
+    }    
+    float nums[4];
+    for(int i = 1; i < 4; i++)
+    {
+      nums[i-1] = atof(this->vAction.at(i).c_str());
+    }
+    this->ApplyTranslate(nums);
+  }
   else if(actiontype == "lookat")
   {
     //lookats to target entity's orientation
@@ -175,7 +189,7 @@ void ModelAbstraction::Action(string input)
   }
   else if(actiontype == "transform_moveto")
   {
-    //lookats to target entity's orientation
+    //move to target entity
     if(this->vAction.size() < 2)
     {
       return;
@@ -190,6 +204,11 @@ void ModelAbstraction::Action(string input)
     ModelAbstraction * model = this->GetModel(combinestr);
     this->SetMoveToTarget(model);
   }
+  else if(actiontype == "transform_moveto_detach")
+  {
+    //stop moving to a target entity
+    this->SetMoveToTarget(NULL);
+  }
   else
   {
     //call implementable method in derived class
@@ -201,6 +220,10 @@ void ModelAbstraction::Action(string input)
 
 void ModelAbstraction::AddChild(ModelAbstraction* child)
 {
+  if(child == NULL)
+    return;
+
+  //check if it's already a child
   for(auto i : this->vChild)
   {
     if(i == child)
@@ -209,7 +232,53 @@ void ModelAbstraction::AddChild(ModelAbstraction* child)
     }
   }
 
+  //get world coodinate of the current object
+  float entitypos[4];
+  if(this->Parent == NULL)
+  {
+    this->GetTranslate(entitypos);
+  }
+  else
+  {
+    float entitytoworld[16];
+    this->GetCombinedTransform(entitytoworld);
+    float origin[4] = {0,0,0,1};
+    MatrixMath::Mat4x4Mult4x1(origin,entitytoworld,entitypos);
+  }
+
+  //get world coodinate of the target object
+  float targetpos[4];  
+  if(child->Parent == NULL)
+  {
+    child->GetTranslate(targetpos);
+  }
+  else
+  {
+    float targettoworld[16];
+    child->GetCombinedTransform(targettoworld);
+    float origin[4] = {0,0,0,1};
+    MatrixMath::Mat4x4Mult4x1(origin,targettoworld,targetpos);
+  }
+  
+  //save relative position into target child
+  float offset[4];
+  for(int i = 0; i < 3; i++)
+  {
+    offset[i] = entitypos[i] - targetpos[i];
+  }
+  
+  if(this->Name == "SkyIsland1")
+  {
+    cout<<"offset"<<endl;
+    MatrixMath::PrintMat4x1(offset);
+  }
+
+  //save absolute offset to child
+  child->ApplyTranslate(offset);
+
+  //add this child
   this->vChild.push_back(child);
+
   child->Parent = this;
 }
 
@@ -250,7 +319,7 @@ void ModelAbstraction::RemoveParent()
     // cout<<"offset:"<<endl;
     // MatrixMath::PrintMat4x1(offset);
 
-    //add this to root
+    //add this to root world
     ModelAbstraction * root = this;
     bool foundroot = false;
     while(foundroot == false)
@@ -274,13 +343,18 @@ void ModelAbstraction::RemoveParent()
 
 void ModelAbstraction::UpdateParentTransform()
 {
-  //pick the 1st parent for now
-  if(this->Parent == NULL)
-    return;
-
   float ParentTransform[16]; 
-  this->Parent->GetCombinedTransform(ParentTransform); 
-  this->SetParentTransform(ParentTransform);
+
+  if(this->Parent == NULL)
+  {
+    MatrixMath::GetMat4x4Identity(ParentTransform);
+    this->SetParentTransform(ParentTransform);
+  }
+  else
+  {
+    this->Parent->GetCombinedTransform(ParentTransform); 
+    this->SetParentTransform(ParentTransform);
+  }
 }
 
 void ModelAbstraction::GetWorldToEntityTransform(float worldtoentity[])
@@ -358,7 +432,7 @@ void ModelAbstraction::UpdateWorldToCameraTransform()
   glPushMatrix();    
     glLoadIdentity();
     
-    //testing with glulookat
+    //set camera transform with glulookat
     gluLookAt(transform[12], transform[13], transform[14],
 	      transformtarget[12], transformtarget[13], transformtarget[14],
 	      0, 1, 0);
@@ -403,11 +477,11 @@ bool ModelAbstraction::GetTargetToCurrentTransform(ModelAbstraction * target, fl
   //normalize scaling
   MatrixMath::NormalizeScalingMat4x4(TargetToWorld, TargetToWorldNormScale);
 
-  if(this == this->pCamera)
-  { 
-    cout<<"targettoworld:"<<endl;
-    MatrixMath::PrintMat4x4(TargetToWorldNormScale);
-  }
+  // if(this == this->pCamera)
+  // { 
+  //   cout<<"targettoworld:"<<endl;
+  //   MatrixMath::PrintMat4x4(TargetToWorldNormScale);
+  // }
 
   float WorldToCurrent[16];
   this->GetWorldToEntityTransform(WorldToCurrent);
@@ -415,15 +489,11 @@ bool ModelAbstraction::GetTargetToCurrentTransform(ModelAbstraction * target, fl
   //normalize scaling
   MatrixMath::NormalizeScalingMat4x4(WorldToCurrent, WorldToCurrentNormScale);
 
-  if(this == this->pCamera)
-  {
-    // WorldToCurrentNormScale[14] = -1*WorldToCurrentNormScale[14];
-    cout<<"WorldToCurrent:"<<endl;
-    MatrixMath::PrintMat4x4(WorldToCurrentNormScale);
-  }
-  // //invert current entity's translation
-  // float WorldToCurrentNormScaleInvertTranslate[16];
-  // MatrixMath::InvertTranslateMat4x4(WorldToCurrentNormScale,WorldToCurrentNormScaleInvertTranslate);
+  // if(this == this->pCamera)
+  // {
+  //   cout<<"WorldToCurrent:"<<endl;
+  //   MatrixMath::PrintMat4x4(WorldToCurrentNormScale);
+  // }
 
   float TargetToCurrent[16];
   //concatenate transforms to get target to current entity's transform
@@ -451,21 +521,21 @@ void ModelAbstraction::LookAtTarget()
     //get relative transform to target
     this->GetTargetToCurrentTransform(this->pLookatTarget, TargetToCurrent);
 
-    if(this == this->pCamera)
-    {
-      cout<<"targettocurrent:"<<endl;
-      MatrixMath::PrintMat4x4(TargetToCurrent);
-    }
+    // if(this == this->pCamera)
+    // {
+    //   cout<<"targettocurrent:"<<endl;
+    //   MatrixMath::PrintMat4x4(TargetToCurrent);
+    // }
 
     //get offset to target
     float targetorigin[4] = {0,0,0,1};
     float offset[4];
     MatrixMath::Mat1x4Mult4x4(targetorigin, TargetToCurrent, offset);
-    if(this == this->pCamera)
-    {    
-      cout<<"offset:"<<endl;
-      MatrixMath::PrintMat4x1(offset);
-    }
+    // if(this == this->pCamera)
+    // {    
+    //   cout<<"offset:"<<endl;
+    //   MatrixMath::PrintMat4x1(offset);
+    // }
     //rotate to face target entity
     float rotate[4] = {0,0,0,0};
     if(abs(offset[2])>0.01)
@@ -475,15 +545,6 @@ void ModelAbstraction::LookAtTarget()
 
       ry = -90 + atan2(offset[2],offset[0])*180/PI;
       rx = -90 + atan2(offset[2],offset[1])*180/PI;
-
-      // if(this == this->pCamera)
-      // {
-      // 	ry = -ry;
-      // 	rx = -rx;
-      // }
-
-      // if(this == this->pCamera)
-      // 	cout<<"ry: "<<ry<<", rx: "<<rx<<endl;
 
       if(ry > 180)
       	ry = ry - 360;
@@ -500,14 +561,16 @@ void ModelAbstraction::LookAtTarget()
 
     }
     
-    if(this == this->pCamera)
-    {
-      cout<<"rotation:"<<endl;
-      MatrixMath::PrintMat4x1(rotate);
-    }
+    // if(this == this->pCamera)
+    // {
+    //   cout<<"rotation:"<<endl;
+    //   MatrixMath::PrintMat4x1(rotate);
+    // }
 
     //reorient entity's rotation
+    this->SetTransformMode(1);
     this->ApplyDeltaRotate(rotate);
+    this->ApplyTransform();
   }
 }
 
@@ -518,13 +581,16 @@ void ModelAbstraction::SetMoveToTarget(ModelAbstraction * target)
     this->RemoveParent();
     this->pMoveToTarget = target;
   }
+  else
+  {
+    this->pMoveToTarget = NULL;
+  }
 }
 void ModelAbstraction::MoveToTarget()
 {
   if(this->pMoveToTarget == NULL)
     return;
 
-  cout<<"running"<<endl;
   float TargetToWorld[16];
   this->pMoveToTarget->GetCombinedTransform(TargetToWorld);
   //get offset to target
