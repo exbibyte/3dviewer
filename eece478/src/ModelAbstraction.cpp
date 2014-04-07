@@ -273,6 +273,12 @@ void ModelAbstraction::AddChild(ModelAbstraction* child)
     MatrixMath::PrintMat4x1(offset);
   }
 
+  ModelAbstraction * temp = child;
+
+  //remove it from parent
+  if(child->Parent != NULL)
+    child->Parent->RemoveChild(child);
+  
   //save absolute offset to child
   child->ApplyTranslate(offset);
 
@@ -338,6 +344,8 @@ void ModelAbstraction::RemoveParent()
     ModelAbstraction * oldparent = this->Parent;
     root->AddChild(this);
     oldparent->RemoveChild(this);
+
+    this->ApplyTransform();
   }
 }
 
