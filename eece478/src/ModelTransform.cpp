@@ -41,10 +41,22 @@ void ModelTransform::ApplyTransform()
       //start of object rotation transform
       glPushMatrix();    
         glLoadIdentity();
-	
-	glRotatef(abs(data[0]),data[0],0,0);
-	glRotatef(abs(data[1]),0,data[1],0);
-	glRotatef(abs(data[2]),0,0,data[2]);
+
+	if(TransformMode == 0)
+	{
+	  glRotatef(data[2],0,0,1);	
+	  glRotatef(data[1],0,1,0);
+	  glRotatef(data[0],1,0,0);
+	}
+	else
+	{
+	  glRotatef(data[0],1,0,0);
+	  glRotatef(data[1],0,1,0);
+	  glRotatef(data[2],0,0,1);
+	}
+	// glRotatef(abs(data[0]),data[0],0,0);
+	// glRotatef(abs(data[1]),0,data[1],0);
+	// glRotatef(abs(data[2]),0,0,data[2]);
 
     	glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelRotation);
       glPopMatrix();
@@ -80,8 +92,8 @@ void ModelTransform::ApplyTransform()
     glLoadIdentity();
     //lastly, apply local transform
     glMultMatrixf(this->vModelTranslation);
-    glMultMatrixf(this->vModelRotation);
     glMultMatrixf(this->vModelScaling);  
+    glMultMatrixf(this->vModelRotation);
 
     //save local transformation
     glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelAllTransform);
@@ -95,7 +107,6 @@ void ModelTransform::ApplyTransform()
   glMultMatrixf(vModelAllTransform);   
   //save this combined transform
   glGetFloatv(GL_MODELVIEW_MATRIX,this->vModelCombinedTransform);
-
 
   glLoadIdentity();  
   //apply world to eye transform
@@ -263,4 +274,16 @@ void ModelTransform::InvertTransform()
   this->ApplyScale(this->ModelScale);
   this->ApplyRotate(this->ModelRotate);
   this->ApplyTranslate(this->ModelTranslate);
+}
+
+void ModelTransform::SetTransformMode(int val)
+{
+  this->TransformMode = val;
+}
+
+
+void ModelTransform::SetLookatTransform(float in[])
+{
+  for(int i = 0; i < 16; i++)
+    this->vModelLookat[i] = in[i];
 }

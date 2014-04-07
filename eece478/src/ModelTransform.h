@@ -33,7 +33,8 @@ class ModelTransform
   float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
   float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
   float vModelAllTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-  
+  float vModelLookat[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
+
   ///parent transform matrix
   float vModelParentTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
@@ -46,6 +47,7 @@ class ModelTransform
   ///stores world to camera transformation
   float vWorldtoCamTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
+  int TransformMode = 0;
  public:
 
   ModelTransform();
@@ -89,6 +91,10 @@ class ModelTransform
 
   ///inverts to negative of current transform 
   void InvertTransform();
+
+  void SetTransformMode(int);
+
+  void SetLookatTransform(float in[]);
 };
 
 #endif
