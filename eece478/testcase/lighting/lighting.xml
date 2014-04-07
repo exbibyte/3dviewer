@@ -1,14 +1,26 @@
 <lighting>
   <name>lightspot1</name>
-  <light_ambient>0.1 0.1 0.1 1</light_ambient>
-  <light_specular>0.5 0.5 0.5 0 </light_specular>
-  <light_diffuse>0.5 0.5 0.5 0</light_diffuse>
+  <light_ambient>0.4 0.4 0.4 1</light_ambient>
+  <light_specular>1 1 1 0 </light_specular>
+  <light_diffuse>1 1 1 0</light_diffuse>
   <light_position>0 0 0 1</light_position>
   <light_direction>0 -1 0 1</light_direction>
-  <light_exponent>70</light_exponent>
-  <light_cutoff>10</light_cutoff>
+  <light_exponent>100</light_exponent>
+  <light_cutoff>5</light_cutoff>
   <light_turnon></light_turnon>
-  <light_atten_quadratic>80</light_atten_quadratic>
+  <light_atten_quadratic>1000</light_atten_quadratic>
+</lighting>
+<lighting>
+  <name>lightspot2</name>
+  <light_ambient>0.4 0.4 0.4 1</light_ambient>
+  <light_specular>1 1 1 0 </light_specular>
+  <light_diffuse>1 1 1 0</light_diffuse>
+  <light_position>0 0 0 1</light_position>
+  <light_direction>0 -1 0 1</light_direction>
+  <light_exponent>100</light_exponent>
+  <light_cutoff>5</light_cutoff>
+  <light_turnon></light_turnon>
+  <light_atten_quadratic>1000</light_atten_quadratic>
 </lighting>
 
 <lighting>
@@ -37,7 +49,8 @@
 
 <lighting>
   <name>lightskyambient</name>
-  <light_ambient>0.7 0.7 0.7 1</light_ambient>
+  <light_ambient>0.1 0.1 0.1 1</light_ambient>
+  <light_diffuse>0 0 0 0</light_diffuse>
   <light_position>0 0 0 1</light_position>
   <light_turnon></light_turnon>
 </lighting>

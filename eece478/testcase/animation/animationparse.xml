@@ -221,14 +221,81 @@
 ################## end skydome
 
 ################## start of lighting
+########## spot light 1
 <animation>
-  <name>Transform_World_AddChild_lightspot1</name>
+  <name>Add lightspot 1</name>
   <time>0</time>		
   <action>transform_addchild</action>
-  <subject>SkyIsland</subject>  
+  <subject>curve_spot1_offset</subject>  
+  <extra>curve_spot1</extra>  
+</animation>
+<animation>
+  <name>Add lightspot 1</name>
+  <time>1</time>		
+  <action>transform_addchild</action>
+  <subject>curve_spot1</subject>  
   <extra>lightspot1</extra>  
 </animation>
+<animation>
+  <name>Translate spotlights</name>
+  <time>2</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_spot1_offset</subject>  
+  <extra>-100 100 -100</extra>  
+</animation>
+<animation>
+  <name>Add lightspot 1</name>
+  <time>3</time>		
+  <action>transform_addchild</action>
+  <subject>SkyIsland2</subject>  
+  <extra>curve_spot1_offset</extra>  
+</animation>
+<animation>
+  <name>start spotlight 1 curve</name>
+  <time>5</time>		
+  <action>curve_increment</action>
+  <subject>curve_spot1</subject>  
+  <extra></extra>  
+</animation>
 
+########### spot light 2
+<animation>
+  <name>Add lightspot 2</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve_spot2_offset</subject>  
+  <extra>curve_spot2</extra>  
+</animation>
+<animation>
+  <name>Add lightspot 2</name>
+  <time>1</time>		
+  <action>transform_addchild</action>
+  <subject>curve_spot2</subject>  
+  <extra>lightspot2</extra>  
+</animation>
+<animation>
+  <name>Translate spotlights</name>
+  <time>2</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_spot2_offset</subject>  
+  <extra>-100 100 -100</extra>  
+</animation>
+<animation>
+  <name>Add lightspot 2</name>
+  <time>3</time>		
+  <action>transform_addchild</action>
+  <subject>SkyIsland2</subject>  
+  <extra>curve_spot2_offset</extra>  
+</animation>
+<animation>
+  <name>start spotlight 1 curve</name>
+  <time>5</time>		
+  <action>curve_increment</action>
+  <subject>curve_spot2</subject>  
+  <extra></extra>  
+</animation>
+
+########## sky lights
 <animation>
   <name>Transform_World_AddChild_lightsky1</name>
   <time>0</time>		
@@ -236,7 +303,6 @@
   <subject>world</subject>  
   <extra>lightsky1</extra>  
 </animation>
-
 <animation>
   <name>Transform_World_AddChild_lightsky2</name>
   <time>0</time>		
@@ -244,7 +310,6 @@
   <subject>world</subject>  
   <extra>lightsky2</extra>  
 </animation>
-
 <animation>
   <name>Transform_World_AddChild_lightskyambient</name>
   <time>0</time>		
@@ -253,6 +318,7 @@
   <extra>lightskyambient</extra>  
 </animation>
 
+# move sky lights
 <animation>
   <name>Transform_Lightsky1_Translate</name>
   <time>0</time>		
@@ -260,15 +326,13 @@
   <subject>lightsky1</subject>  
   <extra>0 500 0 0</extra>  
 </animation>
-
 <animation>
   <name>Transform_Lightsky2_Translate</name>
   <time>0</time>		
   <action>transform_delta_translate</action>
   <subject>lightsky2</subject>  
-  <extra>0 -500 0 0</extra>  
+  <extra>0 500 0 0</extra>  
 </animation>
-
 <animation>
   <name>Transform_lightskyambient_Translate</name>
   <time>0</time>		
@@ -294,7 +358,7 @@
   <time>0</time>		
   <action>transform_delta_translate</action>
   <subject>camera</subject>  
-  <extra>0 -300 800</extra>  
+  <extra>0 -500 1000</extra>  
 </animation>
 
 #add camera lookat point
@@ -318,7 +382,7 @@
   <time>0</time>		
   <action>transform_delta_translate</action>
   <subject>camera_lookat_point</subject>  
-  <extra>-500 -1000 400</extra>  
+  <extra>-1000 -1000 400</extra>  
 </animation>
 
 
@@ -418,7 +482,7 @@
 #start camera path 3
 <animation>
   <name>skyisland 3 tour</name>
-  <time>85</time>		
+  <time>95</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland3_camera</subject>  
   <extra></extra>  
@@ -426,7 +490,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>85</time>		
+  <time>95</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland3_camera</extra>  
@@ -434,7 +498,7 @@
 #camera look at skyisland3
 <animation>
   <name>move lookat point</name>
-  <time>83</time>		
+  <time>93</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
@@ -567,49 +631,49 @@
 </animation>
 <animation>
   <name>zoomout start motion</name>
-  <time>130</time>		
+  <time>135</time>		
   <action>curve_increment</action>
   <subject>curve_zoomout</subject>  
   <extra></extra>  
 </animation>
 <animation>
   <name>attach camera</name>
-  <time>132</time>		
+  <time>137</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_zoomout</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>120</time>		
+  <time>125</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>134</time>		
+  <time>139</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland2</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>136</time>		
+  <time>141</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland1</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>138</time>		
+  <time>143</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
 </animation>
 <animation>
   <name>set camera lookat </name>
-  <time>130</time>		
+  <time>135</time>		
   <action>lookat</action>
   <subject>camera</subject>  
   <extra>camera_lookat_point</extra>  
@@ -746,30 +810,6 @@
 ########### end of skyisland 3 motion curve
 
 #################### end of motion paths for skyislands
-
-<animation>
-  <name>Transform_Lightspot1_Translate</name>
-  <time>0</time>		
-  <action>transform_delta_translate</action>
-  <subject>lightspot1</subject>  
-  <extra>0 50 0</extra>  
-</animation>
-
-#<animation>
-#  <name>Lightspot1_Turnoff</name>
-#  <time>0</time>		
-#  <action>light_turnoff</action>
-#  <subject>lightspot1</subject>  
-#  <extra></extra>  
-#</animation>
-
-<animation>
-  <name>Transform_Attach_Camera</name>
-  <time>0</time>		
-  <action>transform_addchild</action>
-  <subject>world</subject>  
-  <extra>asdfasdfcamera</extra>  
-</animation>
 
 ##dummy object to act as camera
 <animation>
