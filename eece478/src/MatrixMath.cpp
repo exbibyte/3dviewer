@@ -328,3 +328,27 @@ void MatrixMath::InvertTranslateMat4x4(float in[], float out[])
   }
   out[15] = in[15];
 }
+
+void MatrixMath::InvertTranslateZMat4x4(float in[], float out[])
+{
+  for(int i = 0; i < 14; i++)
+  {
+    out[i] = in[i];
+  }
+  out[14] = -1*in[14];
+  out[15] = in[15];
+}
+
+void MatrixMath::InvertRotateMat4x4(float in[], float out[])
+{
+  for(int i = 0; i < 16; i++)
+    out[i] = in[i];
+
+  for(int i = 0; i < 3; i++)
+  {
+    for(int j = 0; j < 3; j++)
+    {
+      out[j+i*4] = in[i+j*4];
+    }
+  }
+}

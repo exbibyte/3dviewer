@@ -36,5 +36,9 @@ namespace MatrixMath{
   void NormalizeScalingMat4x4(float in[], float out[]);
 
   void InvertTranslateMat4x4(float in[], float out[]);
+
+  void InvertTranslateZMat4x4(float in[], float out[]);
+
+  void InvertRotateMat4x4(float in[], float out[]);
 }
 #endif
