@@ -63,7 +63,6 @@
   </controlpoint>
 </curve>
 
-
 #curve path for skycity 3 motion in space
 <curve>
   <name>curve_skyisland3_motion</name>
@@ -82,6 +81,52 @@
   </controlpoint>
 </curve>
 
+######## start of local aerial path over skyislands' buildings
+<curve>
+  <name>curve_skyisland1_aerial</name>
+  <controlpoint>
+    40    0    0    0   30    0    0   30    0    0   60    0    0
+    40   60    0    0   60    0   30   60    0   30   60    0   60
+    40   60    0   60   30    0   60   30    0   60    0    0   60
+    40    0    0   60    0    0   30    0    0   30    0    0    0
+  </controlpoint>
+</curve>
+<curve>
+  <name>curve_skyisland1_aerial_offset</name>
+  <controlpoint>
+  </controlpoint>
+</curve>
+
+<curve>
+  <name>curve_skyisland2_aerial</name>
+  <controlpoint>
+    40    0    0    0   30    0    0   30    0    0   60    0    0
+    40   60    0    0   60    0   30   60    0   30   60    0   60
+    40   60    0   60   30    0   60   30    0   60    0    0   60
+    40    0    0   60    0    0   30    0    0   30    0    0    0
+  </controlpoint>
+</curve>
+<curve>
+  <name>curve_skyisland2_aerial_offset</name>
+  <controlpoint>
+  </controlpoint>
+</curve>
+
+<curve>
+  <name>curve_skyisland3_aerial</name>
+  <controlpoint>
+    40    0    0    0   30    0    0   30    0    0   60    0    0
+    40   60    0    0   60    0   30   60    0   30   60    0   60
+    40   60    0   60   30    0   60   30    0   60    0    0   60
+    40    0    0   60    0    0   30    0    0   30    0    0    0
+  </controlpoint>
+</curve>
+<curve>
+  <name>curve_skyisland3_aerial_offset</name>
+  <controlpoint>
+  </controlpoint>
+</curve>
+######## end of aerial path over skyislands' buildings
 
 <curve>
   <name>curve_plane</name>

@@ -50,7 +50,7 @@
 </animation>
 <animation>
   <name>Translate SkyIsland1</name>
-  <time>2</time>		
+  <time>4</time>		
   <action>transform_abs_translate</action>
   <subject>SkyIsland1</subject>  
   <extra>100 100 100</extra>  
@@ -73,7 +73,7 @@
 </animation>
 <animation>
   <name>Translate_SkyIsland2</name>
-  <time>2</time>		
+  <time>4</time>		
   <action>transform_abs_translate</action>
   <subject>SkyIsland2</subject>  
   <extra>-100 -100 -100</extra>  
@@ -377,7 +377,7 @@
 #start camera path 2
 <animation>
   <name>skyisland 2 tour</name>
-  <time>30</time>		
+  <time>45</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland2_camera</subject>  
   <extra></extra>  
@@ -385,7 +385,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>31</time>		
+  <time>46</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland2_camera</extra>  
@@ -393,7 +393,7 @@
 #camera look at skyisland2
 <animation>
   <name>move lookat point</name>
-  <time>31</time>		
+  <time>46</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland2</extra>  
@@ -410,7 +410,7 @@
 #start camera path 3
 <animation>
   <name>skyisland 3 tour</name>
-  <time>55</time>		
+  <time>85</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland3_camera</subject>  
   <extra></extra>  
@@ -418,7 +418,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>56</time>		
+  <time>86</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland3_camera</extra>  
@@ -426,10 +426,127 @@
 #camera look at skyisland3
 <animation>
   <name>move lookat point</name>
-  <time>56</time>		
+  <time>86</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
+</animation>
+
+#add close up building aerial paths
+#translate aerial paths to skyislands
+<animation>
+  <name>add aerial1 curve</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve_skyisland1_aerial_offset</subject>  
+  <extra>curve_skyisland1_aerial</extra>  
+</animation>
+<animation>
+  <name>Translate aerial 1 path</name>
+  <time>0</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_skyisland1_aerial_offset</subject>  
+  <extra>70 50 70 0</extra>  
+</animation>
+<animation>
+  <name>add aerial2 curve</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve_skyisland2_aerial_offset</subject>  
+  <extra>curve_skyisland2_aerial</extra>  
+</animation>
+<animation>
+  <name>Translate aerial 2 path</name>
+  <time>0</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_skyisland2_aerial_offset</subject>  
+  <extra>-130 50 -130 0</extra>  
+</animation>
+<animation>
+  <name>add aerial3 curve</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>curve_skyisland3_aerial_offset</subject>  
+  <extra>curve_skyisland3_aerial</extra>  
+</animation>
+<animation>
+  <name>Translate aerial 3 path</name>
+  <time>0</time>		
+  <action>transform_abs_translate</action>
+  <subject>curve_skyisland3_aerial_offset</subject>  
+  <extra>70 50 -130 0</extra>  
+</animation>
+
+#attach aerial paths to skyislands
+<animation>
+  <name>add aerial1 to skyisland</name>
+  <time>2</time>		
+  <action>transform_addchild</action>
+  <subject>SkyIsland1</subject>  
+  <extra>curve_skyisland1_aerial_offset</extra>  
+</animation>
+<animation>
+  <name>add aerial2 to skyisland</name>
+  <time>2</time>		
+  <action>transform_addchild</action>
+  <subject>SkyIsland2</subject>  
+  <extra>curve_skyisland2_aerial_offset</extra>  
+</animation>
+<animation>
+  <name>add aerial3 to skyisland</name>
+  <time>2</time>		
+  <action>transform_addchild</action>
+  <subject>SkyIsland3</subject>  
+  <extra>curve_skyisland3_aerial_offset</extra>  
+</animation>
+
+#attach camera to aerial path at selected time
+<animation>
+  <name>attach camera</name>
+  <time>25</time>		
+  <action>transform_moveto</action>
+  <subject>camera</subject>  
+  <extra>curve_skyisland1_aerial</extra>  
+</animation>
+#start motion for aerial path 1
+<animation>
+  <name>aerial 1 start motion</name>
+  <time>26</time>		
+  <action>curve_increment</action>
+  <subject>curve_skyisland1_aerial</subject>  
+  <extra></extra>  
+</animation>
+#attach camera to aerial path at selected time
+<animation>
+  <name>attach camera</name>
+  <time>65</time>		
+  <action>transform_moveto</action>
+  <subject>camera</subject>  
+  <extra>curve_skyisland2_aerial</extra>  
+</animation>
+#start motion for aerial path 2
+<animation>
+  <name>aerial 2 start motion</name>
+  <time>66</time>		
+  <action>curve_increment</action>
+  <subject>curve_skyisland2_aerial</subject>  
+  <extra></extra>  
+</animation>
+#attach camera to aerial path at selected time
+<animation>
+  <name>attach camera</name>
+  <time>105</time>		
+  <action>transform_moveto</action>
+  <subject>camera</subject>  
+  <extra>curve_skyisland3_aerial</extra>  
+</animation>
+#start motion for aerial path 3
+<animation>
+  <name>aerial 3 start motion</name>
+  <time>106</time>		
+  <action>curve_increment</action>
+  <subject>curve_skyisland3_aerial</subject>  
+  <extra></extra>  
 </animation>
 
 ################## end of camera curve path
