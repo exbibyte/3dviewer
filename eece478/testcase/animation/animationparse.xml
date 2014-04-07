@@ -288,13 +288,30 @@
   <extra>400 350 0</extra>  
 </animation>
 
+#add camera lookat point
+<animation>
+  <name>Add camera</name>
+  <time>0</time>		
+  <action>transform_addchild</action>
+  <subject>world</subject>  
+  <extra>camera_lookat_point</extra>  
+</animation>
+#set camera to lookat point
+<animation>
+  <name>set camera lookat point</name>
+  <time>2</time>		
+  <action>lookat</action>
+  <subject>camera</subject>  
+  <extra>camera_lookat_point</extra>  
+</animation>
+
 #######testing only for camera
 <animation>
   <name>Lookat_Camera_to_building</name>
   <time>2</time>		
   <action>lookat</action>
-  <subject>camera</subject>  
-  <extra>SkyIsland3</extra>  
+  <subject>sdfcamera</subject>  
+  <extra>asfdSkyIsland3</extra>  
 </animation>
 
 #add camera curve path for touring skyisland1
@@ -318,15 +335,15 @@
   <name>attach camera</name>
   <time>5.5</time>		
   <action>transform_moveto</action>
-  <subject>su37</subject>  
+  <subject>camera</subject>  
   <extra>curve_skyisland1_camera</extra>  
 </animation>
 #camera look at skyisland1
 <animation>
-  <name>Lookat_Camera_to_building</name>
-  <time>0</time>		
-  <action>lookat</action>
-  <subject>su37</subject>  
+  <name>move lookat point</name>
+  <time>5.5</time>		
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
   <extra>SkyIsland1</extra>  
 </animation>
 
@@ -352,15 +369,15 @@
   <name>attach camera</name>
   <time>31</time>		
   <action>transform_moveto</action>
-  <subject>su37</subject>  
+  <subject>camera</subject>  
   <extra>curve_skyisland2_camera</extra>  
 </animation>
-#camera look at skyisland 2
+#camera look at skyisland2
 <animation>
-  <name>Lookat_Camera_to_building</name>
+  <name>move lookat point</name>
   <time>31</time>		
-  <action>lookat</action>
-  <subject>su37</subject>  
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
   <extra>SkyIsland2</extra>  
 </animation>
 
@@ -385,15 +402,15 @@
   <name>attach camera</name>
   <time>56</time>		
   <action>transform_moveto</action>
-  <subject>su37</subject>  
+  <subject>camera</subject>  
   <extra>curve_skyisland3_camera</extra>  
 </animation>
-#camera look at skyisland 3
+#camera look at skyisland3
 <animation>
-  <name>Lookat_Camera_to_building</name>
+  <name>move lookat point</name>
   <time>56</time>		
-  <action>lookat</action>
-  <subject>su37</subject>  
+  <action>transform_moveto</action>
+  <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
 </animation>
 
