@@ -615,10 +615,15 @@ void ModelAbstraction::MoveToTarget()
   // cout<<"current world transform"<<endl;
   // MatrixMath::PrintMat4x4(CurrentToWorld);
   float offset[3];
+
+  float fraction[3];
+
   for(int i = 0; i < 3; i++)
   {
     offset[i] = targetpos[i] - currentpos[i];
+    fraction[i] = offset[i]*1/10;
   }
-  
-  this->ApplyDeltaTranslate(offset);
+
+  this->ApplyDeltaTranslate(fraction);
+  // this->ApplyDeltaTranslate(offset);
 }
