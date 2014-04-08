@@ -15,6 +15,7 @@ Extra:
 Will implement extra rendering effects (shadow, animation) in near future
 
 Progress screenshots link: https://www.behance.net/gallery/20140226-Sea-Island-Station/14890125
+
 A sample video of animation scene created with this engine: http://youtu.be/KPcf5DIqKU0
 
 
