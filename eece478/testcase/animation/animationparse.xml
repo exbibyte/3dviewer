@@ -11,7 +11,7 @@
   <time>0</time>		
   <action>clock_setfps</action>
   <subject>clock</subject>  
-  <extra>40</extra>  
+  <extra>30</extra>  
 </animation>
 ################## end of clock setting
 
@@ -241,7 +241,7 @@
   <time>2</time>		
   <action>transform_abs_translate</action>
   <subject>curve_spot1_offset</subject>  
-  <extra>-100 100 -100</extra>  
+  <extra>-100 150 -100</extra>  
 </animation>
 <animation>
   <name>Add lightspot 1</name>
@@ -278,7 +278,7 @@
   <time>2</time>		
   <action>transform_abs_translate</action>
   <subject>curve_spot2_offset</subject>  
-  <extra>-100 100 -100</extra>  
+  <extra>-100 150 -100</extra>  
 </animation>
 <animation>
   <name>Add lightspot 2</name>
@@ -339,6 +339,38 @@
   <action>transform_delta_translate</action>
   <subject>lightskyambient</subject>  
   <extra>0 500 0</extra>  
+</animation>
+
+# interpolate skylight intensity over time
+<animation>
+  <name>skylight ambient interpolate</name>
+  <time>20</time>		
+  <action>light_interpolate</action>
+  <subject>lightskyambient</subject>  
+  <extra>
+    1200 1 1 1 0 0 0 0 0 0 0.0 0.0 0.0
+    1200 0.0 0.0 0.0 0 0 0 0 0 0 1 1 1
+  </extra>  
+</animation>
+<animation>
+  <name>skylight ambient interpolate</name>
+  <time>30</time>		
+  <action>light_interpolate</action>
+  <subject>lightsky1</subject>  
+  <extra>
+    900 1 1 1 0 0 0 0 0 0 0.5 0.5 0.5
+    800 0.5 0.5 0.5 0 0 0 0 0 0 1 1 1
+  </extra>  
+</animation>
+<animation>
+  <name>skylight ambient interpolate</name>
+  <time>30</time>		
+  <action>light_interpolate</action>
+  <subject>lightsky2</subject>  
+  <extra>
+    900 1 1 1 0 0 0 0 0 0 0.5 0.5 0.5
+    800 0.5 0.5 0.5 0 0 0 0 0 0 1 1 1
+  </extra>  
 </animation>
 
 ################## end of lighting
@@ -449,7 +481,7 @@
 #start camera path 2
 <animation>
   <name>skyisland 2 tour</name>
-  <time>45</time>		
+  <time>40</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland2_camera</subject>  
   <extra></extra>  
@@ -457,7 +489,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>46</time>		
+  <time>41</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland2_camera</extra>  
@@ -465,7 +497,7 @@
 #camera look at skyisland2
 <animation>
   <name>move lookat point</name>
-  <time>50</time>		
+  <time>41</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland2</extra>  
@@ -482,7 +514,7 @@
 #start camera path 3
 <animation>
   <name>skyisland 3 tour</name>
-  <time>95</time>		
+  <time>75</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland3_camera</subject>  
   <extra></extra>  
@@ -490,7 +522,7 @@
 #attach camera to camera path
 <animation>
   <name>attach camera</name>
-  <time>95</time>		
+  <time>76</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland3_camera</extra>  
@@ -498,7 +530,7 @@
 #camera look at skyisland3
 <animation>
   <name>move lookat point</name>
-  <time>93</time>		
+  <time>77</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
@@ -591,7 +623,7 @@
 #attach camera to aerial path at selected time
 <animation>
   <name>attach camera</name>
-  <time>65</time>		
+  <time>55</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland2_aerial</extra>  
@@ -599,7 +631,7 @@
 #start motion for aerial path 2
 <animation>
   <name>aerial 2 start motion</name>
-  <time>66</time>		
+  <time>56</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland2_aerial</subject>  
   <extra></extra>  
@@ -607,7 +639,7 @@
 #attach camera to aerial path at selected time
 <animation>
   <name>attach camera</name>
-  <time>105</time>		
+  <time>85</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_skyisland3_aerial</extra>  
@@ -615,7 +647,7 @@
 #start motion for aerial path 3
 <animation>
   <name>aerial 3 start motion</name>
-  <time>106</time>		
+  <time>86</time>		
   <action>curve_increment</action>
   <subject>curve_skyisland3_aerial</subject>  
   <extra></extra>  
@@ -631,49 +663,49 @@
 </animation>
 <animation>
   <name>zoomout start motion</name>
-  <time>135</time>		
+  <time>105</time>		
   <action>curve_increment</action>
   <subject>curve_zoomout</subject>  
   <extra></extra>  
 </animation>
 <animation>
   <name>attach camera</name>
-  <time>137</time>		
+  <time>107</time>		
   <action>transform_moveto</action>
   <subject>camera</subject>  
   <extra>curve_zoomout</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>125</time>		
+  <time>95</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>139</time>		
+  <time>109</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland2</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>141</time>		
+  <time>111</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland1</extra>  
 </animation>
 <animation>
   <name>move lookat point</name>
-  <time>143</time>		
+  <time>113</time>		
   <action>transform_moveto</action>
   <subject>camera_lookat_point</subject>  
   <extra>SkyIsland3</extra>  
 </animation>
 <animation>
   <name>set camera lookat </name>
-  <time>135</time>		
+  <time>105</time>		
   <action>lookat</action>
   <subject>camera</subject>  
   <extra>camera_lookat_point</extra>  
@@ -817,6 +849,6 @@
   <time>0</time>		
   <action>transform_addchild</action>
   <subject>world</subject>  
-  <extra>su37</extra>  
+  <extra>su37sdf</extra>  
 </animation>
 

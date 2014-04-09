@@ -49,8 +49,7 @@
 
 <lighting>
   <name>lightskyambient</name>
-  <light_ambient>0.1 0.1 0.1 1</light_ambient>
-  <light_diffuse>0 0 0 0</light_diffuse>
+  <light_ambient>1 1 1 1</light_ambient>
   <light_position>0 0 0 1</light_position>
   <light_turnon></light_turnon>
 </lighting>
