@@ -265,8 +265,8 @@ basic order of drawing operation:
       vCamRotY = vMouseDx/1.f;
       vCamRotX = vMouseDy/1.f;
 
-      DeltaRotate[0] = -1*(vCamRotX - vCamRotOldX);
-      DeltaRotate[1] = -1*(vCamRotY - vCamRotOldY);
+      DeltaRotate[0] = 1*(vCamRotX - vCamRotOldX);
+      DeltaRotate[1] = 1*(vCamRotY - vCamRotOldY);
       DeltaRotate[2] = 0;
 
       //update rotation delta
@@ -302,7 +302,7 @@ basic order of drawing operation:
     }
     
     //apply transforms to camera
-    pCameraEntityRotate->ApplyDeltaTranslate(DeltaTranslate);
+    // pCameraTranslate->ApplyDeltaTranslate(DeltaTranslate);
     pCameraEntityRotate->ApplyDeltaScale(DeltaScale);
     pCameraEntityRotate->ApplyDeltaRotate(DeltaRotate);
     
@@ -387,7 +387,7 @@ int main(int argc, char** argv)
   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize (1280, 720); 
   glutInitWindowPosition (0, 0);
-  glutCreateWindow ("Assignment 1");
+  glutCreateWindow ("Assignment 3");
   
   //initialize glew for vertex shader
   GLenum err = glewInit();
@@ -398,12 +398,17 @@ int main(int argc, char** argv)
   }
 
   glEnable(GL_POLYGON_SMOOTH);
+  glEnable(GL_SHADE_MODEL);
+  glShadeModel(GL_SMOOTH);
   glEnable(GL_TEXTURE_2D);
   glFrontFace(GL_CCW);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);    
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); 
+  glClearDepth(1.0f);   
   glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
+  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   glEnable(GL_LIGHTING);	
   glEnable(GL_NORMALIZE);
   glutReshapeFunc(reshape);
@@ -422,12 +427,15 @@ int main(int argc, char** argv)
 
   //initialize camera stand and camera
   pCameraEntityRotate = new ModelAbstraction();
-  pCameraEntityRotate->Name = "camerarotate";
+  pCameraEntityRotate->Name = "camera";
   pCameraEntityRotate->SetCamera(pCameraEntityRotate);
 
-  pCameraTranslate = new ModelAbstraction();
-  pCameraTranslate->Name = "camera";
-  pCameraTranslate->SetCamera(pCameraEntityRotate);
+  // pCameraTranslate = new ModelAbstraction();
+  // pCameraTranslate->Name = "camera_translate";
+  // pCameraTranslate->SetCamera(pCameraEntityRotate);
+
+  // float test[3] = {0,10,0};
+  // pCameraEntityRotate->ApplyDeltaTranslate(test);
 
   //main world
   pWorld = new ModelAbstraction();
@@ -436,7 +444,7 @@ int main(int argc, char** argv)
 
   //add camera to world
   // pWorld->AddChild(pCameraTranslate);
-  pCameraTranslate->AddChild(pCameraEntityRotate);
+  // pCameraTranslate->AddChild(pCameraEntityRotate);
 
   //parse city
   CityParse cityparser;
@@ -462,8 +470,8 @@ int main(int argc, char** argv)
   //add models to world and sync model pool to each object and also set camera for each entity to calculate world-eye transform
   manager.AddModel(pCameraEntityRotate);
   pCameraEntityRotate->SetModelPool(manager.GetModelPool());
-  manager.AddModel(pCameraTranslate);
-  pCameraTranslate->SetModelPool(manager.GetModelPool());
+  // manager.AddModel(pCameraTranslate);
+  // pCameraTranslate->SetModelPool(manager.GetModelPool());
   manager.AddModel(pWorld);
   pWorld->SetModelPool(manager.GetModelPool());
   for(auto i: vCurve)
