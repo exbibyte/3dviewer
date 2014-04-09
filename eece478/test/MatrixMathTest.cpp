@@ -15,17 +15,7 @@ int main()
 
   cout<<"Multiplication result:"<<endl;
 
-  //for each row
-  for(int i = 0; i < 4; i++)
-  {
-    //for each column
-    for(int j = 0; j < 4; j++)
-    {
-      cout<<out[j + i*4]<<" ";
-    }
-    cout<<endl;
-  }
-  cout<<endl;
+  PrintMat4x4(out);
 
   cout<<"Inverse of in1 result:"<<endl;
   
@@ -33,17 +23,15 @@ int main()
 
   InvertMatrix(in1, inv);
 
-  //for each row
-  for(int i = 0; i < 4; i++)
-  {
-    //for each column
-    for(int j = 0; j < 4; j++)
-    {
-      cout<<inv[j + i*4]<<" ";
-    }
-    cout<<endl;
-  }
-  cout<<endl;
+  PrintMat4x4(inv);
+
+  cout<<"normalize inv(in1) result:"<<endl;
+  
+  float norm[16];
+
+  Mat4x4Normalize(inv, norm);
+
+  PrintMat4x4(norm);
 
   return 0;
 }
