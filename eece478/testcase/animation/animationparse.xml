@@ -4,7 +4,7 @@
   <time>0</time>		
   <action>clock_setscale</action>
   <subject>clock</subject>  
-  <extra>1</extra>  
+  <extra>0.2</extra>  
 </animation>
 <animation>
   <name>SetClockFps</name>
@@ -18,14 +18,14 @@
 ################## start of recorder setting
 <animation>
   <name>Recorder Start</name>
-  <time>0</time>		
+  <time>5</time>		
   <action>recorder_start</action>
   <subject>recorder</subject>  
   <extra></extra>  
 </animation>
 <animation>
   <name>Recorder End</name>
-  <time>0</time>		
+  <time>120</time>		
   <action>recorder_end</action>
   <subject>recorder</subject>  
   <extra></extra>  
