@@ -17,8 +17,8 @@ Recorder::Recorder()
   this->IsRecording = false;
   this->PosX = 0;
   this->PosY = 0;
-  this->Width = 512;
-  this->Height = 512;
+  this->Width = 1280;
+  this->Height = 720;
   this->pImage = new unsigned char[this->Width*this->Height*3];
 }
 

@@ -121,7 +121,6 @@ void Lighting::Draw()
       // calculate intensities based on interpolated values
       for(int i = 0; i < 3; i++)
       {
-	cout<<"light interpolate: "<<pos[0]<<endl;
 	LightAmbianceInterpolate[i] = pos[0] * LightAmbianceInterpolate[i];
 	LightSpecularInterpolate[i] = pos[1] * LightSpecularInterpolate[i];
 	LightDiffuseInterpolate[i] = pos[2] * LightDiffuseInterpolate[i];

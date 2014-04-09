@@ -106,11 +106,11 @@ void ModelAbstraction::Action(string input)
       combinestr += this->vAction.at(i);
     }
 
-    cout<<"finding model: "<<combinestr<<endl;
+    // cout<<"finding model: "<<combinestr<<endl;
     ModelAbstraction * model = this->GetModel(combinestr);
     if(model != NULL)
     {
-      cout<<"model found"<<endl;
+      // cout<<"model found"<<endl;
       this->AddChild(model);
     }
   }
@@ -128,11 +128,11 @@ void ModelAbstraction::Action(string input)
       combinestr += this->vAction.at(i);
     }
 
-    cout<<"finding model: "<<combinestr<<endl;
+    // cout<<"finding model: "<<combinestr<<endl;
     ModelAbstraction * model = this->GetModel(combinestr);
     if(model != NULL)
     {
-      cout<<"model found"<<endl;
+      // cout<<"model found"<<endl;
       this->AddParent(model);
     }
   }
@@ -267,11 +267,9 @@ void ModelAbstraction::AddChild(ModelAbstraction* child)
     offset[i] = targetpos[i] - entitypos[i];
   }
   
-  if(this->Name == "SkyIsland1")
-  {
-    cout<<"offset"<<endl;
-    MatrixMath::PrintMat4x1(offset);
-  }
+  // cout<<"offset"<<endl;
+  // MatrixMath::PrintMat4x1(offset);
+ 
 
   ModelAbstraction * temp = child;
   
@@ -331,8 +329,6 @@ void ModelAbstraction::RemoveParent()
 	foundroot = true;
       else
 	root = root->Parent;
-
-      cout<<root->Name<<endl;
     }
 
     if(root == this->Parent)
