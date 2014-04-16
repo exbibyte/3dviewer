@@ -22,6 +22,10 @@ class Recorder : public ModelAbstraction
   Recorder();
   /// sets image parameter
   void SetImageParam(int posx, int posy, int width, int height); 
+  /// sets image parameter
+  void SetImageParamSize(int w, int h);
+  /// sets image parameter
+  void SetImageParamPosition(int x, int y);
   /// sets output file
   void SetOutputPath(string path);
   /// start

@@ -8,6 +8,7 @@
 
 #include <string>
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -51,6 +52,19 @@ void Recorder::SetImageParam(int posx, int posy, int width, int height)
   this->pImage = new unsigned char[width*height*3];
 }
 
+void Recorder::SetImageParamSize(int width, int height)
+{
+  this->Width = width;
+  this->Height = height;
+  this->pImage = new unsigned char[width*height*3];
+}
+
+void Recorder::SetImageParamPosition(int posx, int posy)
+{
+  this->PosX = posx;
+  this->PosY = posy;
+}
+
 void Recorder::SaveImage()
 {
   if(this->IsRecording == false)
@@ -91,18 +105,46 @@ void Recorder::SaveImage()
 void Recorder::FormatAction()
 {
   int count = 0;
-  for(auto i: vAction)
+
+  if(this->vAction.empty())
+    return;
+
+  //get action type
+  string actiontype = this->vAction[0];
+
+  if(actiontype == "recorder_start")
   {
-    if(count == 0)
-    {
-      if(i == "recorder_start")
-      {
-	this->Start();
-      }
-      else if(i == "recorder_end")
-      {
-	this->End();
-      }
-    }
+    this->Start();
+  }
+  else if(actiontype == "recorder_end")
+  {
+    this->End();
+  }
+  else if(actiontype == "recorder_imagesize")
+  {
+
+    if(this->vAction.size() < 3)
+      return;
+
+    int w = atof(this->vAction[1].c_str());
+    int h = atof(this->vAction[2].c_str());
+    if(w == 0.0 || h == 0.0)
+      return;
+
+    //resize output image
+    this->SetImageParamSize(w, h);
+  }
+  else if(actiontype == "recorder_imageposition")
+  {
+    if(this->vAction.size() < 3)
+      return;
+
+    int x = atof(this->vAction[1].c_str());
+    int y = atof(this->vAction[2].c_str());
+    if(x == 0.0 || y == 0.0)
+      return;
+
+    //reposition output image
+    this->SetImageParamPosition(x, y);
   }
 }
