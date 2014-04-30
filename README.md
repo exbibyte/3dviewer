@@ -25,11 +25,17 @@ run doxygen doxyconfig
 
 ## Running ##
 
+Animation Scene:
 Required files: city file, animation file, motionpath file, lighting file, model files
 
 1. extract model files from testcase/models/ to testcase/city1/ folder
 2. create an outputimage/ folder to store captured images
-3. run using: build/RecorderTest testcase/motionpaths/curvetest1.xml testcase/animation/animationparse.xml testcase/city1/funland.city testcase/lighting/lighting.xml norecord outputimage/
+3. make recordertest
+4. run using: build/RecorderTest testcase/motionpaths/curvetest1.xml testcase/animation/animationparse.xml testcase/city1/funland.city testcase/lighting/lighting.xml norecord outputimage/
+
+Model Converter:
+1. make obj2custom
+2. run using build/obj2custom <input .obj path> <output file path> <output object name>
 
 
 
