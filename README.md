@@ -37,7 +37,7 @@ Required files: city file, animation file, motionpath file, lighting file, model
 Model Converter:
 
 1. make obj2custom
-2. run using build/obj2custom <input .obj path> <output file path> <output object name>
+2. run using build/obj2custom inputObjPath outputFilePath outputObjectName
 
 
 
