@@ -18,5 +18,15 @@ Progress screenshots link: https://www.behance.net/gallery/20140226-Sea-Island-S
 
 A sample video of animation scene created with this engine: http://youtu.be/KPcf5DIqKU0
 
+Documentation #####################################################################################################
+run doxygen doxyconfig
+
+Running ###########################################################################################################
+Required files: city file, animation file, motionpath file, lighting file, model files
+
+1. extract model files from testcase/models/ to testcase/city1/ folder
+2. create an outputimage/ folder to store captured images
+3. run using: build/RecorderTest testcase/motionpaths/curvetest1.xml testcase/animation/animationparse.xml testcase/city1/funland.city testcase/lighting/lighting.xml norecord outputimage/
+
 
 
