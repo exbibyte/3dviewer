@@ -1,5 +1,8 @@
-#include <cmath>
+#include <math.h>
 #include <stdexcept>
+#include <iostream>
+
+using namespace std;
 
 #include "Quat.h"
 #include "Vec.h"
@@ -110,7 +113,7 @@ void Quat::AxisAngleDegree( const float axis[], float angle ){
   v._vec[1] = axis[1];
   v._vec[2] = axis[2];
 
-  v.Normalize();
+  v.NormalizeCurrent();
 
   double radians = (angle/180.0f)*3.14159265f;
   
@@ -135,11 +138,22 @@ void Quat::AxisAngleDegreeVector( const Vec & v, float angle ){
   this->AxisAngleDegree( axis, angle );
 }
 
-float Quat::Length() const{
-   return (float)sqrt( double(_quat[0]*_quat[0] + _quat[1]*_quat[1] + _quat[2]*_quat[2] + _quat[3]*_quat[3]) );
+void Quat::SetTranslation( const float a [] ){
+  _quat[0] = a[0]/2; //dx
+  _quat[1] = a[1]/2; //dy
+  _quat[2] = a[2]/2; //dz
+  _quat[3] = 0;
 }
 
-void Quat::Normalize(){
+float Quat::Length() const{
+  return (float)sqrt( LengthSquared() );
+}
+
+float Quat::LengthSquared() const{
+  return (float) double(_quat[0]*_quat[0] + _quat[1]*_quat[1] + _quat[2]*_quat[2] + _quat[3]*_quat[3]);
+}
+
+void Quat::NormalizeQuatCurrent(){
    float len = Length();
 
    if( len == 0 )
@@ -151,6 +165,41 @@ void Quat::Normalize(){
    _quat[3] /= len;
 }
 
+Quat Quat::NormalizeQuat() const{
+  Quat q = *this;
+  q.NormalizeQuatCurrent();
+  return q;
+}
+
+Quat Quat::Log() const{
+  Quat q;
+  //set a of quat
+  float q_len = this->Length();
+  q._quat[3] = log( q_len );
+
+  //copy x,y,z of quat into vec
+  Vec v;
+  v.SetDim(3);
+  for( int i = 0; i < 3; i++ ){
+    v[i] = _quat[i];
+  }
+
+  //get v/||v||
+  float v_len = v.Magnitude();
+  v.NormalizeCurrent();
+
+  //get arccos(a/||v||)
+  float m = acos( _quat[3] / q_len );
+  v = ScaleVec( m, v );
+
+  //set x,y,z of quat
+  for( int i = 0; i < 3; i++ ){
+    q._quat[i] = v[i];
+  }
+
+  return q;
+}
+
 Quat Quat::Pow( float t ){
   Quat result = (*this); //copy
 
@@ -159,7 +208,7 @@ Quat Quat::Pow( float t ){
   v._vec[0] = _quat[0];
   v._vec[1] = _quat[1];
   v._vec[2] = _quat[2];
-  v.Normalize();
+  v.NormalizeCurrent();
   
   float len = this->Length();
 
@@ -187,7 +236,7 @@ Quat Quat::Pow( float t ){
   return result;
 }
 
-void Quat::ToMatrix( float mat[] ) const{
+void Quat::ToMatrixRot( float mat[] ) const{
 
   // column 1
   mat[ 0] = 1.0f - 2.0f * ( _quat[1] * _quat[1] + _quat[2] * _quat[2] ); 
@@ -214,15 +263,25 @@ void Quat::ToMatrix( float mat[] ) const{
   mat[15] = 1.0f;
 }
 
+void Quat::ToMatrixTrans( float mat[] ) const{
+  for( int i = 0; i < 12; i++ ){
+    mat[i] = 0;
+  }
+  mat[12] = 2 * _quat[0];
+  mat[13] = 2 * _quat[1]; 
+  mat[14] = 2 * _quat[2];
+  mat[15] = 1;
+}
+
 Quat Quat::Negate() const {
   return Quat( -_quat[0], -_quat[1], -_quat[2], -_quat[3] );
 }
 
-Quat Interpolate( const Quat q1, const Quat q2, float r ){
+Quat InterpolateBasic( const Quat q1, const Quat q2, float r ){
   Quat q;
 
   for( int i = 0 ; i < 4; i++) {
-    q._quat[i] = (1-r) * q1._quat[i] + r * q1._quat[i];
+    q._quat[i] = (1-r) * q1._quat[i] + r * q2._quat[i];
   }
 
   return q;
@@ -236,7 +295,7 @@ Quat ScaleAdd( float s, const Quat q1, const Quat q2 ){
   return Quat( s * q1._quat[0] + q2._quat[0], s * q1._quat[1] + q2._quat[1], s * q1._quat[2] + q2._quat[2], s * q1._quat[3] + q2._quat[3] );
 }
 
-Quat Slerp( const Quat & q1, const Quat & q2, float t ){
+Quat InterpolateSlerp( const Quat & q1, const Quat & q2, float t ){
   Quat result, p2 = q2;
 
   //q2 = q1 * result

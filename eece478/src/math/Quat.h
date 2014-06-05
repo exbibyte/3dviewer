@@ -30,18 +30,23 @@ class Quat{
 
   void              AxisAngleDegree( const float axis[], float angle );
   void              AxisAngleDegreeVector( const Vec & v, float angle );  
+  void              SetTranslation( const float a [] );
   float             Length() const;
-  void              Normalize();
+  float             LengthSquared() const;
+  void              NormalizeQuatCurrent();
+  Quat              NormalizeQuat() const;
+  Quat              Log() const; //log(q) = log ||q|| + v/||v|| * arccos(a/||v||)
   Quat              Pow( float t );
-  void              ToMatrix( float mat[] ) const;
+  void              ToMatrixRot( float mat[] ) const; //gets rotation 4x4 matrix
+  void              ToMatrixTrans( float mat[] ) const; //gets translation 4x4 matrix
   inline Quat       Conjugate() const { return Quat(-_quat[0], -_quat[1], -_quat[2], _quat[3]); }
   Quat              Negate() const; //negative version
 };
 
 Quat                Scale( float s, const Quat q); // s*q
 Quat                ScaleAdd( float s, const Quat q1, const Quat q2 ); //s*q1 + q2
-Quat                Slerp(const Quat & q1, const Quat & q2, float t); //spherical linear interpolation
-Quat                Interpolate( const Quat q1, const Quat q2, float r ); // (1-r) * q1 + r * q2              
+Quat                InterpolateSlerp(const Quat & q1, const Quat & q2, float t); //spherical linear interpolation
+Quat                InterpolateBasic( const Quat q1, const Quat q2, float r ); // (1-r) * q1 + r * q2              
 
 
 #endif
