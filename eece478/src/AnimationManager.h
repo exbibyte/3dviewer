@@ -17,24 +17,14 @@ class AnimationManager : public Clock, public ModelPool
 {
  private:
   /// storage for animation
-  vector<tAnimation> vAnimation;
-
+  vector<tAnimation>                   vAnimation;
  public:
-
-  AnimationManager();
-  ~AnimationManager();
-
-  /// adds animation
-  void AddAnimation(tAnimation animation);
-  
-  /// removes animations according to matching animation name
-  bool RemoveAnimation(tAnimation animation);
-
-  /// gets animation from matching name
-  tAnimation GetAnimation(string name);
-
-  /// implement function to update models based on clock trigger
-  void TickAction(string a);
+                                       AnimationManager();
+                                       ~AnimationManager();
+  void                                 AddAnimation(tAnimation animation);   /// adds animation
+  bool                                 RemoveAnimation(tAnimation animation);   /// removes animations according to matching animation name
+  tAnimation                           GetAnimation(string name);   /// gets animation from matching name
+  void                                 TickAction(string a);   /// implement function to update models based on clock trigger
 };
 
 #endif

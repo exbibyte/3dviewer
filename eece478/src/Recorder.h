@@ -10,33 +10,24 @@ using namespace std;
 class Recorder : public ModelAbstraction
 {
  private:
-  bool IsRecording;
-  int PosX;
-  int PosY;
-  int Width;
-  int Height;
-  string OutputPath;
-  unsigned char * pImage;
-  int ImageCount;
+  bool                    IsRecording;
+  int                     PosX;
+  int                     PosY;
+  int                     Width;
+  int                     Height;
+  string                  OutputPath;
+  unsigned char *         pImage;
+  int                     ImageCount;
  public:
-  Recorder();
-  /// sets image parameter
-  void SetImageParam(int posx, int posy, int width, int height); 
-  /// sets image parameter
-  void SetImageParamSize(int w, int h);
-  /// sets image parameter
-  void SetImageParamPosition(int x, int y);
-  /// sets output file
-  void SetOutputPath(string path);
-  /// start
-  void Start();
-  /// stop
-  void End();
-  /// write to file
-  void SaveImage();
-
-  ///implemented method from ModelAbstraction for recording
-  void FormatAction();
+                          Recorder();
+  void                    SetImageParam(int posx, int posy, int width, int height); 
+  void                    SetImageParamSize(int w, int h);
+  void                    SetImageParamPosition(int x, int y);
+  void                    SetOutputPath(string path);
+  void                    Start();
+  void                    End();
+  void                    SaveImage();
+  void                    FormatAction();  ///implemented method from ModelAbstraction for recording
 };
 
 #endif

@@ -20,15 +20,14 @@ using namespace std;
 class ModelParse
 {
  private:
-  bool bEmpty;
+  bool                          bEmpty;
   ///container to hold parsed data types such as vertices, textures, triangles, normals, and model name
-  vector<ModelData*> vModelData; 
+  vector< ModelData * >         vModelData; 
 
  public:
-  ModelParse();
-  ~ModelParse();
-  ///factory function to generate model entity from input model file
-  ModelEntity * GetEntity(string path);
+                                ModelParse();
+				~ModelParse();
+  ModelEntity *                 GetEntity(string path);  ///factory function to generate model entity from input model file
 };
 
 #endif

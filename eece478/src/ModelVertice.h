@@ -23,11 +23,9 @@ typedef tuple<int, float,float,float> tVertice;
 class ModelVertice: ModelData
 {
  public:
-  ModelVertice();
-  ///container of formatted data
-  vector<tVertice> vVertice;
-  ///formats vertices
-  void FormatData();
+                         ModelVertice();
+  vector< tVertice >     vVertice;  ///container of formatted data
+  void                   FormatData();  ///formats vertices
 };
 
 #endif

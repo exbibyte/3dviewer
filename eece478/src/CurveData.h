@@ -26,11 +26,10 @@ typedef tuple<int, float,float,float, float,float,float, float,float,float, floa
 class CurveData : public ModelData
 {
  public:
-  ///storage for bezier curve control points
-  vector<tCurveControl> vCurveControl;
-  CurveData();
-  void FormatData(); 
-  void ClearData(); 
+  vector<tCurveControl>           vCurveControl;   ///storage for bezier curve control points
+                                  CurveData();
+  void                            FormatData(); 
+  void                            ClearData(); 
 };
 
 #endif

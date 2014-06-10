@@ -23,78 +23,42 @@ typedef tuple<int,float*> TransformQueue;
 class ModelTransform
 {
  private:
-  ///initial local model orientation
-  float ModelScale[3] = {1,1,1};
-  float ModelTranslate[3] = {0,0,0};
-  float ModelRotate[3] = {0,0,0};
-
-  ///local transform matrices
-  float vModelTranslation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-  float vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-  float vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-  float vModelAllTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-  float vModelLookat[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
-
-  ///parent transform matrix
-  float vModelParentTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-
-  float vModelCombinedTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-
-  vector<TransformQueue> vTransformQueue;
-
-  void PutInTransformQueue(int, float[]);
-
-  ///stores world to camera transformation
-  float vWorldtoCamTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-
-  int TransformMode = 0;
+  float                              ModelScale[3] = {1,1,1};
+  float                              ModelTranslate[3] = {0,0,0};
+  float                              ModelRotate[3] = {0,0,0};
+  float                              vModelTranslation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  ///local transform matrices
+  float                              vModelScaling[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  float                              vModelRotation[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  float                              vModelAllTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  float                              vModelLookat[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  
+  float                              vModelParentTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};  ///parent transform matrix
+  float                              vModelCombinedTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  vector<TransformQueue>             vTransformQueue;
+  void                               PutInTransformQueue(int, float[]);
+  float                              vWorldtoCamTransform[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};   ///stores world to camera transformation
+  int                                TransformMode = 0;
  public:
-
-  ModelTransform();
-
-  ///functions to change orientation
-  void ApplyScale(float scale[]);
-  void ApplyRotate(float rotate[]);
-  void ApplyTranslate(float translate[]);
-
-  void ApplyDeltaScale(float scale[]);
-  void ApplyDeltaRotate(float rotate[]);
-  void ApplyDeltaTranslate(float translate[]);
-
-  ///applies transformations in queue
-  void ApplyTransform();
-
-  ///sets intial model orientation
-  void InitializeOrientation(float scale[], float rotate[], float translate[]);
-  
-  ///sets transform from the parent 
-  void SetParentTransform(float matrix[]);
-
-  ///returns combined transform of current entity
-  void GetCombinedTransform(float out[]);
-
-  //gets the parent transformation of the current entity
-  void GetParentTransform(float out[]);
-
-  void GetScale(float out[]);
-  void GetTranslate(float out[]);
-  void GetRotate(float out[]);
-
-  ///sets the world to eye transform
-  void SetWorldtoCamTransform(float[]);
-
-  ///gets the world to eye transform
-  void GetWorldtoCamTransform(float[]);
-
-  ///gets local transform
-  void GetLocalTransform(float out[]);
-
-  ///inverts to negative of current transform 
-  void InvertTransform();
-
-  void SetTransformMode(int);
-
-  void SetLookatTransform(float in[]);
+                                     ModelTransform();
+  void                               ApplyScale(float scale[]);
+  void                               ApplyRotate(float rotate[]);
+  void                               ApplyTranslate(float translate[]);
+  void                               ApplyDeltaScale(float scale[]);
+  void                               ApplyDeltaRotate(float rotate[]);
+  void                               ApplyDeltaTranslate(float translate[]);
+  void                               ApplyTransform();  ///applies transformations in queue
+  void                               InitializeOrientation(float scale[], float rotate[], float translate[]);
+  void                               SetParentTransform(float matrix[]);
+  void                               GetCombinedTransform(float out[]);  ///returns combined transform of current entity
+  void                               GetParentTransform(float out[]);
+  void                               GetScale(float out[]);
+  void                               GetTranslate(float out[]);
+  void                               GetRotate(float out[]);
+  void                               SetWorldtoCamTransform(float[]);   ///sets the world to eye transform
+  void                               GetWorldtoCamTransform(float[]);  ///gets the world to eye transform
+  void                               GetLocalTransform(float out[]);
+  void                               InvertTransform();
+  void                               SetTransformMode(int);
+  void                               SetLookatTransform(float in[]);
 };
 
 #endif

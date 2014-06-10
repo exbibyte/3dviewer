@@ -21,21 +21,15 @@ enum eDataType
 ///acts as a helper class to the parser. It provides matching DOM tags and separates data to be used by derived classes
 class ModelData{
  protected:
-  ///contains separated data to be accessed by derived class
-  vector<string> vDataItem; 
+  vector<string>           vDataItem;   ///contains separated data to be accessed by derived class
  public:
-  ///start tag for parsing
-  string mBeginTag; 
-  ///end tag for parsing
-  string mEndTag;  
-  //type of stored data
-  eDataType mType;
-  ///seperates space delimited input string into a vector of strings in vDataItem
-  void SetData(string input);  
-  ///function to save data to specific format
-  virtual void FormatData()=0; 
-  virtual ~ModelData(){};
-  virtual void ClearData(){}; 
+  string                   mBeginTag;   ///start tag for parsing
+  string                   mEndTag;    ///end tag for parsing
+  eDataType                mType;  //type of stored data
+  void                     SetData(string input);  ///seperates space delimited input string into a vector of strings in vDataItem
+  virtual void             FormatData()=0;  ///function to save data to specific format
+  virtual                  ~ModelData(){};
+  virtual void             ClearData(){}; 
 };
 
 #endif

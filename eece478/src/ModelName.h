@@ -21,11 +21,9 @@ typedef tuple<int,string> tName;
 class ModelName: ModelData
 {
  public:
-  ModelName();
-  ///formatted data
-  vector<tName> vName;
-  ///saves parsed data to tuple
-  void FormatData();  
+                ModelName();
+  vector<tName> vName; ///formatted data
+  void          FormatData();  ///saves parsed data to tuple
 };
 
 #endif

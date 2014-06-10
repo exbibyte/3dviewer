@@ -30,11 +30,9 @@ typedef tuple<int, int,int,int, int, int, float,float,float,float,float,float> t
 class ModelTriangle: ModelData
 {
  public:
-  ModelTriangle();
-  ///container for formatted triangle data
-  vector<tTriangle> vTriangle;
-  ///formats triangle data
-  void FormatData();
+                                ModelTriangle();
+  vector< tTriangle >           vTriangle;  ///container for formatted triangle data
+  void                          FormatData();   ///formats triangle data
 };
 
 #endif

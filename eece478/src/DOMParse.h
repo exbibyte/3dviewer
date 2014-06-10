@@ -16,18 +16,11 @@ using namespace std;
 class DOMParse
 {
  private:
-
-  ///DOM types to register a match
-  vector<tDOMMatcher> vDOMMatcher; 
-
-  ///helper function to get nested data
-  void NestedDOM(DOMNode * node, string input);
-
+  vector<tDOMMatcher>                  vDOMMatcher;   ///DOM types to register a match
+  void                                 NestedDOM(DOMNode * node, string input);   ///helper function to get nested data
  public:
-  DOMParse();
-
-  ///factory function to generate DOM tree
-  DOMNode* GetDOM(string path);
+                                       DOMParse();
+  DOMNode *                            GetDOM(string path);   ///factory function to generate DOM tree
 
 };
 

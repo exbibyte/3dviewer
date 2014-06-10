@@ -22,11 +22,9 @@ typedef tuple<int, float,float,float> tNormal;
 class ModelNormal: ModelData
 {
  public:
-  ModelNormal();
-  ///container for formatted data
-  vector<tNormal> vNormal;
-  ///formats data
-  void FormatData();
+                      ModelNormal();
+  vector< tNormal >   vNormal;  ///container for formatted data
+  void                FormatData();  ///formats data
 };
 
 #endif

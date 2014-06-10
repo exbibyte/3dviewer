@@ -18,22 +18,14 @@ using namespace std;
 class TrajectoryParse : public DOMParse
 {
  private:
-  bool bEmpty;
-  ///container to hold parsed data types
-  vector<ModelData*> vModelData; 
-
-  ///helper function to find all curves in DOM
-  void FindCurve(vector<DOMNode *> * pvpDOM, DOMNode * node);
-
-  ///helper function to intialize curves to control points
-  void InitializeCurve(CurvePath * pCurve, CurveData * pCurveData);
-
+  bool                             bEmpty;
+  vector< ModelData * >            vModelData;   ///container to hold parsed data types
+  void                             FindCurve( vector< DOMNode * > * pvpDOM, DOMNode * node );  ///helper function to find all curves in DOM
+  void                             InitializeCurve(CurvePath * pCurve, CurveData * pCurveData);  ///helper function to intialize curves to control points
  public:
-  TrajectoryParse();
-  ~TrajectoryParse();
-
-  ///factory function to generate CurvePath entities from input Trajectory file
-  vector<CurvePath *> GetTrajectories(string path);
+                                   TrajectoryParse();
+				   ~TrajectoryParse();
+  vector<CurvePath *>              GetTrajectories(string path);  ///factory function to generate CurvePath entities from input Trajectory file
 };
 
 #endif

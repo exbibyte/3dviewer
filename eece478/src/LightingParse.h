@@ -19,19 +19,12 @@ class Lighting;
 class LightingParse : public DOMParse
 {
  private:
-
-  ///container to hold parsed data types
-  vector<ModelData*> vModelData; 
-
-  ///helper function to find all lightings in DOM
-  void FindLighting(vector<DOMNode *> * pvpDOM, DOMNode * node);
-
+  vector<ModelData*>                     vModelData;   ///container to hold parsed data types
+  void                                   FindLighting(vector<DOMNode *> * pvpDOM, DOMNode * node);   ///helper function to find all lightings in DOM
  public:
-  LightingParse();
-  ~LightingParse();
-
-  ///factory function to generate lighting entities from input lighting file
-  vector<Lighting*> GetLightings(string path);
+                                         LightingParse();
+					 ~LightingParse();
+  vector<Lighting*>                      GetLightings(string path);   ///factory function to generate lighting entities from input lighting file
 };
 
 #endif

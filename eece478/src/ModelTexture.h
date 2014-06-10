@@ -20,11 +20,9 @@ typedef tuple<int, string> tTexture;
 class ModelTexture: ModelData
 {
  public:
-  ModelTexture();
-  ///container for model texture
-  vector<tTexture> vTexture;
-  ///formats texture names 
-  void FormatData();
+                            ModelTexture();
+  vector< tTexture >        vTexture;  ///container for model texture
+  void                      FormatData();  ///formats texture names 
 };
 
 #endif

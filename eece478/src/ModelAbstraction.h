@@ -13,73 +13,34 @@ using namespace std;
 class ModelAbstraction : public ModelTransform, public ModelPool
 {
  private:
-  ///storage for child and parent entities used for transforms
-  vector<ModelAbstraction*> vChild;
-  ModelAbstraction* Parent;
-  
-  ///root node for rendering using world to eye transform from the camera
-  ModelAbstraction* pCamera;
-
-  ///target entity to lookat to
-  ModelAbstraction* pLookatTarget;
-  ModelAbstraction* pMoveToTarget;
+  vector<ModelAbstraction*>              vChild;
+  ModelAbstraction *                     Parent;
+  ModelAbstraction *                     pCamera;   ///root node for rendering using world to eye transform from the camera
+  ModelAbstraction *                     pLookatTarget;   ///target entity to lookat to
+  ModelAbstraction *                     pMoveToTarget;
 
  public:	
-
-  ///storage for received action
-  vector<string> vAction;
-
-  /// storage for model identifier
-  string Name;
-
-  ModelAbstraction();
-
-  ///updates model view transforms and calls implementable draw method
-  void DrawModel();
-  
-  ///implementable draw function
-  virtual void Draw();
-
-  ///implementable action function
-  virtual void Action(string input);
-
-  ///implementable action formatting
-  virtual void FormatAction(){};
-
-  void AddChild(ModelAbstraction* child);
-  void RemoveChild(ModelAbstraction* child);
-  void AddParent(ModelAbstraction* parent);
-  void RemoveParent();
-
-  ///gets the parent transform if it exists
-  void UpdateParentTransform();
-
-  //updates and gets transforms from world (root node) to current node
-  void GetWorldToEntityTransform(float out[]);
-
-  //updates and gets transforms from world (root node) to camera
-  void UpdateWorldToCameraTransform();
-
-  /// draws this and all children entities in this hierarchy
-  void DrawCascade();
-
-  ///sets the entity to look at
-  bool SetLookatTarget(ModelAbstraction *);
-
-  ///rotates to face set lookat target
-  void LookAtTarget();
-
-  ///gets the target orientation with respect to this transformation
-  bool GetTargetToCurrentTransform(ModelAbstraction * target, float out[]);
-
-  ///sets the camera node to apply world to eye transform to this entity
-  void SetCamera(ModelAbstraction * cam);
-
-  ///moves to target location
-  void MoveToTarget();
-
-  ///sets target to move to
-  void SetMoveToTarget(ModelAbstraction *);
+  vector<string>                         vAction;  ///storage for received action
+  string                                 Name;  /// storage for model identifier
+                                         ModelAbstraction();
+  void                                   DrawModel();  ///updates model view transforms and calls implementable draw method
+  virtual void                           Draw();  ///implementable draw function
+  virtual void                           Action( string input );  ///implementable action function
+  virtual void                           FormatAction(){};  ///implementable action formatting
+  void                                   AddChild( ModelAbstraction * child );
+  void                                   RemoveChild( ModelAbstraction * child );
+  void                                   AddParent( ModelAbstraction * parent );
+  void                                   RemoveParent();
+  void                                   UpdateParentTransform();  ///gets the parent transform if it exists
+  void                                   GetWorldToEntityTransform( float out[] );
+  void                                   UpdateWorldToCameraTransform();  //updates and gets transforms from world (root node) to camera
+  void                                   DrawCascade();  /// draws this and all children entities in this hierarchy
+  bool                                   SetLookatTarget( ModelAbstraction * );  ///sets the entity to look at
+  void                                   LookAtTarget();  ///rotates to face set lookat target
+  bool                                   GetTargetToCurrentTransform( ModelAbstraction * target, float out[] );
+  void                                   SetCamera( ModelAbstraction * cam );
+  void                                   MoveToTarget();  ///moves to target location
+  void                                   SetMoveToTarget( ModelAbstraction * );   ///sets target to move to
 };
 
 #endif

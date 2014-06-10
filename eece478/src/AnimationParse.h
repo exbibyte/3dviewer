@@ -26,16 +26,12 @@ using namespace std;
 class AnimationParse : public DOMParse
 {
  private:
-
   ///helper function to find all animations in DOM
-  void FindAnimation(vector<DOMNode *> * pvpDOM, DOMNode * node);
-
+  void                   FindAnimation(vector<DOMNode *> * pvpDOM, DOMNode * node);
  public:
-  AnimationParse();
-  ~AnimationParse();
-
-  ///factory function to generate animation entities from input animation file
-  vector<tAnimation> GetAnimations(string path);
+                         AnimationParse();
+                         ~AnimationParse();
+  vector<tAnimation>     GetAnimations(string path);   ///factory function to generate animation entities from input animation file
 };
 
 #endif

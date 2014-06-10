@@ -9,26 +9,15 @@ using namespace std;
 class DOMNode
 {
  public:
-  DOMNode();
-  ~DOMNode();
-
-  ///node type
-  string Type;
-
-  /// parent node
-  DOMNode * Parent;
-
-  /// children nodes
-  vector<DOMNode *> Children;
-
-  ///parsed data
-  string Data;
-
-  void AddChild(DOMNode * node);
-
-  void Print();
-
-  void PrintBreadth();
+                         DOMNode();
+                         ~DOMNode();
+  string                 Type;
+  DOMNode *              Parent;
+  vector<DOMNode *>      Children;  
+  string                 Data;   ///parsed data
+  void                   AddChild(DOMNode * node);
+  void                   Print();
+  void                   PrintBreadth();
 
 };
 

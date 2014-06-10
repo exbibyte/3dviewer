@@ -55,81 +55,37 @@ typedef tuple<int, int,int,int, int, int, float,float,float,float,float,float,fl
 
 class ModelEntity : public ModelAbstraction{
 private:
-  ///sorting comparators used in linking triangles to vertices  
-  static bool fSortTriangleDetailByVec1(const tTriangleDetail&, const tTriangleDetail&);
-  ///sorting comparators used in linking triangles to vertices  
-  static bool fSortTriangleDetailByVec2(const tTriangleDetail&, const tTriangleDetail&);
-  ///sorting comparators used in linking triangles to vertices  
-  static bool fSortTriangleDetailByVec3(const tTriangleDetail&, const tTriangleDetail&);
-  ///sorting comparators used in linking triangles to normals 
-  static bool fSortTriangleDetailByNorm(const tTriangleDetail&, const tTriangleDetail&);
-  ///sorting comparators used in linking triangles to textures
-  static bool fSortTriangleDetailByText(const tTriangleDetail&, const tTriangleDetail&);
-  
-  ///texture object names
-  GLuint *pTextureID;
-  ///texture file count
-  int vNumTextureImg;
-
-  ///render buffer object names
-  GLuint * pRbo;
-  ///render buffers
-  float ** pRenderData;
-  ///number of data in specific buffer
-  int* pNumRenderData;
-  ///holder of texture id, used for opengl texture name, buffer name lookup
-  vector<int> vTexturePassId;
-
+  static bool                    fSortTriangleDetailByVec1(const tTriangleDetail&, const tTriangleDetail&);
+  static bool                    fSortTriangleDetailByVec2(const tTriangleDetail&, const tTriangleDetail&);
+  static bool                    fSortTriangleDetailByVec3(const tTriangleDetail&, const tTriangleDetail&);
+  static bool                    fSortTriangleDetailByNorm(const tTriangleDetail&, const tTriangleDetail&);
+  static bool                    fSortTriangleDetailByText(const tTriangleDetail&, const tTriangleDetail&);
+  GLuint *                       pTextureID;  ///texture object names
+  int                            vNumTextureImg;  ///texture file count
+  GLuint *                       pRbo;  ///render buffer object names
+  float **                       pRenderData;   ///render buffers
+  int *                          pNumRenderData;  ///number of data in specific buffer
+  vector<int> vTexturePassId;   ///holder of texture id, used for opengl texture name and buffer name lookup
 public:
-  ModelEntity();
-  ~ModelEntity();
-  
-  ///model file path
-  string ModelFilePath;
-
-  ///stored formatted data from parsing
-  ModelName * cModelName;
-  ///stored formatted data from parsing
-  ModelTexture * cModelTexture;
-  ///stored formatted data from parsing
-  ModelVertice * cModelVertice;
-  ///stored formatted data from parsing
-  ModelNormal * cModelNormal;
-  ///stored formatted data from parsing
-  ModelTriangle * cModelTriangle;
-  
-  //stores processed triangle data after calling Update()
-  vector<tTriangleDetail> vtTriangleDetail;
-  
-  ///helper function to create 1D array of vertice data from processed triangles
-  void GetUpdatedVertices(float*& data, int& num);
-
-  ///helper function to create 1D array of normals from processed triangles
-  void GetUpdatedNormals(float*& data, int& num);
-
-  ///helper function to create 1D array of texture coordinates from processed triangles
-  void GetUpdatedTextureCoords(float*& data, int& num);
-
-  ///helper function to create 1D array of interleaved vertices, normals, texture coordinates
-  void UpdateInterleavedArray();
-
-  //call after setting ModelName to set ModelAbstraction name
-  void Initialize(ModelName *, ModelTexture *, ModelVertice *, ModelNormal *, ModelTriangle *);
-
-  //sortes and matches formatted data to create processed triangles
-  void Update();
-
-  ///draws model using data linked to VBO    
-  void Draw();  
-
-  ///bind render data to buffer objects		
-  void LoadRenderBuffer();    
-
-  ///load texture files
-  void LoadTextureFiles();    
-
-  ///deallocate pointers
-  void CleanUp();
+                                 ModelEntity();
+				 ~ModelEntity();
+  string                         ModelFilePath;  ///model file path
+  ModelName *                    cModelName;  ///stored formatted data from parsing
+  ModelTexture *                 cModelTexture;
+  ModelVertice *                 cModelVertice;
+  ModelNormal *                  cModelNormal;
+  ModelTriangle *                cModelTriangle;
+  vector< tTriangleDetail >      vtTriangleDetail;  //stores processed triangle data after calling Update()
+  void                           GetUpdatedVertices(float*& data, int& num);
+  void                           GetUpdatedNormals(float*& data, int& num);
+  void                           GetUpdatedTextureCoords(float*& data, int& num);
+  void                           UpdateInterleavedArray();  ///helper function to create 1D array of interleaved vertices, normals, texture coordinates
+  void                           Initialize(ModelName *, ModelTexture *, ModelVertice *, ModelNormal *, ModelTriangle *);
+  void                           Update();  //sortes and matches formatted data to create processed triangles
+  void                           Draw();  ///draws model using data linked to VBO      
+  void                           LoadRenderBuffer();  ///bind render data to buffer objects		    
+  void                           LoadTextureFiles();  ///load texture files
+  void                           CleanUp();  ///deallocate pointers
 
 };
 

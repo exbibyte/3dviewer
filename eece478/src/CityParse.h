@@ -14,12 +14,11 @@
 class CityParse
 {
  private:
-  ModelParse cModelParse; ///factory to generate model
-  vector<ModelAbstraction*> vEntity;///temporary storage for produced models
-
+  ModelParse                     cModelParse; ///factory to generate model
+  vector<ModelAbstraction*>      vEntity;///temporary storage for produced models
  public:
-  CityParse();
-  vector<ModelAbstraction*> ParseCity(string path); /// parses city file and returns a vector of entities   
+                                 CityParse();
+  vector<ModelAbstraction*>      ParseCity(string path); /// parses city file and returns a vector of entities   
 };
 
 #endif
